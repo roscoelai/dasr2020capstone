@@ -9,24 +9,19 @@
 - ...
 
 ### Data
-- Spatial data:
-  - [Data.gov.sg](https://data.gov.sg/)
-    - Weekly case numbers from 2014 to 2018
-    - Number of cases and location for past 14 days
+- [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)
+  - [x] Weekly case numbers from 2014 to 2018
+  - [ ] Spatial data (Number of cases and location for past 14 days)
+    - [ ] GeoJSON
+    - [ ] Leaflet
+  - [x] Manual download
+  - [ ] Web scrape from R script
 - Weather data
-  - [Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
-    - Historical daily records
+  - [x] Monthly records from [SingStat Table Builder](https://www.tablebuilder.singstat.gov.sg/publicfacing/initApiList.action)
+  - [x] Daily records from [Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
+  - [x] Web scrape from R script
 - Others
   - ?
 
 ### Analysis Plan
 - ?
-
-### Tasks
-- Weather data
-  - Webscraping
-- Spatial data
-  - GeoJSON
-  - leaflet
-- Other data
-  - ?
