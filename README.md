@@ -20,6 +20,8 @@
   - [x] Monthly records from [SingStat Table Builder](https://www.tablebuilder.singstat.gov.sg/publicfacing/initApiList.action)
   - [x] Daily records from [Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
   - [x] Web scrape from R script
+- Google Trends
+  - [ ] Like what Prof. Roh did for COVID-19?
 - Others
   - ?
 
