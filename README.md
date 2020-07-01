@@ -1,27 +1,32 @@
-# dasr2020capstone
+# Capstone Project Proposal
 
-## Capstone
-### Analysing Dengue Cases in Singapore
+## Analysing Dengue Cases in Singapore
 
-Overview:
+### Overview
 - Does the amount of rainfall affect numbers of dengue cases?
 - Geographical location
 - Property prices
 - ...
 
-Data:
-- Number of cases and coordinates:
+### Data
+- Spatial data:
   - [Data.gov.sg](https://data.gov.sg/)
-    - Weekly case numbers from 2014 onwards
+    - Weekly case numbers from 2014 to 2018
     - Number of cases and location for past 14 days
-- Weather data:
+- Weather data
   - [Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
+    - Historical daily records
+- Others
+  - ?
 
-Analysis Plan:
+### Analysis Plan
 - ?
 
-Tasks:
-- Webscraping:
-  - Weather data
-- .kml files:
-  - How to use...?
+### Tasks
+- Weather data
+  - Webscraping
+- Spatial data
+  - GeoJSON
+  - leaflet
+- Other data
+  - ?
