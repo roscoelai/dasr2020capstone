@@ -1,0 +1,96 @@
+---
+title: "Capstone Project Proposal:\nAnalysing Dengue Cases in Singapore"
+author: "S, R, A"
+date: "04 July 2020"
+output: powerpoint_presentation  # html_document
+---
+
+<!-- References (if we need some guidance) -->
+<!-- https://bookdown.org/yihui/rmarkdown/powerpoint-presentation.html -->
+<!-- https://rmarkdown.rstudio.com/authoring_basics.html -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Dengue
+![_Aedes aegypti_ mosquito](https://research.a-star.edu.sg/cms/figure/index/55e43a55140ba0db748b4b69.jpg "research.a-star.edu.sg")
+
+
+## Overview of the Project
+- Question
+  - ?
+- Why the question matters
+  - Dengue infections -> severe medical condition -> ...
+- Why the findings are plausible
+  - Rainfall, temperature -> mosquito growth -> ...
+
+## Overview of the Project
+- What will be investigated
+  - ?
+- What the outcome of the investigation will be
+  - ?
+- Identify your questions (explorative/predictive)
+  - In the format of the relationships between X and Y (correlational/causational)
+  - ?
+
+
+
+## Data
+- Provide descriptions of your data
+- Where you will find it or have found it
+  - [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)
+    - Weekly case numbers 2014 to 2018 (epidemiological weeks?)
+    - Geographical locations for past 14 days (GeoJSON? leaflet?)
+  - [Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
+    - Historical daily records
+  - Others?
+- How you will secure or have secured access (to import the data)
+  - ?
+
+## Data
+- What key variables are available within your dataset(s) for your analyses
+    - ?
+- For your dataset search, here are some useful websites that you might want to refer to:
+  - [Google Dataset Search](https://toolbox.google.com/datasetsearch)
+  - [ICPSR](https://www.icpsr.umich.edu/icpsrweb/)
+- Surely, you may scrape webpages that contain potential evidence for your analyses
+- You may use multiple datasets
+
+
+
+## Analysis Plan
+- How you will transform your datasets to come up with proxies of your X and Y
+  - ?
+- Further elaborate and identify what would be your analysis
+  - ?
+- How your analyses answer your proposed questions
+  - ?
+
+## Analysis Plan
+- What the limits of your analyses would be
+  - ?
+  - You might want to ponder alternative accounts to your proposed explanation of the phenomena that you analyzed
+
+---
+
+```{r, import, fig.cap="", echo=FALSE, include=FALSE}
+library(ggplot2);library(magrittr)
+data <- readr::read_csv("../data/weekly-number-of-dengue-and-dengue-haemorrhagic-fever-cases/weekly-number-of-dengue-and-dengue-haemorrhagic-fever-cases.csv")
+```
+
+```{r, explore, fig.cap="", echo=FALSE, fig.width=8, fig.height=6}
+data %>% 
+  dplyr::filter(type_dengue == "Dengue") %>% 
+  dplyr::mutate(year.f = as.factor(year)) %>% 
+  tidyr::drop_na() %>% 
+  ggplot(aes(x = eweek, y = number, group = year.f, color = year.f)) + 
+  geom_line(size = 1) + 
+  labs(title = "Number of Dengue cases of over time from 2014 to 2018",
+       subtitle = "",
+       x = "Epidemiological Weeks",
+       y = "Number of Cases",
+       caption = "Source: Data.gov.sg",
+       color = "Year")
+```
+
