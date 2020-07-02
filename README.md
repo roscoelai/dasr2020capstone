@@ -2,7 +2,7 @@
 
 ## Analysing Dengue Cases in Singapore
 
-[Preview Current Version](https://roscoelai.github.io/dasr2020capstone/results/project_proposal.html)
+[Preview Current Version](https://roscoelai.github.io/dasr2020capstone/src/project_proposal.html)
 
 ### Overview
 - Questions
