@@ -24,8 +24,16 @@
   - [x] Web scrape from R script
 - Google Trends
   - [ ] Like what Prof. Roh did for COVID-19?
+    - Search terms frequency for symptoms of dengue vs. number of cases?
 - Others
   - ?
 
 ### Analysis Plan
-- ?
+- Simple
+  - Weather (temperature, rainfall) vs. number of cases
+    - Matching time between datasets
+- More advanced
+  - ?
+- Grandiose (!!!)
+  - Spatial analysis
+    - Of what variables? Breeding habitat vs. number of cases?
