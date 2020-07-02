@@ -1,3 +1,9 @@
+# get_mss_daily.R
+
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+library(magrittr)
+
 get_mss_daily <- function(years) {
   #' Get Daily Records from Meteorological Service Singapore (MSS)
   #' 
@@ -54,4 +60,4 @@ w_data <- get_mss_daily(years = 2014:2020)
 
 dplyr::glimpse(w_data)
 
-write.csv(w_data, "../results/weather_daily_2014_2020.csv", row.names = F)
+# write.csv(w_data, "../results/weather_daily_2014_2020.csv", row.names = F)
