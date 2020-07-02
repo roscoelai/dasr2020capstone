@@ -10,7 +10,7 @@
     - Specifically, does higher humidity, precipitation, or temperature increase the number of dengue cases?
   - Can atmospheric variables predict the number of dengue cases?
   - Does the number of dengue cases increase with the number of COVID-19 cases?
-  - Explain the different number of cases in different regions of Singapore
+  - Explain the different number of cases in different regions of Singapore.
 
 ### Data
 - Weather data
@@ -41,7 +41,7 @@
     - Converting epidemiological weeks to months
       - EpiWeek::epiweekToDate()
   - Time lag: Dengue cases manifest 1-2 weeks after infection
-    - So, adjust timings for different dataset accordingly
+    - So, adjust timings for different datasets accordingly
   - Seasonal effects
     - "Vector" months (June, July, August, September, October)
   - COVID-19 cases vs. dengue cases
