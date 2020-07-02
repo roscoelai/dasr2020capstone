@@ -2,19 +2,26 @@
 title: "Capstone Project Proposal:\nAnalysing Dengue Cases in Singapore"
 author: "S, R, A"
 date: "04 July 2020"
-output: powerpoint_presentation  # html_document
+output:
+  ioslides_presentation:
+    smaller: true
 ---
 
 <!-- References (if we need some guidance) -->
-<!-- https://bookdown.org/yihui/rmarkdown/powerpoint-presentation.html -->
+<!-- https://bookdown.org/yihui/rmarkdown/presentations.html -->
 <!-- https://rmarkdown.rstudio.com/authoring_basics.html -->
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+library(magrittr)
 ```
 
 ## Dengue
 ![_Aedes aegypti_ mosquito](https://research.a-star.edu.sg/cms/figure/index/55e43a55140ba0db748b4b69.jpg "research.a-star.edu.sg")
+
 
 
 ## Overview of the Project
@@ -59,6 +66,117 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 
+```{r collect, echo=FALSE, include=FALSE}
+get_dos_monthly <- function() {
+  #' Get Monthly Weather Records from Singapore Department of Statistics (DOS)
+  #' 
+  #' @description
+  #' Air Temperature And Sunshine, Relative Humidity And Rainfall, Monthly.
+  #' 
+  #' It's just a single file. But it's wide form, need to tidy.
+  #' 
+  #' @details https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv
+  #' 
+  #' @return A table containing the combined historical monthly records.
+  #' @examples
+  #' get_dos_monthly()
+  url = "https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv"
+  
+  readr::read_csv(url, na = c("", "na"), skip = 1, n_max = 10) %>% 
+    tidyr::gather("year_month", "value", -Variables) %>% 
+    dplyr::mutate(date = lubridate::ymd(paste(year_month, "01")),
+                  year = lubridate::year(date),
+                  month = lubridate::month(date),
+                  Variables = gsub("\\s", "_", Variables)) %>% 
+    dplyr::select(-c(year_month, date)) %>% 
+    tidyr::spread(Variables, value) %>% 
+    setNames(., c("Year",
+                  "Month",
+                  "24_Hours_Mean_Relative_Humidity_percent",
+                  "Air_Temperature_Absolute_Extremes_Maximum_degC",
+                  "Air_Temperature_Absolute_Extremes_Minimum_degC",
+                  "Air_Temperature_Means_Daily_Maximum_degC",
+                  "Air_Temperature_Means_Daily_Minimum_degC",
+                  "Bright_Sunshine_Daily_Mean_hour",
+                  "Highest_Daily_Rainfall_Total_mm",
+                  "Minimum_Relative_Humidity_percent",
+                  "Number_Of_Rainy_Days",
+                  "Total_Rainfall_mm"))
+}
+
+get_mss_daily <- function(years) {
+  #' Get Daily Records from Meteorological Service Singapore (MSS)
+  #' 
+  #' @description
+  #' The Changi station (S24) is hard-coded here.
+  #' 
+  #' Available data ranges from Jan 1980 to May 2020.
+  #' 
+  #' @details http://www.weather.gov.sg/climate-historical-daily/
+  #' 
+  #' @param years A vector of years of interest.
+  #' @return A table containing the combined historical daily records.
+  #' @examples
+  #' get_mss_daily(2014:2018)
+  #' get_mss_daily(2014:2020)
+  urls = paste0("http://www.weather.gov.sg/files/dailydata/DAILYDATA_S24_", 
+                t(outer(years, sprintf("%02d", 1:12), FUN = paste0)), 
+                ".csv")
+  
+  # There's no data beyond May 2020 (at the moment), so remove the last 7
+  #   months if 2020 is included
+  if (2020 %in% years) {
+    urls = urls[1:(length(urls) - 7)]
+  }
+  
+  myreader <- function(s) {
+    readr::read_csv(s) %>% 
+      # The "degree sign" in column headers are invalid multibyte characters
+      # Data after Apr 2020 have slightly different column names
+      # This would complicate joining the tables together
+      # So, it might be better to manually label all column names
+      setNames(., c("Station",
+                    "Year",
+                    "Month",
+                    "Day",
+                    "Daily_Rainfall_Total_mm",
+                    "Highest_30_Min_Rainfall_mm",
+                    "Highest_60_Min_Rainfall_mm",
+                    "Highest_120_Min_Rainfall_mm",
+                    "Mean_Temperature_degC",
+                    "Maximum_Temperature_degC",
+                    "Minimum_Temperature_degC",
+                    "Mean_Wind_Speed_kmh",
+                    "Max_Wind_Speed_kmh")) %>% 
+      # The "long dashes" (em dash?) representing missing values are invalid
+      #   multibyte characters and are replaced with NA (by coersion)
+      dplyr::mutate_at(dplyr::vars(-Station), as.numeric)
+  }
+  
+  dplyr::bind_rows(lapply(urls, myreader))
+}
+
+# s_data <- get_dos_monthly()
+# w_data <- get_mss_daily(years = 2014:2020)
+
+s_data <- readr::read_csv("../results/weather_monthly_1975_2020.csv")
+w_data <- readr::read_csv("../results/weather_daily_2014_2020.csv")
+```
+
+---
+
+```{r inspect1, comment="", size="tiny"}
+dplyr::glimpse(s_data)
+```
+
+---
+
+```{r inspect2, comment="", size="tiny"}
+dplyr::glimpse(w_data)
+```
+
+
+
 ## Analysis Plan
 - How you will transform your datasets to come up with proxies of your X and Y
   - ?
@@ -75,7 +193,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ---
 
 ```{r, import, fig.cap="", echo=FALSE, include=FALSE}
-library(ggplot2);library(magrittr)
+library(ggplot2)
+
 data <- readr::read_csv("../data/weekly-number-of-dengue-and-dengue-haemorrhagic-fever-cases/weekly-number-of-dengue-and-dengue-haemorrhagic-fever-cases.csv")
 ```
 
@@ -93,4 +212,3 @@ data %>%
        caption = "Source: Data.gov.sg",
        color = "Year")
 ```
-
