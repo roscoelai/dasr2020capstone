@@ -35,16 +35,16 @@
 
 ### Analysis Plan (not very organized...)
 - Considerations
-  1. Combining datasets (standardize timeframe and resolution)
+  - Combining datasets (standardize timeframe and resolution)
     - Converting dates to epidemiological weeks
       - lubridate::epiweeks()
     - Converting epidemiological weeks to months
       - EpiWeek::epiweekToDate()
-  2. Time lag: Dengue cases manifest 1-2 weeks after infection
+  - Time lag: Dengue cases manifest 1-2 weeks after infection
     - So, adjust timings for different dataset accordingly
-  3. Seasonal effects
+  - Seasonal effects
     - "Vector" months (June, July, August, September, October)
-  4. COVID-19 cases vs. dengue cases
+  - COVID-19 cases vs. dengue cases
     - 90% foreign workers -> expect correlation
     - Number of cases from Apr - Jul 2020
 
