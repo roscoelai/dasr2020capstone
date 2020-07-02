@@ -19,50 +19,98 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 library(magrittr)
 ```
 
-## Dengue
-![_Aedes aegypti_ mosquito](https://research.a-star.edu.sg/cms/figure/index/55e43a55140ba0db748b4b69.jpg "research.a-star.edu.sg")
+---
+
+```{r, import, fig.cap="", echo=FALSE, include=FALSE}
+library(ggplot2)
+
+bulletin <- readr::read_csv("../data/weekly-infectious-disease-bulletin-cases/weekly-infectious-disease-bulletin-cases.csv")
+```
+
+```{r, explore_ncases_eweeks, fig.cap="", echo=FALSE, fig.width=8, fig.height=6}
+bulletin %>% 
+  dplyr::filter(grepl("Dengue", disease)) %>%
+  # dplyr::filter(disease == "Dengue Fever") %>% 
+  ggplot(aes(x = 1:nrow(.), y = no._of_cases, color = disease)) + 
+  scale_x_continuous(breaks = c(1 + 104 * (0:8)),  # 104 because there's 2 rows per eweek
+                     label = c(2012:2020)) + 
+  geom_line(size = 1) + 
+  labs(title = "Number of Dengue cases of over time from 2012-W01 to 2020-W20",
+       subtitle = "Worrying trend - We might set a record this year!",
+       x = "Time (from 2012-W01 to 2020-W20)",
+       y = "Number of Cases",
+       caption = "Source: Data.gov.sg")
+```
 
 
 
-## Overview of the Project
-- Question
-  - ?
-- Why the question matters
+## Overview of the Project {data-background=https://research.a-star.edu.sg/cms/figure/index/55e43a55140ba0db748b4b69.jpg data-background-size=auto data-background-position="right top"}
+### Questions
+  - Does atmospheric variables influence the incidence of dengue cases?
+    - Specifically, is higher humidity, precipitation, or temperature (X) associated with increased numbers of dengue cases (Y)?
+  - Can atmospheric variables predict the number of dengue cases?
+  - Does the number of dengue cases increase with the number of COVID-19 cases?
+  - Explain the different number of cases in different regions of Singapore.
+
+## Overview of the Project (checklist)
+### If we've covered the following then is K
+- [ ] Why the question matters
   - Dengue infections -> severe medical condition -> ...
-- Why the findings are plausible
+  - This year might be the worst...
+- [ ] Why the findings are plausible
   - Rainfall, temperature -> mosquito growth -> ...
-
-## Overview of the Project
-- What will be investigated
-  - ?
-- What the outcome of the investigation will be
-  - ?
-- Identify your questions (explorative/predictive)
-  - In the format of the relationships between X and Y (correlational/causational)
-  - ?
+- [x] What will be investigated
+- [ ] What the outcome of the investigation will be
+- [ ] Identify your questions (explorative/predictive) in the format of the relationships between X and Y (correlational/causational)
 
 
 
 ## Data
-- Provide descriptions of your data
-- Where you will find it or have found it
+- Weather data
+  - Daily records from [Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
+  - Air Temperature And Sunshine, Relative Humidity And Rainfall, Monthly from [Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)
+- Number of cases by epidemiological weeks
+  - [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue) (2012-W01 to 2020-W20)
+  - [Ministry of Health](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020ea2c0b1cec1549009844537d52f2377f.xlsx) (2012-W01 to 2020-W25)
+- Coordinates of zones with numbers of cases (past 14 days)
   - [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)
-    - Weekly case numbers 2014 to 2018 (epidemiological weeks?)
-    - Geographical locations for past 14 days (GeoJSON? leaflet?)
-  - [Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
-    - Historical daily records
-  - Others?
-- How you will secure or have secured access (to import the data)
+- COVID-19 cases (Apr - Jul 2020)
   - ?
+- Population distribution across named regions (not coordinates) (2011 to 2019, yearly)
+  - respopagesextod2011to2019.csv
 
-## Data
-- What key variables are available within your dataset(s) for your analyses
-    - ?
-- For your dataset search, here are some useful websites that you might want to refer to:
-  - [Google Dataset Search](https://toolbox.google.com/datasetsearch)
-  - [ICPSR](https://www.icpsr.umich.edu/icpsrweb/)
-- Surely, you may scrape webpages that contain potential evidence for your analyses
-- You may use multiple datasets
+## Data (checklist)
+### If we've covered the following then is K
+- [ ] Provide descriptions of your data
+  - After we finalize which datasets we're using...
+- [x] Where you will find it or have found it
+- [x] How you will secure or have secured access (to import the data)
+  - Webscrape, then save, then upload to GitHub
+- [ ] What key variables are available within your dataset(s) for your analyses
+  - Expand point 1 above
+
+
+
+## Analysis Plan
+- Combining datasets (standardize timeframe and resolution)
+  - Converting dates to epidemiological weeks (lubridate::epiweeks())
+  - Converting epidemiological weeks to months
+- Number of dengue cases ~ Humidity, Precipitation, Temperature, ...
+- Limitations
+  - Time lag: Dengue cases manifest 1-2 weeks after infection
+    - So, adjust timings for different datasets accordingly
+  - Seasonal effects
+    - "Vector" months (June, July, August, September, October)
+  - COVID-19 cases vs. dengue cases
+    - 90% foreign workers -> expect correlation
+    - Number of cases from Apr - Jul 2020
+
+## Analysis Plan
+- [ ] How you will transform your datasets to come up with proxies of your X and Y
+- [ ] Further elaborate and identify what would be your analysis
+- [ ] How your analyses answer your proposed questions
+- [ ] What the limits of your analyses would be
+- [x] You might want to ponder alternative accounts to your proposed explanation of the phenomena that you analyzed
 
 
 
@@ -149,7 +197,7 @@ get_mss_daily <- function(years) {
                     "Mean_Wind_Speed_kmh",
                     "Max_Wind_Speed_kmh")) %>% 
       # The "long dashes" (em dash?) representing missing values are invalid
-      #   multibyte characters and are replaced with NA (by coersion)
+      #   multibyte characters and are replaced with NA (by coercion)
       dplyr::mutate_at(dplyr::vars(-Station), as.numeric)
   }
   
@@ -163,52 +211,51 @@ s_data <- readr::read_csv("../results/weather_monthly_1975_2020.csv")
 w_data <- readr::read_csv("../results/weather_daily_2014_2020.csv")
 ```
 
----
-
+## Monthly Weather Data
 ```{r inspect1, comment="", size="tiny"}
 dplyr::glimpse(s_data)
 ```
 
----
-
+## Daily Weather Data
 ```{r inspect2, comment="", size="tiny"}
 dplyr::glimpse(w_data)
 ```
 
+```{r, explore_weather1, echo=FALSE, fig.cap="", fig.width=8, fig.height=6}
+s1 <- s_data %>%
+  dplyr::filter(Year >= 2014 & Year <= 2018) %>%
+  ggplot(aes(x = 1:nrow(.), y = Total_Rainfall_mm)) + 
+  scale_x_continuous(breaks = c(1 + 12 * (0:4)),
+                     label = c(2014:2018)) + 
+  geom_line(size = 1) + 
+  labs(title = "Total Monthly Rainfall from 2014 to 2018",
+       subtitle = "Are we getting more water?",
+       x = "Time (from 2014 to 2018)",
+       y = "Total Monthly Rainfal (mm)",
+       caption = "Source: singstat.gov.sg")
 
+s2 <- s_data %>%
+  dplyr::filter(Year >= 2014 & Year <= 2018) %>%
+  ggplot(aes(x = 1:nrow(.), y = Air_Temperature_Means_Daily_Maximum_degC)) + 
+  scale_x_continuous(breaks = c(1 + 12 * (0:4)),
+                     label = c(2014:2018)) + 
+  geom_line(size = 1) + 
+  labs(title = "Air Temperature Means Daily Maximum from 2014 to 2018",
+       subtitle = "",
+       x = "Time (from 2014 to 2018)",
+       y = "Air Temperature Means Daily Maximum (degC)",
+       caption = "Source: singstat.gov.sg")
 
-## Analysis Plan
-- How you will transform your datasets to come up with proxies of your X and Y
-  - ?
-- Further elaborate and identify what would be your analysis
-  - ?
-- How your analyses answer your proposed questions
-  - ?
-
-## Analysis Plan
-- What the limits of your analyses would be
-  - ?
-  - You might want to ponder alternative accounts to your proposed explanation of the phenomena that you analyzed
-
----
-
-```{r, import, fig.cap="", echo=FALSE, include=FALSE}
-library(ggplot2)
-
-data <- readr::read_csv("../data/weekly-number-of-dengue-and-dengue-haemorrhagic-fever-cases/weekly-number-of-dengue-and-dengue-haemorrhagic-fever-cases.csv")
+gridExtra::grid.arrange(s1, s2, nrow = 2)
 ```
 
-```{r, explore, fig.cap="", echo=FALSE, fig.width=8, fig.height=6}
-data %>% 
-  dplyr::filter(type_dengue == "Dengue") %>% 
-  dplyr::mutate(year.f = as.factor(year)) %>% 
-  tidyr::drop_na() %>% 
-  ggplot(aes(x = eweek, y = number, group = year.f, color = year.f)) + 
-  geom_line(size = 1) + 
-  labs(title = "Number of Dengue cases of over time from 2014 to 2018",
-       subtitle = "",
-       x = "Epidemiological Weeks",
-       y = "Number of Cases",
-       caption = "Source: Data.gov.sg",
-       color = "Year")
+```{r, explore_weather2, echo=FALSE, fig.cap="", fig.width=8, fig.height=6}
+# dplyr::glimpse(w_data)
+# 
+# w_data %>% 
+#   dplyr::filter(Year == 2014) %>%
+#   dplyr::mutate(Year.f = as.factor(Year),
+#                 Month.f = as.factor(Month)) %>% 
+#   ggplot(aes(x = Day, y = Daily_Rainfall_Total_mm, color = Month.f)) + 
+#   geom_line(size = 1)
 ```
