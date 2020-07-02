@@ -19,7 +19,7 @@
   - [x] Manual download
   - [ ] Web scrape from R script
 - Weather data
-  - [x] Monthly records from [SingStat Table Builder](https://www.tablebuilder.singstat.gov.sg/publicfacing/initApiList.action)
+  - <s> Monthly records from [SingStat Table Builder](https://www.tablebuilder.singstat.gov.sg/publicfacing/initApiList.action)</s>
   - [x] Daily records from [Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
   - [x] Web scrape from R script
 - Google Trends
@@ -32,6 +32,8 @@
 - Simple
   - Weather (temperature, rainfall) vs. number of cases
     - Matching time between datasets
+    - lubridate::epiweeks()
+    - EpiWeek::epiweekToDate()
 - More advanced
   - ?
 - Grandiose (!!!)
