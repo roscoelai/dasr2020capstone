@@ -2,6 +2,8 @@
 
 ## Analysing Dengue Cases in Singapore
 
+[Preview Current Version](https://roscoelai.github.io/dasr2020capstone/results/project_proposal.html)
+
 ### Overview
 - Does the amount of rainfall affect numbers of dengue cases?
 - Geographical location
