@@ -18,15 +18,15 @@
       - [ ] Marine Parade
       - [ ] Queenstown
       - [ ] Sembawang
-  - <s>[x] Air Temperature And Sunshine, Relative Humidity And Rainfall, Monthly from [Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)</s>
+  - [x] <s>Air Temperature And Sunshine, Relative Humidity And Rainfall, Monthly from [Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)</s>
 - Number of cases by epidemiological weeks
-  - <s>[x] [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue) (2012-W01 to 2020-W20)</s>
+  - [x] <s>[Data.gov.sg](https://data.gov.sg/dataset?q=Dengue) (2012-W01 to 2020-W20)</s>
   - [x] [Ministry of Health](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020ea2c0b1cec1549009844537d52f2377f.xlsx) (2012-W01 to 2020-W25)
 - COVID-19 cases (Apr - Jul 2020)
   - [ ] ?
 - Latest clusters by regions
   - [ ] [National Environment Agency](https://www.nea.gov.sg/dengue-zika/dengue/dengue-clusters)
-  - <s>[x] Coordinates of zones with numbers of cases for past 14 days from [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)</s>
+  - [x] <s>Coordinates of zones with numbers of cases for past 14 days from [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)</s>
 - Population distribution across named regions (not coordinates) (2011 to 2019, yearly)
   - [x] respopagesextod2011to2019.csv
 - Google Trends
@@ -46,7 +46,7 @@
   - Create models for regression
   - Compare the predicted value with actual value
 - Explain the current trend in differences between the number of cases in different regions
-  - According to Strait's Times report, East region has the largest number of clusters than North (and West??) regions
+  - According to Strait's Times report, East region has the largest number of clusters than North (and West?) regions
   - Pick Marine Parade and Sembawang (or Queenstown?) to find out if there is a difference in their weather variables
 
 ### Considerations and limitations
