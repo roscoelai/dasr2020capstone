@@ -11,21 +11,44 @@
   - Explain the different number of cases in different regions of Singapore.
 
 ## Data
-- Weather data
+- Climate
   - [x] Daily records from [Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
-    - [x] Changi station (reference) (1980 - 2020, daily)
-    - [ ] May also need data from other stations
-      - [ ] Marine Parade
-      - [ ] Queenstown
-      - [ ] Sembawang
+    - Range
+      - 2012 to 2020
+    - Resolution
+      - Daily
+    - Variables
+      - Rainfall
+      - Temperature
+      - <s>Wind speed</s>
+    - Stations
+      - [x] Changi
+      - [x] Marine Parade
+      - [x] Queenstown
+      - [x] Sembawang
   - [x] <s>Air Temperature And Sunshine, Relative Humidity And Rainfall, Monthly from [Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)</s>
-- Number of cases by epidemiological weeks
-  - [x] <s>[Data.gov.sg](https://data.gov.sg/dataset?q=Dengue) (2012-W01 to 2020-W20)</s>
-  - [x] [Ministry of Health](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020ea2c0b1cec1549009844537d52f2377f.xlsx) (2012-W01 to 2020-W25)
+    - Resolution
+      - Monthly
+    - Additional variables
+      - 24 hours mean relative humidity (%)
+      - Bright sunshine daily mean (hours)
+      - Minimum relative humidity (%)
+      - Number of rainy days
+- Number of cases
+  - [x] <s>[Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)</s>
+    - Range
+      - 2012-W01 to 2020-W20
+    - Resolution
+      - (Epidemiological) Week
+  - [x] [Ministry of Health](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020ea2c0b1cec1549009844537d52f2377f.xlsx)
+    - Range
+      - 2012-W01 to 2020-W25
+    - Resolution
+      - (Epidemiological) Week
 - COVID-19 cases (Apr - Jul 2020)
   - [ ] ?
 - Latest clusters by regions
-  - [ ] [National Environment Agency](https://www.nea.gov.sg/dengue-zika/dengue/dengue-clusters)
+  - [x] [National Environment Agency](https://www.nea.gov.sg/dengue-zika/dengue/dengue-clusters)
   - [x] <s>Coordinates of zones with numbers of cases for past 14 days from [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)</s>
 - Population distribution across named regions (not coordinates) (2011 to 2019, yearly)
   - [x] respopagesextod2011to2019.csv
