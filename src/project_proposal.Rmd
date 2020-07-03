@@ -7,39 +7,210 @@ output:
     smaller: true
 ---
 
-<!-- References (if we need some guidance) -->
-<!-- https://bookdown.org/yihui/rmarkdown/presentations.html -->
-<!-- https://rmarkdown.rstudio.com/authoring_basics.html -->
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-library(magrittr)
+library(ggplot2);library(magrittr)
 ```
 
 ---
 
 ```{r, import, fig.cap="", echo=FALSE, include=FALSE}
-library(ggplot2)
+get_moh_eweekly <- function(path) {
+  #' Get (Epi) Weekly Records from Ministry of Health (MOH)
+  #' 
+  #' @description
+  #' Available data ranges from 2012-W01 to 2020-W25.
+  #' 
+  #' The file is a multi-sheet Excel Workbook. Each sheet stores a year's data.
+  #' 
+  #' @details
+  #' "https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020ea2c0b1cec1549009844537d52f2377f.xlsx"
+  #' 
+  #' @param path The file path of the dataset.
+  #' @return A table containing the combined historical epi-weekly records.
+  #' @examples
+  #' get_moh_eweekly("dataset.xlsx")
+  
+  # Read multiple sheets in an Excel Workbook
+  dfs = path %>% 
+    readxl::excel_sheets() %>% 
+    set_names(., .) %>%
+    lapply(readxl::read_xlsx, path = path, skip = 1)
+  
+  # Start and End date formats are different for 2020
+  dfs[["2020"]]$Start = lubridate::dmy(dfs[["2020"]]$Start)
+  dfs[["2020"]]$End = lubridate::dmy(dfs[["2020"]]$End)
+  
+  for (y in names(dfs)) {
+    # Add a "Year" column to distinguish different tables
+    dfs[[y]]$Year = y
+    
+    # There is some inconsistent naming of column headers
+    names(dfs[[y]])[names(dfs[[y]]) %in% c("Campylobacter enterosis",
+                                           "Campylobacterenterosis",
+                                           "Campylobacteriosis")] <- "Campylobacter enteritis"
+    names(dfs[[y]])[names(dfs[[y]]) == "Chikungunya Fever"] <- "Chikungunya"
+    names(dfs[[y]])[names(dfs[[y]]) == "Dengue Haemorrhagic Fever"] <- "DHF"
+    names(dfs[[y]])[names(dfs[[y]]) == "Dengue Fever"] <- "Dengue"
+    names(dfs[[y]])[names(dfs[[y]]) %in% c("Hand, Foot and Mouth Disease",
+                                           "Hand, Foot Mouth Disease")] <- "HFMD"
+    names(dfs[[y]])[names(dfs[[y]]) == "Nipah virus infection"] <- "Nipah"
+    names(dfs[[y]])[names(dfs[[y]]) == "Viral Hepatitis A"] <- "Acute Viral Hepatitis A"
+    names(dfs[[y]])[names(dfs[[y]]) == "Viral Hepatitis E"] <- "Acute Viral Hepatitis E"
+    names(dfs[[y]])[names(dfs[[y]]) %in% c("Zika Virus Infection",
+                                           "Zika virus infection")] <- "Zika"
+  }
+  
+  dplyr::bind_rows(dfs) %>% 
+    dplyr::select(Year, everything()) %>% 
+    dplyr::arrange(Year, `Epidemiology Wk`) %>% 
+    dplyr::mutate(Year = as.numeric(Year))
+}
 
-bulletin <- readr::read_csv("../data/weekly-infectious-disease-bulletin-cases/weekly-infectious-disease-bulletin-cases.csv")
+get_mss_daily <- function(years, stations = c("Changi")) {
+  #' Get Daily Records from Meteorological Service Singapore (MSS)
+  #' 
+  #' @description
+  #' Available data ranges from Jan 1980 to May 2020.
+  #' 
+  #' This function will automatically calculate the epidemiological weeks.
+  #' 
+  #' @details http://www.weather.gov.sg/climate-historical-daily/
+  #' 
+  #' @param years A vector of years of interest.
+  #' @param stations A vector of climate station names. Defaults to c("Changi").
+  #' @return A table containing the combined historical daily records.
+  #' @examples
+  #' get_mss_daily(2014:2018)
+  #' get_mss_daily(2012:2020, c("Changi", "Marine Parade", "Queenstown", "Sembawang"))
+  
+  dates = as.vector(t(outer(years, sprintf("%02d", 1:12), FUN = paste0)))
+  
+  # There's no data beyond May 2020 (at the moment), so remove the last 7
+  #   months if 2020 is included
+  if (2020 %in% years) {
+    dates = dates[1:(length(dates) - 7)]
+  }
+  
+  mappings = list(
+    "Ang Mo Kio" = "109_",
+    "Buangkok" = "55_",
+    "Bukit Panjang" = "64_",
+    "Changi" = "24_",
+    "Jurong (West)" = "44_",
+    "Khatib" = "122_",
+    "Lower Peirce Reservoir" = "08_",
+    "Marine Parade" = "113_",
+    "Punggol" = "81_",
+    "Queenstown" = "77_",
+    "Seletar" = "25_",
+    "Sembawang" = "80_",
+    "Serangoon" = "36_",
+    "Toa Payoh" = "88_",
+    "Yishun" = "91_"
+  )
+  station_nums = sapply(stations, function(x) mappings[[x]])
+  urls = paste0("http://www.weather.gov.sg/files/dailydata/DAILYDATA_S", 
+                t(outer(station_nums, dates, FUN = paste0)), 
+                ".csv")
+  
+  myreader = function(url) {
+    tryCatch(
+      readr::read_csv(url) %>% 
+        # The "degree sign" in column headers are invalid multibyte characters
+        # Data after Apr 2020 have slightly different column names
+        # This would complicate joining the tables together
+        # So, it might be better to manually label all column names
+        setNames(., c("Station",
+                      "Year",
+                      "Month",
+                      "Day",
+                      "Daily_Rainfall_Total_mm",
+                      "Highest_30_Min_Rainfall_mm",
+                      "Highest_60_Min_Rainfall_mm",
+                      "Highest_120_Min_Rainfall_mm",
+                      "Mean_Temperature_degC",
+                      "Maximum_Temperature_degC",
+                      "Minimum_Temperature_degC",
+                      "Mean_Wind_Speed_kmh",
+                      "Max_Wind_Speed_kmh")) %>% 
+        # The "long dashes" (em dash?) representing missing values are invalid
+        #   multibyte characters and are replaced with NA (by coercion)
+        dplyr::mutate_at(dplyr::vars(-Station), as.numeric),
+      error = function(e) { NA }
+    )
+  }
+  
+  dfs = lapply(urls, myreader)
+  
+  dplyr::bind_rows(dfs[!is.na(dfs)]) %>% 
+    dplyr::mutate(Date = paste(Year, Month, Day, sep = "-"),
+                  Epiweek = lubridate::epiweek(Date)) %>% 
+    dplyr::select(Station, Epiweek, everything(), -Date)
+}
+
+# w_data <- get_mss_daily(years = 2012:2020,
+#                     stations = c("Changi",
+#                                  "Marine Parade",
+#                                  "Queenstown",
+#                                  "Sembawang"))
+
+weather <- readr::read_csv("../results/weather_daily_2012_2020.csv")
+bulletin <- get_moh_eweekly("../data/weekly-infectious-disease-bulletin-year-2020ea2c0b1cec1549009844537d52f2377f.xlsx")
+
+grouped_epiweek <- weather %>%
+  dplyr::filter(Station == "Changi") %>% 
+  dplyr::select(Year, Epiweek, matches("Rainfall_Total|Temperature"), -Station) %>% 
+  dplyr::group_by(Year, Epiweek) %>% 
+  dplyr::summarise(Rainfall_Total = sum(Daily_Rainfall_Total_mm),
+                   Mean_Temperature = mean(Mean_Temperature_degC))
+
+df <- bulletin %>% 
+  dplyr::rename(Epiweek = `Epidemiology Wk`) %>% 
+  dplyr::select(Year, Epiweek, Dengue) %>% 
+  tidyr::drop_na() %>% 
+  dplyr::left_join(grouped_epiweek, c("Year", "Epiweek")) %>% 
+  tibble::add_column(x = 1:nrow(.))
 ```
 
-```{r, explore_ncases_eweeks, fig.cap="", echo=FALSE, fig.width=8, fig.height=6}
-bulletin %>% 
-  dplyr::filter(grepl("Dengue", disease)) %>%
-  # dplyr::filter(disease == "Dengue Fever") %>% 
-  ggplot(aes(x = 1:nrow(.), y = no._of_cases, color = disease)) + 
-  scale_x_continuous(breaks = c(1 + 104 * (0:8)),  # 104 because there's 2 rows per eweek
+```{r, explore_ncases_eweeks, fig.cap="", echo=FALSE, warning=FALSE, fig.width=8, fig.height=6}
+f1 <- df %>% 
+  ggplot(aes(x = x, y = Dengue)) + 
+  geom_line(size = 1, color = "tomato3") + 
+  scale_x_continuous(breaks = c(1 + 52 * (0:8)),
                      label = c(2012:2020)) + 
-  geom_line(size = 1) + 
-  labs(title = "Number of Dengue cases of over time from 2012-W01 to 2020-W20",
-       subtitle = "Worrying trend - We might set a record this year!",
-       x = "Time (from 2012-W01 to 2020-W20)",
+  labs(title = "Number of weekly Dengue cases of over time from 2012 to 2020",
+       subtitle = "Why are the numbers abnormally high this year?",
+       x = "",
        y = "Number of Cases",
-       caption = "Source: Data.gov.sg")
+       caption = "Source: moh.gov.sg")
+
+f2 <- df %>% 
+  ggplot(aes(x = x, y = Rainfall_Total)) + 
+  geom_line(size = 1, color = "deepskyblue4") + 
+  scale_x_continuous(breaks = c(1 + 52 * (0:8)),
+                     label = c(2012:2020)) + 
+  labs(title = "Total weekly Rainfall from 2012 to 2020",
+       subtitle = "",
+       x = "",
+       y = "Total Rainfall (mm)",
+       caption = "Source: weather.gov.sg")
+
+f3 <- df %>% 
+  ggplot(aes(x = x, y = Mean_Temperature)) + 
+  geom_line(size = 1, color = "darkgreen") + 
+  scale_x_continuous(breaks = c(1 + 52 * (0:8)),
+                     label = c(2012:2020)) + 
+  labs(title = "Average weekly Temperature from 2012 to 2020",
+       subtitle = "",
+       x = "",
+       y = "Temperature (\u00b0C)",
+       caption = "Source: weather.gov.sg")
+
+gridExtra::grid.arrange(f1, f2, f3, nrow = 3, top = "Is there a relationship?")
 ```
 
 
@@ -52,210 +223,106 @@ bulletin %>%
   - Does the number of dengue cases increase with the number of COVID-19 cases?
   - Explain the different number of cases in different regions of Singapore.
 
-## Overview of the Project (checklist)
-### If we've covered the following then is K
-- [ ] Why the question matters
-  - Dengue infections -> severe medical condition -> ...
-  - This year might be the worst...
-- [ ] Why the findings are plausible
-  - Rainfall, temperature -> mosquito growth -> ...
-- [x] What will be investigated
-- [ ] What the outcome of the investigation will be
-- [ ] Identify your questions (explorative/predictive) in the format of the relationships between X and Y (correlational/causational)
-
 
 
 ## Data
-- Weather data
-  - Daily records from [Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
-  - Air Temperature And Sunshine, Relative Humidity And Rainfall, Monthly from [Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)
-- Number of cases by epidemiological weeks
-  - [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue) (2012-W01 to 2020-W20)
-  - [Ministry of Health](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020ea2c0b1cec1549009844537d52f2377f.xlsx) (2012-W01 to 2020-W25)
-- Coordinates of zones with numbers of cases (past 14 days)
-  - [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)
+- Daily climate records from [Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
+  - Relevant variables: Rainfall, Temperature
+  - Data for 2012 to 2020 will be gathered from selected climate stations
+- Weekly case numbers (2012-W01 to 2020-W25) from [Ministry of Health (MOH)](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020ea2c0b1cec1549009844537d52f2377f.xlsx)
+- Latest number of cases by named regions from [National Environment Agency (NEA)](https://www.nea.gov.sg/dengue-zika/dengue/dengue-clusters)
+- [Yearly population distribution across named regions](../data/respopagesextod2011to2019.csv)
 - COVID-19 cases (Apr - Jul 2020)
   - ?
-- Population distribution across named regions (not coordinates) (2011 to 2019, yearly)
-  - respopagesextod2011to2019.csv
 
-## Data (checklist)
-### If we've covered the following then is K
-- [ ] Provide descriptions of your data
-  - After we finalize which datasets we're using...
-- [x] Where you will find it or have found it
-- [x] How you will secure or have secured access (to import the data)
-  - Webscrape, then save, then upload to GitHub
-- [ ] What key variables are available within your dataset(s) for your analyses
-  - Expand point 1 above
+## Deprecated Data
+- Monthly Air Temperature And Sunshine, Relative Humidity And Rainfall from [Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)
+  - <u>Reason</u>: Higher resolution (daily) data available from MSS
+  - Might reconsider if humidity data is needed
+- Latest number of cases by regions with geocoordinates from [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)
+  - <u>Reason</u>: Potentially **grandiose** (we've not learned leaflet yet!)
+
+### Discarded
+- Weekly case numbers (2012-W01 to 2020-W20) from [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)
+  - <u>Reason</u>: More up-to-date data available from MOH
 
 
 
 ## Analysis Plan
-- Combining datasets (standardize timeframe and resolution)
-  - Converting dates to epidemiological weeks (lubridate::epiweeks())
-  - Converting epidemiological weeks to months
-- Number of dengue cases ~ Humidity, Precipitation, Temperature, ...
-- Limitations
-  - Time lag: Dengue cases manifest 1-2 weeks after infection
-    - So, adjust timings for different datasets accordingly
-  - Seasonal effects
-    - "Vector" months (June, July, August, September, October)
-  - COVID-19 cases vs. dengue cases
-    - 90% foreign workers -> expect correlation
-    - Number of cases from Apr - Jul 2020
+- Transform dengue cases data
+  - Converting epidemiology weeks cases to monthly cases for 2012 - 2020
+  - Combine the different Excel sheets into a table 
+- Compare the monthly cases across the years
+  - Using repeated-measures ANOVA
+  - Plotting
+- To understand if atmospheric variables have an influence in the incidence of dengue cases
+  - Correlate the weather variables with number of dengue cases monthly across the years
+- To test if atmospheric variables predict number of dengue cases
+  - Create models for regression
+  - Compare the predicted value with actual value
 
 ## Analysis Plan
-- [ ] How you will transform your datasets to come up with proxies of your X and Y
-- [ ] Further elaborate and identify what would be your analysis
-- [ ] How your analyses answer your proposed questions
-- [ ] What the limits of your analyses would be
-- [x] You might want to ponder alternative accounts to your proposed explanation of the phenomena that you analyzed
+- Explain the current trend in differences between the number of cases in different regions
+  - According to Strait's Times report, East region has the largest number of clusters than North (and West?) regions
+  - Pick Marine Parade and Sembawang (or Queenstown?) to find out if there is a difference in their weather variables
+
+### Considerations and limitations
+- Time lag: Dengue cases manifest 1-2 weeks after infection
+  - So, adjust timings for different datasets accordingly
+- Seasonal effects
+  - "Vector" months (June, July, August, September, October)
+- COVID-19 cases vs. dengue cases
+  - 90% foreign workers -> expect correlation
+  - Number of cases from Apr - Jul 2020
 
 
 
-```{r collect, echo=FALSE, include=FALSE}
-get_dos_monthly <- function() {
-  #' Get Monthly Weather Records from Singapore Department of Statistics (DOS)
-  #' 
-  #' @description
-  #' Air Temperature And Sunshine, Relative Humidity And Rainfall, Monthly.
-  #' 
-  #' It's just a single file. But it's wide form, need to tidy.
-  #' 
-  #' @details https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv
-  #' 
-  #' @return A table containing the combined historical monthly records.
-  #' @examples
-  #' get_dos_monthly()
-  url = "https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv"
-  
-  readr::read_csv(url, na = c("", "na"), skip = 1, n_max = 10) %>% 
-    tidyr::gather("year_month", "value", -Variables) %>% 
-    dplyr::mutate(date = lubridate::ymd(paste(year_month, "01")),
-                  year = lubridate::year(date),
-                  month = lubridate::month(date),
-                  Variables = gsub("\\s", "_", Variables)) %>% 
-    dplyr::select(-c(year_month, date)) %>% 
-    tidyr::spread(Variables, value) %>% 
-    setNames(., c("Year",
-                  "Month",
-                  "24_Hours_Mean_Relative_Humidity_percent",
-                  "Air_Temperature_Absolute_Extremes_Maximum_degC",
-                  "Air_Temperature_Absolute_Extremes_Minimum_degC",
-                  "Air_Temperature_Means_Daily_Maximum_degC",
-                  "Air_Temperature_Means_Daily_Minimum_degC",
-                  "Bright_Sunshine_Daily_Mean_hour",
-                  "Highest_Daily_Rainfall_Total_mm",
-                  "Minimum_Relative_Humidity_percent",
-                  "Number_Of_Rainy_Days",
-                  "Total_Rainfall_mm"))
-}
+# Preliminary Survey
 
-get_mss_daily <- function(years) {
-  #' Get Daily Records from Meteorological Service Singapore (MSS)
-  #' 
-  #' @description
-  #' The Changi station (S24) is hard-coded here.
-  #' 
-  #' Available data ranges from Jan 1980 to May 2020.
-  #' 
-  #' @details http://www.weather.gov.sg/climate-historical-daily/
-  #' 
-  #' @param years A vector of years of interest.
-  #' @return A table containing the combined historical daily records.
-  #' @examples
-  #' get_mss_daily(2014:2018)
-  #' get_mss_daily(2014:2020)
-  urls = paste0("http://www.weather.gov.sg/files/dailydata/DAILYDATA_S24_", 
-                t(outer(years, sprintf("%02d", 1:12), FUN = paste0)), 
-                ".csv")
-  
-  # There's no data beyond May 2020 (at the moment), so remove the last 7
-  #   months if 2020 is included
-  if (2020 %in% years) {
-    urls = urls[1:(length(urls) - 7)]
-  }
-  
-  myreader <- function(s) {
-    readr::read_csv(s) %>% 
-      # The "degree sign" in column headers are invalid multibyte characters
-      # Data after Apr 2020 have slightly different column names
-      # This would complicate joining the tables together
-      # So, it might be better to manually label all column names
-      setNames(., c("Station",
-                    "Year",
-                    "Month",
-                    "Day",
-                    "Daily_Rainfall_Total_mm",
-                    "Highest_30_Min_Rainfall_mm",
-                    "Highest_60_Min_Rainfall_mm",
-                    "Highest_120_Min_Rainfall_mm",
-                    "Mean_Temperature_degC",
-                    "Maximum_Temperature_degC",
-                    "Minimum_Temperature_degC",
-                    "Mean_Wind_Speed_kmh",
-                    "Max_Wind_Speed_kmh")) %>% 
-      # The "long dashes" (em dash?) representing missing values are invalid
-      #   multibyte characters and are replaced with NA (by coercion)
-      dplyr::mutate_at(dplyr::vars(-Station), as.numeric)
-  }
-  
-  dplyr::bind_rows(lapply(urls, myreader))
-}
-
-# s_data <- get_dos_monthly()
-# w_data <- get_mss_daily(years = 2014:2020)
-
-s_data <- readr::read_csv("../results/weather_monthly_1975_2020.csv")
-w_data <- readr::read_csv("../results/weather_daily_2014_2020.csv")
+```{r pre_explore, echo=FALSE, include=FALSE}
+grouped_month <- weather %>%
+  dplyr::select(Station, Year, Month, matches("Rainfall_Total|Temperature")) %>% 
+  dplyr::group_by(Station, Year, Month) %>% 
+  dplyr::summarise(Rainfall_Total = sum(Daily_Rainfall_Total_mm),
+                   Mean_Temperature = mean(Mean_Temperature_degC),
+                   Maximum_Temperature = mean(Maximum_Temperature_degC),
+                   Minimum_Temperature = mean(Minimum_Temperature_degC))
 ```
 
-## Monthly Weather Data
-```{r inspect1, comment="", size="tiny"}
-dplyr::glimpse(s_data)
-```
+---
 
-## Daily Weather Data
-```{r inspect2, comment="", size="tiny"}
-dplyr::glimpse(w_data)
-```
-
-```{r, explore_weather1, echo=FALSE, fig.cap="", fig.width=8, fig.height=6}
-s1 <- s_data %>%
-  dplyr::filter(Year >= 2014 & Year <= 2018) %>%
-  ggplot(aes(x = 1:nrow(.), y = Total_Rainfall_mm)) + 
-  scale_x_continuous(breaks = c(1 + 12 * (0:4)),
-                     label = c(2014:2018)) + 
+```{r, explore_weather, echo=FALSE, fig.cap="", fig.width=8, fig.height=5}
+w1 <- grouped_month %>% 
+  dplyr::filter(Station == "Changi") %>% 
+  tibble::add_column(x = 1:nrow(.)) %>% 
+  dplyr::select(-Rainfall_Total) %>% 
+  tidyr::gather("Variable",
+                "Value",
+                Mean_Temperature,
+                Maximum_Temperature,
+                Minimum_Temperature) %>% 
+  ggplot(aes(x = x, y = Value, color = Variable)) + 
+  scale_x_continuous(breaks = c(1 + 12 * (0:8)),
+                     label = c(2012:2020)) +
   geom_line(size = 1) + 
-  labs(title = "Total Monthly Rainfall from 2014 to 2018",
-       subtitle = "Are we getting more water?",
-       x = "Time (from 2014 to 2018)",
-       y = "Total Monthly Rainfal (mm)",
-       caption = "Source: singstat.gov.sg")
-
-s2 <- s_data %>%
-  dplyr::filter(Year >= 2014 & Year <= 2018) %>%
-  ggplot(aes(x = 1:nrow(.), y = Air_Temperature_Means_Daily_Maximum_degC)) + 
-  scale_x_continuous(breaks = c(1 + 12 * (0:4)),
-                     label = c(2014:2018)) + 
-  geom_line(size = 1) + 
-  labs(title = "Air Temperature Means Daily Maximum from 2014 to 2018",
+  labs(title = "Average monthly Temperature from 2012 to 2020",
        subtitle = "",
-       x = "Time (from 2014 to 2018)",
-       y = "Air Temperature Means Daily Maximum (degC)",
-       caption = "Source: singstat.gov.sg")
+       x = "",
+       y = "Temperature (\u00b0C)",
+       caption = "Source: weather.gov.sg")
 
-gridExtra::grid.arrange(s1, s2, nrow = 2)
-```
+w2 <- grouped_month %>% 
+  dplyr::select(Station, Year, Month, Rainfall_Total) %>% 
+  dplyr::mutate(x = (Year - 2012) * 12 + Month) %>% 
+  ggplot(aes(x = x, y = Rainfall_Total, color = Station)) + 
+  scale_x_continuous(breaks = c(1 + 12 * (0:8)),
+                     label = c(2012:2020)) +
+  geom_line(size = 1, alpha = 0.5) + 
+  labs(title = "Total monthly Rainfall from 2012 to 2020",
+       subtitle = "",
+       x = "",
+       y = "Total Rainfall (mm)",
+       caption = "Source: weather.gov.sg")
 
-```{r, explore_weather2, echo=FALSE, fig.cap="", fig.width=8, fig.height=6}
-# dplyr::glimpse(w_data)
-# 
-# w_data %>% 
-#   dplyr::filter(Year == 2014) %>%
-#   dplyr::mutate(Year.f = as.factor(Year),
-#                 Month.f = as.factor(Month)) %>% 
-#   ggplot(aes(x = Day, y = Daily_Rainfall_Total_mm, color = Month.f)) + 
-#   geom_line(size = 1)
+gridExtra::grid.arrange(w1, w2, nrow = 2)
 ```
