@@ -1,5 +1,5 @@
 ---
-title: "Capstone Project Proposal:\nAnalysing Dengue Cases in Singapore"
+title: "Capstone Project:\nAnalysing Dengue Cases in Singapore"
 author: "Shayne, Roscoe, Anu"
 date: "04 July 2020"
 output:
@@ -89,22 +89,39 @@ get_mss_daily <- function(years, stations = c("Changi")) {
   }
   
   mappings = list(
+    "Admiralty" = "104_",
     "Ang Mo Kio" = "109_",
-    "Buangkok" = "55_",
-    "Bukit Panjang" = "64_",
     "Changi" = "24_",
+    "Choa Chu Kang (South)" = "121_",
+    "Clementi" = "50_",
+    "East Coast Parkway" = "107_",
     "Jurong (West)" = "44_",
+    "Jurong Island" = "117_",
     "Khatib" = "122_",
-    "Lower Peirce Reservoir" = "08_",
-    "Marine Parade" = "113_",
-    "Punggol" = "81_",
-    "Queenstown" = "77_",
+    "Marina Barrage" = "108_",
+    "Newton" = "111_",
+    "Pasir Panjang" = "116_",
+    "Pulau Ubin" = "106_",
     "Seletar" = "25_",
     "Sembawang" = "80_",
-    "Serangoon" = "36_",
-    "Toa Payoh" = "88_",
-    "Yishun" = "91_"
+    "Sentosa Island" = "60_",
+    "Tai Seng" = "43_",
+    "Tengah" = "23_",
+    "Tuas South" = "115_"
+    
+    # "Boon Lay (East)" = "86_",
+    # "Buangkok" = "55_",
+    # "Bukit Panjang" = "64_",
+    # "Lower Peirce Reservoir" = "08_",
+    # "Marine Parade" = "113_",
+    # "Punggol" = "81_",
+    # "Queenstown" = "77_",
+    # "Semakau Island" = "102_",
+    # "Serangoon" = "36_",
+    # "Toa Payoh" = "88_",
+    # "Yishun" = "91_"
   )
+  
   station_nums = sapply(stations, function(x) mappings[[x]])
   urls = paste0("http://www.weather.gov.sg/files/dailydata/DAILYDATA_S", 
                 t(outer(station_nums, dates, FUN = paste0)), 
@@ -151,6 +168,27 @@ get_mss_daily <- function(years, stations = c("Changi")) {
 #                                  "Marine Parade",
 #                                  "Queenstown",
 #                                  "Sembawang"))
+
+# w_data <- get_mss_daily(years = 2012:2020,
+#                     stations = c("Admiralty",
+#                                  "Ang Mo Kio",
+#                                  "Changi",
+#                                  "Choa Chu Kang (South)",
+#                                  "Clementi",
+#                                  "East Coast Parkway",
+#                                  "Jurong (West)",
+#                                  "Jurong Island",
+#                                  "Khatib",
+#                                  "Marina Barrage",
+#                                  "Newton",
+#                                  "Pasir Panjang",
+#                                  "Pulau Ubin",
+#                                  "Seletar",
+#                                  "Sembawang",
+#                                  "Sentosa Island",
+#                                  "Tai Seng",
+#                                  "Tengah",
+#                                  "Tuas South"))
 
 weather <- readr::read_csv("../results/weather_daily_2012_2020.csv")
 bulletin <- get_moh_eweekly("../data/weekly-infectious-disease-bulletin-year-2020ea2c0b1cec1549009844537d52f2377f.xlsx")

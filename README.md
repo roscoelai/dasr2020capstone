@@ -65,7 +65,32 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
 
 ## Todo
 - [ ] [This might be useful](http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf)
-  - [ ] Extract table from PDF
+  - [ ] Extract table from .pdf
+    - Not happening without Java :pensive:
+    - [x] Convert to .csv using Excel
+    - [x] Tidy with R
+- [ ] Re-select climate stations
+  - The following stations may have reasonably recent rainfall and temperature data
+    - [ ] Admiralty
+    - [ ] Ang Mo Kio
+    - [ ] Changi
+    - [ ] Choa Chu Kang (South)
+    - [ ] Clementi
+    - [ ] East Coast Parkway
+    - [ ] Jurong (West)
+    - [ ] Jurong Island
+    - [ ] Khatib
+    - [ ] Marina Barrage
+    - [ ] Newton
+    - [ ] Pasir Panjang
+    - [ ] Pulau Ubin
+    - [ ] Seletar
+    - [ ] Sembawang
+    - [ ] Sentosa Island
+    - [ ] Tai Seng
+    - [ ] Tengah
+    - [ ] Tuas South
+  - Might have to refine selection after checking for missing values
 - [ ] Google Trends analysis (like what Prof. Roh did for COVID-19)?
     - Search term frequency for symptoms of dengue vs. number of cases
 - [ ] Grandiose (!)
