@@ -25,7 +25,7 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
 - Yearly population distribution across named regions in Singapore
 - COVID-19 cases (Apr - Jul 2020)
 
-## Deprecated Data
+### Deprecated Data
 - Monthly Air Temperature And Sunshine, Relative Humidity And Rainfall from [Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)
   - <u>Reason</u>: Higher resolution (daily) data available from MSS
   - Might reconsider if humidity data is needed
@@ -63,20 +63,13 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
 
 
 
-## Ideas
-- Predictions!
-  - Create model using data from 2014 to 2018
-    - (Number of Cases) ~ Precipitation + Temperature [+ Humidity + ...]
-  - Predict number of cases in 2020
-  - Check against actual live data
-
-- Grandiose (!!!)
+## Todo
+- [ ] [This might be useful](http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf)
+  - [ ] Extract table from PDF
+- [ ] Google Trends analysis (like what Prof. Roh did for COVID-19)?
+    - Search term frequency for symptoms of dengue vs. number of cases
+- [ ] Grandiose (!)
   - Population distribution
   - Spatial analysis (of what variables)?
     - Breeding habitat vs. number of cases?
     - Property prices vs. number of cases?
-
-## Todo
-- [ ] [This might be useful](http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf)
-- [ ] Google Trends analysis (like what Prof. Roh did for COVID-19)?
-    - Search term frequency for symptoms of dengue vs. number of cases
