@@ -91,6 +91,9 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
     - [ ] Tengah
     - [ ] Tuas South
   - Might have to refine selection after checking for missing values
+
+![](./climate_stations.png)
+
 - [ ] Google Trends analysis (like what Prof. Roh did for COVID-19)?
     - Search term frequency for symptoms of dengue vs. number of cases
 - [ ] Grandiose (!)
