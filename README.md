@@ -1,4 +1,4 @@
-[Preview Current Version of Slides](https://roscoelai.github.io/dasr2020capstone/src/project_proposal3.html)
+[Preview Current Version of Slides](https://roscoelai.github.io/dasr2020capstone/tmp/project_proposal.html)
 
 # Capstone Project Proposal: Analysing Dengue Cases in Singapore
 
