@@ -1,5 +1,7 @@
 [Preview Current Version of Slides](https://roscoelai.github.io/dasr2020capstone/tmp/project_proposal.html)
 
+[Preview Current Version of Document](https://roscoelai.github.io/dasr2020capstone/src/capstone_project_html.html)
+
 # Capstone Project Proposal: Analysing Dengue Cases in Singapore
 
 <img src="./ncases_2012_2020.png" width="50%">
@@ -69,27 +71,27 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
     - [ ] Not happening without Java :pensive:
     - [x] Convert to .csv using Excel
     - [x] Tidy with R
-- [ ] Re-select climate stations
+- [x] Re-select climate stations
   - The following stations may have reasonably recent rainfall and temperature data
-    - [ ] Admiralty
-    - [ ] Ang Mo Kio
-    - [ ] Changi
-    - [ ] Choa Chu Kang (South)
-    - [ ] Clementi
-    - [ ] East Coast Parkway
-    - [ ] Jurong (West)
-    - [ ] Jurong Island
-    - [ ] Khatib
-    - [ ] Marina Barrage
-    - [ ] Newton
-    - [ ] Pasir Panjang
-    - [ ] Pulau Ubin
-    - [ ] Seletar
-    - [ ] Sembawang
-    - [ ] Sentosa Island
-    - [ ] Tai Seng
-    - [ ] Tengah
-    - [ ] Tuas South
+    - [x] Admiralty
+    - [x] Ang Mo Kio
+    - [x] Changi
+    - [x] Choa Chu Kang (South)
+    - [x] Clementi
+    - [x] East Coast Parkway
+    - [x] Jurong (West)
+    - [ ] Jurong Island - EXCLUDED
+    - [x] Khatib
+    - [x] Marina Barrage
+    - [x] Newton
+    - [x] Pasir Panjang
+    - [ ] Pulau Ubin - EXCLUDED
+    - [x] Seletar
+    - [ ] Sembawang - EXCLUDED
+    - [ ] Sentosa Island - EXCLUDED
+    - [x] Tai Seng
+    - [x] Tengah
+    - [ ] Tuas South - EXCLUDED
   - Might have to refine selection after checking for missing values
 
 ![](./climate_stations.png)
