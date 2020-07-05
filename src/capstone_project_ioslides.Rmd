@@ -1,7 +1,7 @@
 ---
 title: "Capstone Project:\nAnalysing Dengue Cases in Singapore"
 author: "Shayne, Roscoe, Anu"
-date: "04 July 2020"
+date: "05 July 2020"
 output:
   ioslides_presentation:
     smaller: true
@@ -340,7 +340,33 @@ grouped_month <- weather %>%
                    Mean_Temperature = mean(Mean_Temperature_degC),
                    Maximum_Temperature = mean(Maximum_Temperature_degC),
                    Minimum_Temperature = mean(Minimum_Temperature_degC))
+
+station_positions <- readr::read_csv("../data/Station_Records.csv") %>% 
+  dplyr::rename(Lat = `Lat.(N)`,
+                Long = `Long. (E)`) %>% 
+  dplyr::select(Station,
+                Lat,
+                Long,
+                `Period of Daily Rain Records`, 
+                `Period of Mean Temperature`,
+                `Period of Max and Min Temperature`) %>% 
+  tidyr::drop_na() %>% 
+  dplyr::select(Station, Lat, Long) %>%
+  dplyr::arrange(Station)
 ```
+
+```{r, viz_stations, echo=FALSE}
+station_positions %>%
+  leaflet::leaflet(width = "100%") %>% 
+  leaflet::addTiles() %>% 
+  leaflet::addMarkers(~Long, 
+                      ~Lat, 
+                      popup = ~as.character(Station), 
+                      label = ~as.character(Station), 
+                      labelOptions = leaflet::labelOptions(noHide = T))
+```
+
+---
 
 ```{r, explore_weather, echo=FALSE, fig.cap="", fig.width=8, fig.height=5}
 w1 <- grouped_month %>% 

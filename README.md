@@ -66,7 +66,7 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
 ## Todo
 - [ ] [This might be useful](http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf)
   - [ ] Extract table from .pdf
-    - Not happening without Java :pensive:
+    - [ ] Not happening without Java :pensive:
     - [x] Convert to .csv using Excel
     - [x] Tidy with R
 - [ ] Re-select climate stations

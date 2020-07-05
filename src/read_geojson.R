@@ -5,16 +5,29 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 library(magrittr)
 
 # Read .geojson file(s)
-geojson_file <- "../data/dengue-cases-central/dengue-cases-central-geojson.geojson"
+lspdf <- rgdal::readOGR("../data/dengue-cases-central/dengue-cases-central-geojson.geojson")
 
-lspdf <- rgdal::readOGR(geojson_file)
+lspdf@data <- lspdf@data %>% 
+  dplyr::mutate(ncases = gsub(".*Dengue Cases : (\\d+).*", "\\1", Description),
+                ncases = as.numeric(ncases))
+
+pal <- leaflet::colorNumeric("Reds", lspdf@data$ncases)
 
 leaflet::leaflet(lspdf) %>%
   leaflet::addTiles() %>%
-  leaflet::addPolygons(stroke = FALSE,
-                       smoothFactor = 0.3,
-                       fillOpacity = 0.7,
-                       fillColor = "deepskyblue4")
+  leaflet::addPolygons(stroke = T,
+                       opacity = 1,
+                       color = "black",
+                       smoothFactor = 0.5,
+                       fillOpacity = 0.75,
+                       fillColor = ~pal(ncases),
+                       weight = 1,
+                       label = lspdf@data$ncases,
+                       labelOptions = leaflet::labelOptions(
+                         style = list("font-weight" = "normal", padding = "3px 8px"),
+                         textsize = "15px",
+                         direction = "auto"
+                       ))
 
 
 

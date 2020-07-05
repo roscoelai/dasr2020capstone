@@ -5,9 +5,10 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 library(magrittr)
 
 # Read .kml file(s)
-kml_file <- "../data/dengue-cases-central/dengue-cases-central-kml.kml"
+df <- sf::st_read("../data/dengue-cases-central/dengue-cases-central-kml.kml")
 
-df <- sf::st_read(kml_file)
+class(df)
+
 df <- df %>% 
   dplyr::mutate(ncases = gsub(".*Dengue Cases : (\\d+).*", "\\1", Description),
                 ncases = as.numeric(ncases))
@@ -16,6 +17,14 @@ dplyr::glimpse(df)
 
 plot(df)
 
+leaflet::leaflet(df) %>%
+  leaflet::addTiles() %>%
+  leaflet::addPolygons(stroke = T,
+                       opacity = 1,
+                       smoothFactor = 0.5,
+                       fillOpacity = 0.75,
+                       fillColor = ~pal(Name),
+                       weight = 1)
 
 
 # write.csv(map, "../results/kml1.csv")
