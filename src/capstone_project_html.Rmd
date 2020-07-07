@@ -1,7 +1,7 @@
 ---
-title: "Capstone Project:\nAnalysing Dengue Cases in Singapore"
+title: "Analysing Dengue Cases in Singapore"
 author: "Shayne, Roscoe, Anu"
-date: "05 July 2020"
+date: "07 July 2020"
 output: html_document
 ---
 
@@ -10,207 +10,78 @@ knitr::opts_chunk$set(echo = TRUE)
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-library(ggplot2);library(magrittr)
+library(magrittr)
+library(ggplot2)
 ```
 
-```{r, import, include=FALSE}
+```{r, import_moh_bulletin, include=FALSE}
 get_moh_eweekly <- function(path) {
-  #' Get (Epi) Weekly Records from Ministry of Health (MOH)
+  #' Get Weekly Records from Ministry of Health (MOH)
   #' 
   #' @description
-  #' Available data ranges from 2012-W01 to 2020-W25. The data file is an Excel Workbook with multiple sheets. The file has to be downloaded first. Each sheet stores a year's data.
+  #' Data from 2012-W01 to 2020-W26. Single Excel file with 1 sheet per year. 
+  #' The link will download the file.
   #' 
-  #' @details https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020ea2c0b1cec1549009844537d52f2377f.xlsx
+  #' @details
+  #' https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin
+  #'
+  #' Up to W25: https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020ea2c0b1cec1549009844537d52f2377f.xlsx
+  #'
+  #' Up to W26: https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020ef64ac3712334d4dba1206de20313f78.xlsx
   #' 
   #' @param path The file path of the dataset.
-  #' @return A table containing the combined historical epi-weekly records.
-  #' @examples
-  #' get_moh_eweekly("dataset.xlsx")
+  #' @return Combined weekly records.
   
-  # Read multiple sheets in an Excel Workbook
-  dfs = path %>% 
-    readxl::excel_sheets() %>% 
-    set_names(., .) %>%
-    lapply(readxl::read_xlsx, path = path, skip = 1)
-  
-  # Start and End date formats are different for 2020
-  dfs[["2020"]]$Start = lubridate::dmy(dfs[["2020"]]$Start)
-  dfs[["2020"]]$End = lubridate::dmy(dfs[["2020"]]$End)
-  
-  for (y in names(dfs)) {
-    # Add a "Year" column to distinguish different tables
-    dfs[[y]]$Year = y
-    
-    # Standardize naming of column headers
-    names(dfs[[y]])[names(dfs[[y]]) %in% c("Campylobacter enterosis",
-                                           "Campylobacterenterosis",
-                                           "Campylobacteriosis")] <- "Campylobacter enteritis"
-    names(dfs[[y]])[names(dfs[[y]]) == "Chikungunya Fever"] <- "Chikungunya"
-    names(dfs[[y]])[names(dfs[[y]]) == "Dengue Haemorrhagic Fever"] <- "DHF"
-    names(dfs[[y]])[names(dfs[[y]]) == "Dengue Fever"] <- "Dengue"
-    names(dfs[[y]])[names(dfs[[y]]) %in% c("Hand, Foot and Mouth Disease",
-                                           "Hand, Foot Mouth Disease")] <- "HFMD"
-    names(dfs[[y]])[names(dfs[[y]]) == "Nipah virus infection"] <- "Nipah"
-    names(dfs[[y]])[names(dfs[[y]]) == "Viral Hepatitis A"] <- "Acute Viral Hepatitis A"
-    names(dfs[[y]])[names(dfs[[y]]) == "Viral Hepatitis E"] <- "Acute Viral Hepatitis E"
-    names(dfs[[y]])[names(dfs[[y]]) %in% c("Zika Virus Infection",
-                                           "Zika virus infection")] <- "Zika"
-  }
-  
-  dplyr::bind_rows(dfs) %>% 
-    dplyr::select(Year, everything()) %>% 
-    dplyr::arrange(Year, `Epidemiology Wk`) %>% 
-    dplyr::mutate(Year = as.numeric(Year))
-}
-
-get_mss_daily <- function(years, stations = c("Changi")) {
-  #' Get Daily Records from Meteorological Service Singapore (MSS)
-  #' 
-  #' @description
-  #' Available data ranges from Jan 1980 to May 2020. Epidemiological weeks will be calculated automatically.
-  #' 
-  #' @details http://www.weather.gov.sg/climate-historical-daily/
-  #' 
-  #' @param years A vector of years of interest.
-  #' @param stations A vector of climate station names. Defaults to c("Changi").
-  #' @return A table containing the combined historical daily records.
-  #' @examples
-  #' get_mss_daily(2014:2018)
-  #' get_mss_daily(2012:2020, c("Changi", "Marine Parade", "Queenstown", "Sembawang"))
-  
-  # All combinations of the given years and the 12 months
-  dates = as.vector(t(outer(years, sprintf("%02d", 1:12), FUN = paste0)))
-  
-  # Remove the last 7 months if 2020 is included (no data after May 2020)
-  if (2020 %in% years) {
-    dates = dates[1:(length(dates) - 7)]
-  }
-  
-  mappings = list(
-    "Admiralty" = "104_",
-    "Ang Mo Kio" = "109_",
-    "Changi" = "24_",
-    "Choa Chu Kang (South)" = "121_",
-    "Clementi" = "50_",
-    "East Coast Parkway" = "107_",
-    "Jurong (West)" = "44_",
-    "Jurong Island" = "117_",
-    "Khatib" = "122_",
-    "Marina Barrage" = "108_",
-    "Newton" = "111_",
-    "Pasir Panjang" = "116_",
-    "Pulau Ubin" = "106_",
-    "Seletar" = "25_",
-    "Sembawang" = "80_",
-    "Sentosa Island" = "60_",
-    "Tai Seng" = "43_",
-    "Tengah" = "23_",
-    "Tuas South" = "115_"
-    
-    # "Boon Lay (East)" = "86_",
-    # "Buangkok" = "55_",
-    # "Bukit Panjang" = "64_",
-    # "Lower Peirce Reservoir" = "08_",
-    # "Marine Parade" = "113_",
-    # "Punggol" = "81_",
-    # "Queenstown" = "77_",
-    # "Semakau Island" = "102_",
-    # "Serangoon" = "36_",
-    # "Toa Payoh" = "88_",
-    # "Yishun" = "91_"
+  # Variation in column header names over the years must be standardized
+  old_new = c(
+    "Campylobacter enterosis" = "Campylobacter enteritis",
+    "Campylobacterenterosis" = "Campylobacter enteritis",
+    "Campylobacteriosis" = "Campylobacter enteritis",
+    "Chikungunya Fever" = "Chikungunya",
+    "Dengue Haemorrhagic Fever" = "DHF",
+    "Dengue Fever" = "Dengue",
+    "Hand, Foot and Mouth Disease" = "HFMD",
+    "Hand, Foot Mouth Disease" = "HFMD",
+    "Nipah virus infection" = "Nipah",
+    "Viral Hepatitis A" = "Acute Viral Hepatitis A",
+    "Viral Hepatitis E" = "Acute Viral Hepatitis E",
+    "Zika Virus Infection" = "Zika",
+    "Zika virus infection" = "Zika"
   )
   
-  station_nums = sapply(stations, function(x) mappings[[x]])
-  urls = paste0("http://www.weather.gov.sg/files/dailydata/DAILYDATA_S", 
-                t(outer(station_nums, dates, FUN = paste0)), 
-                ".csv")
-  
-  myreader = function(url) {
-    tryCatch(
-      readr::read_csv(url) %>% 
-        # The "degree sign" in column headers are invalid multibyte characters
-        # Data after Apr 2020 have slightly different column names
-        # This would complicate joining the tables together
-        # So, it might be better to manually label all column names
-        setNames(., c("Station",
-                      "Year",
-                      "Month",
-                      "Day",
-                      "Daily_Rainfall_Total_mm",
-                      "Highest_30_Min_Rainfall_mm",
-                      "Highest_60_Min_Rainfall_mm",
-                      "Highest_120_Min_Rainfall_mm",
-                      "Mean_Temperature_degC",
-                      "Maximum_Temperature_degC",
-                      "Minimum_Temperature_degC",
-                      "Mean_Wind_Speed_kmh",
-                      "Max_Wind_Speed_kmh")) %>% 
-        # The "long dashes" (em dash?) representing missing values are invalid
-        #   multibyte characters and are replaced with NA (by coercion)
-        dplyr::mutate_at(dplyr::vars(-Station), as.numeric),
-      error = function(e) { NA }
-    )
-  }
-  
-  dfs = lapply(urls, myreader)
-  
-  dplyr::bind_rows(dfs[!is.na(dfs)]) %>% 
-    # Calculate epidemiological weeks (for joining with other datasets)
-    dplyr::mutate(Date = paste(Year, Month, Day, sep = "-"),
-                  Epiweek = lubridate::epiweek(Date)) %>% 
-    dplyr::select(Station, Epiweek, everything(), -Date)
+  path %>% 
+    readxl::excel_sheets() %>% 
+    lapply(function(sheetname) {
+      df = readxl::read_xlsx(path, sheetname, skip = 1)
+      
+      df$Year = sheetname
+      
+      # Start and End date formats are different for 2020
+      if (sheetname == "2020") {
+        df$Start = lubridate::dmy(df$Start)
+        df$End = lubridate::dmy(df$End)
+      }
+      
+      # Standardize column names
+      mask = match(names(old_new), names(df))
+      names(df)[na.omit(mask)] = old_new[which(!is.na(mask))]
+      
+      df
+    }) %>% 
+    dplyr::bind_rows() %>% 
+    dplyr::mutate(Year = as.numeric(Year)) %>% 
+    dplyr::select(Year, everything()) %>% 
+    dplyr::arrange(Year, `Epidemiology Wk`)
 }
 
-# w_data <- get_mss_daily(years = 2012:2020,
-#                     stations = c("Changi",
-#                                  "Marine Parade",
-#                                  "Queenstown",
-#                                  "Sembawang"))
-
-# w_data <- get_mss_daily(years = 2012:2020,
-#                     stations = c("Admiralty",
-#                                  "Ang Mo Kio",
-#                                  "Changi",
-#                                  "Choa Chu Kang (South)",
-#                                  "Clementi",
-#                                  "East Coast Parkway",
-#                                  "Jurong (West)",
-#                                  "Jurong Island",
-#                                  "Khatib",
-#                                  "Marina Barrage",
-#                                  "Newton",
-#                                  "Pasir Panjang",
-#                                  "Pulau Ubin",
-#                                  "Seletar",
-#                                  "Sembawang",
-#                                  "Sentosa Island",
-#                                  "Tai Seng",
-#                                  "Tengah",
-#                                  "Tuas South"))
-
-weather <- readr::read_csv("../results/weather_daily_2012_2020.csv")
-bulletin <- get_moh_eweekly("../data/weekly-infectious-disease-bulletin-year-2020ea2c0b1cec1549009844537d52f2377f.xlsx")
-```
-
-```{r, transform, include=FALSE}
-grouped_epiweek_changi <- weather %>%
-  dplyr::filter(Station == "Changi") %>%
-  dplyr::select(Year, Epiweek, matches("Rainfall_Total|Temperature"), -Station) %>% 
-  dplyr::group_by(Year, Epiweek) %>% 
-  dplyr::summarise(Rainfall = sum(Daily_Rainfall_Total_mm),
-                   Temperature = mean(Mean_Temperature_degC))
-
-df <- bulletin %>% 
-  dplyr::rename(Epiweek = `Epidemiology Wk`) %>% 
-  dplyr::select(Year, Epiweek, Start, Dengue) %>% 
-  tidyr::drop_na() %>% 
-  dplyr::left_join(grouped_epiweek_changi, c("Year", "Epiweek"))
+bulletin <- get_moh_eweekly("../data/weekly-infectious-disease-bulletin-year-2020ef64ac3712334d4dba1206de20313f78.xlsx")
 ```
 
 ---
 
-```{r, viz_ncases, echo=FALSE, fig.width=8, fig.height=6}
-f1 <- df %>% 
+```{r, viz_ncases, echo=FALSE, fig.width=8, fig.height=4}
+f1 <- bulletin %>% 
+  tidyr::drop_na(Dengue) %>% 
   ggplot(aes(x = Start, y = Dengue)) + 
   geom_line(size = 1, color = "tomato3", alpha = 0.7) + 
   labs(title = "Weekly Dengue Cases from 2012 to 2020",
@@ -224,7 +95,7 @@ f1
 
 
 
-## Overview of the Project {data-background=https://research.a-star.edu.sg/cms/figure/index/55e43a55140ba0db748b4b69.jpg data-background-size="20% 20%" data-background-position="right top"}
+## Overview of the Project
 Dengue fever is a vector-borne infectious disease that are endemic in the tropical world. Singapore is one of several countries with high disease burden of dengue. In 2020, Singapore saw 1,158 dengue cases in a week of June - the highest number of weekly dengue cases ever recorded since 2014. Why is there a sudden spike in dengue cases this year?
 
 ### Questions
@@ -237,10 +108,30 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
 
 
 ## Data
-- Daily climate records from [Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
+- [Daily records](http://www.weather.gov.sg/climate-historical-daily/) from Meteorological Service Singapore (MSS)
   - Relevant variables: Rainfall, Temperature
-  - Data for 2012 to 2020 will be gathered from selected climate stations
-- Weekly case numbers (2012-W01 to 2020-W25) from [Ministry of Health (MOH)](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020ea2c0b1cec1549009844537d52f2377f.xlsx)
+  - Data from 2012 to 2020 will be gathered from selected climate stations
+    - [Climate station records](http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf) indicate the following stations might have both rainfall and temperature data:
+      - [x] Admiralty
+      - [x] Ang Mo Kio
+      - [x] Changi
+      - [x] Choa Chu Kang (South)
+      - [x] Clementi
+      - [x] East Coast Parkway
+      - [x] Jurong (West)
+      - [ ] Jurong Island - EXCLUDED (too remote)
+      - [x] Khatib
+      - [x] Marina Barrage
+      - [x] Newton
+      - [x] Pasir Panjang
+      - [ ] Pulau Ubin - EXCLUDED (too remote)
+      - [x] Seletar
+      - [ ] Sembawang - EXCLUDED (too many missing values)
+      - [ ] Sentosa Island - EXCLUDED (too remote)
+      - [x] Tai Seng
+      - [x] Tengah
+      - [ ] Tuas South - EXCLUDED (too remote)
+- [Weekly infectious diesease bulletin (2012-W01 to 2020-W26)](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020ef64ac3712334d4dba1206de20313f78.xlsx) from [Ministry of Health (MOH)](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
 - Latest number of cases by named regions in Singapore from [National Environment Agency (NEA)](https://www.nea.gov.sg/dengue-zika/dengue/dengue-clusters)
 - Yearly population distribution across named regions in Singapore
 - COVID-19 cases (Apr - Jul 2020)
@@ -268,8 +159,6 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
 - To test if atmospheric variables predict number of dengue cases
   - Create models for regression
   - Compare the predicted value with actual value
-
-## Analysis Plan
 - For the current trend, explain the differences between the number of cases in different regions
   - According to the news report, East region has the largest number of clusters compared to other parts of Singapore
   - In particular, does Marine Parade and Sembawang (or Queenstown?) have any differences in their weather variables?
@@ -289,7 +178,123 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
 
 ---
 
-```{r, viz_grid, echo=FALSE, warning=FALSE, fig.width=8, fig.height=6}
+```{r, import_mss_records, include=FALSE}
+get_mss_daily <- function(years, stations = "Changi") {
+  #' Compile Daily Records from Meteorological Service Singapore (MSS)
+  #' 
+  #' @description Data from Jan 1980 to May 2020.
+  #' 
+  #' @details http://www.weather.gov.sg/climate-historical-daily/
+  #' 
+  #' @param years A vector of years of interest.
+  #' @param stations A vector of climate station names. Defaults to "Changi".
+  #' @return A table containing the combined historical daily records.
+  #' @examples
+  #' get_mss_daily(2014:2018)
+  #' get_mss_daily(2012:2020, c("Changi", "Marine Parade", "Sembawang"))
+  
+  stations_vec = c(
+    "Admiralty" = "104_",
+    "Ang Mo Kio" = "109_",
+    "Changi" = "24_",
+    "Choa Chu Kang (South)" = "121_",
+    "Clementi" = "50_",
+    "East Coast Parkway" = "107_",
+    "Jurong (West)" = "44_",
+    # "Jurong Island" = "117_",
+    "Khatib" = "122_",
+    "Marina Barrage" = "108_",
+    "Newton" = "111_",
+    "Pasir Panjang" = "116_",
+    # "Pulau Ubin" = "106_",
+    # "Seletar" = "25_",
+    "Sembawang" = "80_",
+    # "Sentosa Island" = "60_",
+    "Tai Seng" = "43_",
+    "Tengah" = "23_"
+    # "Tuas South" = "115_"
+  )
+  
+  # List URLs with all climate station number-year-month combinations
+  base_url = "http://www.weather.gov.sg/files/dailydata/DAILYDATA_S"
+  station_nums = stations_vec[match(stations, names(stations_vec))]
+  year_months = as.vector(t(outer(years, sprintf("%02d", 1:12), FUN = paste0)))
+  station_year_months = t(outer(station_nums, year_months, FUN = paste0))
+  
+  urls = paste0(base_url, station_year_months, ".csv")
+  
+  dfs = urls %>% 
+    lapply(function(url) {
+      tryCatch(
+        readr::read_csv(url) %>% 
+          # Invalid multibyte characters "degree sign" in column headers
+          # Different column names after Apr 2020
+          # Manually label column names to facilitate row binding
+          setNames(., c("Station",
+                        "Year",
+                        "Month",
+                        "Day",
+                        "Daily_Rainfall_Total_mm",
+                        "Highest_30_Min_Rainfall_mm",
+                        "Highest_60_Min_Rainfall_mm",
+                        "Highest_120_Min_Rainfall_mm",
+                        "Mean_Temperature_degC",
+                        "Maximum_Temperature_degC",
+                        "Minimum_Temperature_degC",
+                        "Mean_Wind_Speed_kmh",
+                        "Max_Wind_Speed_kmh")) %>% 
+          # Invalid multibyte characters "em dash" as (missing) values
+          # Coerced to NA
+          dplyr::mutate_at(dplyr::vars(-Station), as.numeric),
+        error = function(e) { NA })
+      })
+  
+  dfs[!is.na(dfs)] %>% 
+    dplyr::bind_rows() %>% 
+    dplyr::mutate(Epiweek = lubridate::epiweek(paste(Year,
+                                                     Month,
+                                                     Day,
+                                                     sep = "-"))) %>% 
+    dplyr::select(Station, Epiweek, everything())
+}
+
+# weather <- get_mss_daily(years = 2012:2012)
+
+# weather <- get_mss_daily(years = 2012:2020,
+#                          stations = c("Admiralty",
+#                                       "Ang Mo Kio",
+#                                       "Changi",
+#                                       "Choa Chu Kang (South)",
+#                                       "Clementi",
+#                                       "East Coast Parkway",
+#                                       "Jurong (West)",
+#                                       "Khatib",
+#                                       "Marina Barrage",
+#                                       "Newton",
+#                                       "Pasir Panjang",
+#                                       "Sembawang",
+#                                       "Tai Seng",
+#                                       "Tengah"))
+
+weather <- readr::read_csv("../results/weather_daily_2012_2020.csv")
+```
+
+```{r, prep_overall, include=FALSE}
+grouped_epiweek_changi <- weather %>%
+  dplyr::filter(Station == "Changi") %>%
+  dplyr::select(Year, Epiweek, matches("Rainfall_Total|Temperature"), -Station) %>% 
+  dplyr::group_by(Year, Epiweek) %>% 
+  dplyr::summarise(Rainfall = sum(Daily_Rainfall_Total_mm),
+                   Temperature = mean(Mean_Temperature_degC))
+
+df <- bulletin %>% 
+  dplyr::rename(Epiweek = `Epidemiology Wk`) %>% 
+  dplyr::select(Year, Epiweek, Start, Dengue) %>% 
+  tidyr::drop_na() %>% 
+  dplyr::left_join(grouped_epiweek_changi, c("Year", "Epiweek"))
+```
+
+```{r, viz_overall, echo=FALSE, warning=FALSE, fig.width=8, fig.height=6}
 f2 <- df %>% 
   ggplot(aes(x = Start, y = Rainfall)) + 
   geom_line(size = 1, color = "deepskyblue4", alpha = 0.7) + 
@@ -313,31 +318,14 @@ gridExtra::grid.arrange(f1, f2, f3, nrow = 3, top = "Is there a relationship?")
 
 ---
 
-```{r pre_explore, include=FALSE}
-df <- bulletin %>% 
-  dplyr::rename(Epiweek = `Epidemiology Wk`) %>% 
-  dplyr::select(Year, Epiweek, Start, Dengue) %>% 
-  tidyr::drop_na() %>% 
-  dplyr::left_join(grouped_epiweek_changi, c("Year", "Epiweek"))
-
-grouped_month <- weather %>%
-  dplyr::select(Station, Year, Month, matches("Rainfall_Total|Temperature")) %>% 
-  dplyr::group_by(Station, Year, Month) %>% 
-  dplyr::summarise(Rainfall_Total = sum(Daily_Rainfall_Total_mm),
-                   Mean_Temperature = mean(Mean_Temperature_degC),
-                   Maximum_Temperature = mean(Maximum_Temperature_degC),
-                   Minimum_Temperature = mean(Minimum_Temperature_degC))
-
+```{r prep_geo, include=FALSE}
 station_positions <- readr::read_csv("../data/Station_Records.csv") %>% 
+  tidyr::drop_na(`Period of Daily Rain Records`,
+                 `Period of Mean Temperature`,
+                 `Period of Max and Min Temperature`) %>% 
   dplyr::rename(Lat = `Lat.(N)`,
                 Long = `Long. (E)`) %>% 
-  dplyr::select(Station,
-                Lat,
-                Long,
-                `Period of Daily Rain Records`, 
-                `Period of Mean Temperature`,
-                `Period of Max and Min Temperature`) %>% 
-  tidyr::drop_na() %>% 
+  dplyr::mutate(Station = paste(Station, "Climate Station")) %>% 
   dplyr::select(Station, Lat, Long) %>%
   dplyr::arrange(Station)
 
@@ -345,29 +333,20 @@ station_positions <- readr::read_csv("../data/Station_Records.csv") %>%
 
 lspdf <- rgdal::readOGR("../data/master-plan-2019-planning-area-boundary-no-sea/planning-boundary-area.kml")
 
-lspdf@data$area_name <- gsub(".*?<td>(.*?)</td>.*", "\\1", lspdf@data$Description)
+lspdf@data <- lspdf@data %>% 
+  dplyr::mutate(area_name = gsub(".*?<td>(.*?)</td>.*", "\\1", Description) %>% 
+                  tolower() %>% 
+                  tools::toTitleCase())
+
 centers <- rgeos::gCentroid(lspdf, byid = T)
 centers$region <- lspdf@data$area_name
 
-pal <- leaflet::colorFactor(RColorBrewer::brewer.pal(nrow(lspdf@data), "Set3"), NULL)
-```
-
-## Climate Stations
-
-```{r, viz_stations, echo=FALSE}
-station_positions %>%
-  leaflet::leaflet(width = "100%") %>% 
-  leaflet::addTiles() %>% 
-  leaflet::addMarkers(~Long, 
-                      ~Lat, 
-                      popup = ~as.character(Station), 
-                      label = ~as.character(Station), 
-                      labelOptions = leaflet::labelOptions(noHide = T))
+pal <- leaflet::colorFactor(RColorBrewer::brewer.pal(length(lspdf), "Set3"), NULL)
 ```
 
 ## Climate Stations with Planning Areas Overlay
 
-```{r, viz_planning_areas, echo=FALSE}
+```{r, viz_geo, echo=FALSE}
 lspdf %>% 
   leaflet::leaflet(width = "100%") %>%
   leaflet::addTiles() %>%
@@ -375,23 +354,20 @@ lspdf %>%
                        opacity = 1,
                        # color = "black",
                        smoothFactor = 0.5,
-                       fillOpacity = 0.75,
+                       fillOpacity = 0.5,
                        fillColor = ~pal(area_name),
                        weight = 1,
-                       label = lspdf@data$area_name,
-                       labelOptions = leaflet::labelOptions(
-                         style = list("font-weight" = "normal", padding = "3px 8px"),
-                         textsize = "15px",
-                         direction = "auto",
-                         noHide = F
-                       )) %>% 
+                       popup = ~as.character(area_name)) %>% 
   leaflet::addLabelOnlyMarkers(data = centers,
                                lng = centers$x,
                                lat = centers$y,
                                label = ~region,
-                               labelOptions = leaflet::labelOptions(noHide = T,
-                                                           direction = "top",
-                                                           textOnly = T)) %>% 
+                               labelOptions = leaflet::labelOptions(
+                                 noHide = T,
+                                 textOnly = T,
+                                 textsize = "10px",
+                                 direction = "auto")
+                               ) %>% 
   leaflet::addMarkers(data = station_positions,
                       lng = ~Long,
                       lat = ~Lat,
@@ -402,7 +378,17 @@ lspdf %>%
 
 ---
 
-```{r, explore_weather, echo=FALSE, fig.width=8, fig.height=5}
+```{r prep_weather_monthly, include=FALSE}
+grouped_month <- weather %>%
+  dplyr::select(Station, Year, Month, matches("Rainfall_Total|Temperature")) %>% 
+  dplyr::group_by(Station, Year, Month) %>% 
+  dplyr::summarise(Rainfall_Total = sum(Daily_Rainfall_Total_mm),
+                   Mean_Temperature = mean(Mean_Temperature_degC),
+                   Maximum_Temperature = mean(Maximum_Temperature_degC),
+                   Minimum_Temperature = mean(Minimum_Temperature_degC))
+```
+
+```{r, viz_weather_monthly, echo=FALSE, fig.width=8, fig.height=5}
 w1 <- grouped_month %>% 
   dplyr::filter(Station == "Changi") %>% 
   tibble::add_column(x = 1:nrow(.)) %>% 
