@@ -2,7 +2,43 @@
 
 [Preview Current Version of Document](https://roscoelai.github.io/dasr2020capstone/src/capstone_project_html.html)
 
-# Capstone Project Proposal: Analysing Dengue Cases in Singapore
+# Analysing Dengue Cases in Singapore
+
+---
+
+## Meeting (08 Jul 2020)
+### S
+- Q1: Case numbers for different diseases across 2012-2020
+  - Plot weekly by months for each year - line/bar graph and heat map
+  - Compare significant differences between years
+- Q2: Weather variables across 2012 - 2020
+  - Variables: daily temperature, wind speed, daily total rainfall
+  - Aggregate to weekly data - median, mean, min, max, range
+  - Plot weekly by months for each year - bar graph and heat map
+
+### A
+- Q3: Correlate case numbers and weather variables in general
+  - For each disease to each weather variables
+  - Which disease is most related to weather
+- Q4: Regression model
+  - Y (number of cases) = temperature range + e
+  - Y (number of cases) = temperature range + total rainfall + e
+  - Y (number of cases) = temperature range + total rainfall + humidity + e
+- Q5: Identify highest rainfall months and plot the number of cases over the years
+
+### R
+- Q7: Compare cases across singapore regions
+  - Compare differences of cases among regions in Singapore
+  - Geographical plots using Leaflet
+  - Leaflet with clusterOptions
+- R scripts for data import and tidy (and maybe collect... and maybe transform)
+
+### Others
+- Q6: Find intervention data (optional)
+
+---
+
+# Capstone Project Proposal
 
 <img src="./ncases_2012_2020.png" width="50%">
 
