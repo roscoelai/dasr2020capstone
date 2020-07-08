@@ -4,42 +4,36 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 library(magrittr)
 
-# Read .kml file(s)
-df <- sf::st_read("../data/dengue-cases-central/dengue-cases-central-kml.kml")
+regions <- c(
+  "central" = "../data/dengue-cases-central/dengue-cases-central-kml.kml",
+  "northeast" = "../data/dengue-cases-north-east/dengue-cases-north-east-kml.kml",
+  "southeast" = "../data/dengue-cases-south-east/dengue-cases-south-east-kml.kml",
+  "southwest" = "../data/dengue-cases-south-west/dengue-cases-south-west-kml.kml"
+)
 
-class(df)
+spdf <- regions %>% 
+  lapply(rgdal::readOGR) %>% 
+  do.call("rbind", .)
 
-df <- df %>% 
-  dplyr::mutate(ncases = gsub(".*Dengue Cases : (\\d+).*", "\\1", Description),
-                ncases = as.numeric(ncases))
+spdf@data$ncases <- 
+  as.numeric(gsub(".*Cases : (\\d+).*", "\\1", spdf@data$Description))
 
-dplyr::glimpse(df)
+# spdf@data %>% 
+#   dplyr::mutate(ncases = gsub(".*Cases : (\\d+).*", "\\1", Description),
+#                 ncases = as.numeric(ncases))
 
-plot(df)
+# pal <- leaflet::colorFactor(RColorBrewer::brewer.pal(length(spdf), "Set3"), NULL)
 
-leaflet::leaflet(df) %>%
+pal <- leaflet::colorNumeric("Reds", spdf@data$ncases)
+
+spdf %>% 
+  leaflet::leaflet() %>%
   leaflet::addTiles() %>%
   leaflet::addPolygons(stroke = T,
                        opacity = 1,
                        smoothFactor = 0.5,
                        fillOpacity = 0.75,
-                       fillColor = ~pal(Name),
-                       weight = 1)
-
-
-# write.csv(map, "../results/kml1.csv")
-
-kml_files <- c(
-  "./input/dengue-cases/dengue-cases-central-kml.kml",
-  "./input/dengue-cases/dengue-cases-north-east-kml.kml",
-  "./input/dengue-cases/dengue-cases-north-west-kml.kml",
-  "./input/dengue-cases/dengue-cases-south-east-kml.kml",
-  "./input/dengue-cases/dengue-cases-south-west-kml.kml"
-)
-
-maps <- lapply(kml_files, st_read)
-plot(maps[[1]])
-plot(maps[[2]])
-plot(maps[[3]])
-plot(maps[[4]])
-plot(maps[[5]])
+                       fillColor = ~pal(ncases),
+                       weight = 0.5,
+                       label = ~as.character(ncases),
+                       popup = ~as.character(ncases))
