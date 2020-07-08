@@ -35,6 +35,7 @@
 
 ### Others
 - Q6: Find intervention data (optional)
+- Addresses or geocoords of clinics
 
 ---
 
