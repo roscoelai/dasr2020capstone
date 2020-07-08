@@ -116,4 +116,8 @@ get_moh_eweekly <- function(path) {
     dplyr::arrange(Year, `Epidemiology Wk`)
 }
 
-bulletin <- get_moh_eweekly("../data/weekly-infectious-disease-bulletin-year-2020ef64ac3712334d4dba1206de20313f78.xlsx")
+# bulletin <- get_moh_eweekly("../data/weekly-infectious-disease-bulletin-year-2020ef64ac3712334d4dba1206de20313f78.xlsx")
+# 
+# write.csv(bulletin, 
+#           "../results/moh_weekly_bulletin_2012_2020_tidy_20200708.csv", 
+#           row.names = F)

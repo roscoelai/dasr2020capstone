@@ -4,6 +4,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 library(magrittr)
 
+# Import ----
 regions <- c(
   "central" = "../data/dengue-cases-central/dengue-cases-central-kml.kml",
   "northeast" = "../data/dengue-cases-north-east/dengue-cases-north-east-kml.kml",
@@ -15,12 +16,11 @@ spdf <- regions %>%
   lapply(rgdal::readOGR) %>% 
   do.call("rbind", .)
 
+# Transform ----
 spdf@data$ncases <- 
   as.numeric(gsub(".*Cases : (\\d+).*", "\\1", spdf@data$Description))
 
-# spdf@data %>% 
-#   dplyr::mutate(ncases = gsub(".*Cases : (\\d+).*", "\\1", Description),
-#                 ncases = as.numeric(ncases))
+# Visualize ----
 
 # pal <- leaflet::colorFactor(RColorBrewer::brewer.pal(length(spdf), "Set3"), NULL)
 

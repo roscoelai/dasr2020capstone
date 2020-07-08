@@ -108,28 +108,6 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
     - [ ] Not happening without Java :pensive:
     - [x] Convert to .csv using Excel
     - [x] Tidy with R
-- [x] Re-select climate stations
-  - The following stations may have reasonably recent rainfall and temperature data
-    - [x] Admiralty
-    - [x] Ang Mo Kio
-    - [x] Changi
-    - [x] Choa Chu Kang (South)
-    - [x] Clementi
-    - [x] East Coast Parkway
-    - [x] Jurong (West)
-    - [ ] Jurong Island - EXCLUDED
-    - [x] Khatib
-    - [x] Marina Barrage
-    - [x] Newton
-    - [x] Pasir Panjang
-    - [ ] Pulau Ubin - EXCLUDED
-    - [x] Seletar
-    - [ ] Sembawang - EXCLUDED
-    - [ ] Sentosa Island - EXCLUDED
-    - [x] Tai Seng
-    - [x] Tengah
-    - [ ] Tuas South - EXCLUDED
-  - Might have to refine selection after checking for missing values
 
 ![](./climate_stations.png)
 

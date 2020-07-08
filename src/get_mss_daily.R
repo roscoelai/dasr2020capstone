@@ -4,31 +4,62 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 library(magrittr)
 
-get_mss_daily <- function(years, stations = c("Changi")) {
-  #' Get Daily Records from Meteorological Service Singapore (MSS)
+get_mss_daily <- function(years, stations = "Changi") {
+  #' Historical Daily Weather Records
   #' 
   #' @description
-  #' Available data ranges from Jan 1980 to May 2020. 
-  #' Epidemiological weeks will be calculated automatically.
+  #' Daily weather records from the Meteorological Service Singapore (MSS). 
+  #' Data from January 1980 to June 2020 potentially available. This function 
+  #' will combine data from a range of years, from a list of climate stations 
+  #' (refer to the list below for recognized stations). Epidemiological weeks 
+  #' will be calculated using available date information.
   #' 
-  #' @details http://www.weather.gov.sg/climate-historical-daily/
+  #' Recognized climate stations:
+  #' \enumerate{
+  #'   \item Admiralty
+  #'   \item Ang Mo Kio
+  #'   \item Changi
+  #'   \item Choa Chu Kang (South)
+  #'   \item Clementi
+  #'   \item East Coast Parkway
+  #'   \item Jurong (West)
+  #'   \item Jurong Island
+  #'   \item Khatib
+  #'   \item Marina Barrage
+  #'   \item Newton
+  #'   \item Pasir Panjang
+  #'   \item Pulau Ubin
+  #'   \item Seletar
+  #'   \item Sembawang
+  #'   \item Sentosa Island
+  #'   \item Tai Seng
+  #'   \item Tengah
+  #'   \item Tuas South
+  #' }
+  #' 
+  #' Variables:
+  #' \enumerate{
+  #'   \item Daily_Rainfall_Total_mm
+  #'   \item Highest_30_Min_Rainfall_mm
+  #'   \item Highest_60_Min_Rainfall_mm
+  #'   \item Highest_120_Min_Rainfall_mm
+  #'   \item Mean_Temperature_degC
+  #'   \item Maximum_Temperature_degC
+  #'   \item Minimum_Temperature_degC
+  #'   \item Mean_Wind_Speed_kmh
+  #'   \item Max_Wind_Speed_kmh
+  #' }
+  #' 
+  #' @details
+  #' \href{http://www.weather.gov.sg/climate-historical-daily/}{MSS Daily Records}
   #' 
   #' @param years A vector of years of interest.
-  #' @param stations A vector of climate station names. Defaults to c("Changi").
-  #' @return A table containing the combined historical daily records.
+  #' @param stations A vector of climate station names. Defaults to "Changi".
+  #' @return A table containing the combined daily records.
   #' @examples
-  #' get_mss_daily(2014:2018)
-  #' get_mss_daily(2012:2020, c("Changi", "Marine Parade", "Sembawang"))
+  #' get_mss_daily(2012:2020, c("Changi", "Clementi", "Khatib", "Newton"))
   
-  # All combinations of the given years and the 12 months
-  dates = as.vector(t(outer(years, sprintf("%02d", 1:12), FUN = paste0)))
-  
-  # Remove the last 7 months if 2020 is included (no data after May 2020)
-  if (2020 %in% years) {
-    dates = dates[1:(length(dates) - 7)]
-  }
-  
-  mappings = list(
+  stations_vec = c(
     "Admiralty" = "104_",
     "Ang Mo Kio" = "109_",
     "Changi" = "24_",
@@ -48,109 +79,67 @@ get_mss_daily <- function(years, stations = c("Changi")) {
     "Tai Seng" = "43_",
     "Tengah" = "23_",
     "Tuas South" = "115_"
-    
-    # "Boon Lay (East)" = "86_",
-    # "Buangkok" = "55_",
-    # "Bukit Panjang" = "64_",
-    # "Lower Peirce Reservoir" = "08_",
-    # "Marine Parade" = "113_",
-    # "Punggol" = "81_",
-    # "Queenstown" = "77_",
-    # "Semakau Island" = "102_",
-    # "Serangoon" = "36_",
-    # "Toa Payoh" = "88_",
-    # "Yishun" = "91_"
   )
   
-  station_nums = sapply(stations, function(x) mappings[[x]])
-  urls = paste0("http://www.weather.gov.sg/files/dailydata/DAILYDATA_S", 
-                t(outer(station_nums, dates, FUN = paste0)), 
-                ".csv")
+  # List URLs with all climate station number-year-month combinations
+  base_url = "http://www.weather.gov.sg/files/dailydata/DAILYDATA_S"
+  station_nums = stations_vec[match(stations, names(stations_vec))]
+  year_months = as.vector(t(outer(years, sprintf("%02d", 1:12), FUN = paste0)))
+  station_year_months = t(outer(station_nums, year_months, FUN = paste0))
   
-  myreader = function(url) {
-    tryCatch(
-      readr::read_csv(url) %>% 
-        # The "degree sign" in column headers are invalid multibyte characters
-        # Data after Apr 2020 have slightly different column names
-        # This would complicate joining the tables together
-        # So, it might be better to manually label all column names
-        setNames(., c("Station",
-                      "Year",
-                      "Month",
-                      "Day",
-                      "Daily_Rainfall_Total_mm",
-                      "Highest_30_Min_Rainfall_mm",
-                      "Highest_60_Min_Rainfall_mm",
-                      "Highest_120_Min_Rainfall_mm",
-                      "Mean_Temperature_degC",
-                      "Maximum_Temperature_degC",
-                      "Minimum_Temperature_degC",
-                      "Mean_Wind_Speed_kmh",
-                      "Max_Wind_Speed_kmh")) %>% 
-        # The "long dashes" (em dash?) representing missing values are invalid
-        #   multibyte characters and are replaced with NA (by coercion)
-        dplyr::mutate_at(dplyr::vars(-Station), as.numeric),
-      error = function(e) { NA }
-    )
-  }
+  urls = paste0(base_url, station_year_months, ".csv")
   
-  dfs = lapply(urls, myreader)
+  dfs = urls %>% 
+    lapply(function(url) {
+      tryCatch(
+        readr::read_csv(url) %>% 
+          # Invalid multibyte characters "degree sign" in column headers
+          # Different column names after Apr 2020
+          # Manually label column names to facilitate row binding
+          setNames(., c("Station",
+                        "Year",
+                        "Month",
+                        "Day",
+                        "Daily_Rainfall_Total_mm",
+                        "Highest_30_Min_Rainfall_mm",
+                        "Highest_60_Min_Rainfall_mm",
+                        "Highest_120_Min_Rainfall_mm",
+                        "Mean_Temperature_degC",
+                        "Maximum_Temperature_degC",
+                        "Minimum_Temperature_degC",
+                        "Mean_Wind_Speed_kmh",
+                        "Max_Wind_Speed_kmh")) %>% 
+          # Invalid multibyte characters "em dash" as (missing) values
+          # Coerced to NA
+          dplyr::mutate_at(dplyr::vars(-Station), as.numeric),
+        error = function(e) { NA })
+    })
   
-  dplyr::bind_rows(dfs[!is.na(dfs)]) %>% 
-    # Calculate epidemiological weeks (for joining with other datasets)
-    dplyr::mutate(Date = paste(Year, Month, Day, sep = "-"),
-                  Epiweek = lubridate::epiweek(Date)) %>% 
-    dplyr::select(Station, Epiweek, everything(), -Date)
+  dfs[!is.na(dfs)] %>% 
+    dplyr::bind_rows() %>% 
+    dplyr::mutate(Epiweek = lubridate::epiweek(paste(Year,
+                                                     Month,
+                                                     Day,
+                                                     sep = "-"))) %>% 
+    dplyr::select(Station, Epiweek, everything())
 }
 
-# df <- get_mss_daily(years = 2012:2020,
-#                     stations = c("Changi",
-#                                  "Marine Parade",
-#                                  "Queenstown",
-#                                  "Sembawang"))
-
-df <- get_mss_daily(years = 2012:2020,
-                    stations = c("Admiralty",
-                                 "Ang Mo Kio",
-                                 "Changi",
-                                 "Choa Chu Kang (South)",
-                                 "Clementi",
-                                 "East Coast Parkway",
-                                 "Jurong (West)",
-                                 "Jurong Island",
-                                 "Khatib",
-                                 "Marina Barrage",
-                                 "Newton",
-                                 "Pasir Panjang",
-                                 "Pulau Ubin",
-                                 "Seletar",
-                                 "Sembawang",
-                                 "Sentosa Island",
-                                 "Tai Seng",
-                                 "Tengah",
-                                 "Tuas South"))
-
-# write.csv(df, 
-#           "../results/weather_daily_19stations_2012_2020.csv", 
+# weather <- get_mss_daily(years = 2012:2020,
+#                          stations = c("Admiralty",
+#                                       "Ang Mo Kio",
+#                                       "Changi",
+#                                       "Choa Chu Kang (South)",
+#                                       "Clementi",
+#                                       "East Coast Parkway",
+#                                       "Jurong (West)",
+#                                       "Khatib",
+#                                       "Marina Barrage",
+#                                       "Newton",
+#                                       "Pasir Panjang",
+#                                       "Sembawang",
+#                                       "Tai Seng",
+#                                       "Tengah"))
+# 
+# write.csv(weather, 
+#           "../results/mss_daily_2012_2020_14stations_20200708.csv", 
 #           row.names = F)
-
-df %>% 
-  dplyr::select(-Highest_30_Min_Rainfall_mm,
-                -Highest_60_Min_Rainfall_mm,
-                -Highest_120_Min_Rainfall_mm,
-                -Mean_Wind_Speed_kmh,
-                -Max_Wind_Speed_kmh) %>% 
-  dplyr::group_by(Station) %>% 
-  dplyr::summarise(nRain = dplyr::n() - sum(is.na(Daily_Rainfall_Total_mm)),
-                   nMeanT = dplyr::n() - sum(is.na(Mean_Temperature_degC)),
-                   nMaxT = dplyr::n() - sum(is.na(Maximum_Temperature_degC)),
-                   nMinT = dplyr::n() - sum(is.na(Minimum_Temperature_degC))) %>% 
-  dplyr::rowwise() %>% 
-  dplyr::mutate(maxnT = max(nMeanT, nMaxT, nMinT),
-                nRT = min(nRain, maxnT)) %>% 
-  dplyr::arrange(desc(nRT)) %>% 
-  dplyr::filter(!(Station %in% c("Jurong Island",
-                                 "Tuas South",
-                                 "Pulau Ubin",
-                                 "Sentosa Island",
-                                 "Seletar")))
