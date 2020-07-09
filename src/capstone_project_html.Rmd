@@ -1,7 +1,7 @@
 ---
 title: "Analysing Dengue Cases in Singapore"
 author: "Shayne, Roscoe, Anu"
-date: "08 July 2020"
+date: "09 July 2020"
 output: html_document
 ---
 
@@ -14,7 +14,7 @@ library(magrittr)
 library(ggplot2)
 ```
 
-```{r, import_moh_bulletin, include=FALSE}
+```{r, bulletin_import_tidy, include=FALSE}
 get_moh_eweekly <- function(path) {
   #' Weekly Infectious Diseases Bulletin
   #' 
@@ -134,7 +134,7 @@ bulletin <- readr::read_csv("../data/moh_weekly_bulletin_2012_2020_tidy_20200708
 
 ---
 
-```{r, viz_ncases, echo=FALSE, fig.width=8, fig.height=4}
+```{r, bulletin_visualize, echo=FALSE, fig.width=8, fig.height=4}
 f1 <- bulletin %>% 
   tidyr::drop_na(Dengue) %>% 
   ggplot(aes(x = Start, y = Dengue)) + 
@@ -174,18 +174,13 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
       - [x] Clementi
       - [x] East Coast Parkway
       - [x] Jurong (West)
-      - [ ] Jurong Island - EXCLUDED (too remote)
       - [x] Khatib
       - [x] Marina Barrage
       - [x] Newton
       - [x] Pasir Panjang
-      - [ ] Pulau Ubin - EXCLUDED (too remote)
-      - [x] Seletar
-      - [ ] Sembawang - EXCLUDED (too many missing values)
-      - [ ] Sentosa Island - EXCLUDED (too remote)
+      - [x] Sembawang
       - [x] Tai Seng
       - [x] Tengah
-      - [ ] Tuas South - EXCLUDED (too remote)
   - [ ] Aggregate data to months
     - Mean/Median rainfall
     - Mean/Median temperature
@@ -195,12 +190,12 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
 - Latest number of cases by named regions in Singapore from [National Environment Agency (NEA)](https://www.nea.gov.sg/dengue-zika/dengue/dengue-clusters)
 - Yearly population distribution across named regions in Singapore
 - COVID-19 cases (Apr - Jul 2020)
+- Latest number of cases by regions with geocoordinates from [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)
 
 ## Deprecated Data
 - Monthly Air Temperature And Sunshine, Relative Humidity And Rainfall from [Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)
   - <u>Reason</u>: Higher resolution (daily) data available from MSS
   - Might reconsider if humidity data is needed
-- Latest number of cases by regions with geocoordinates from [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)
   - <u>Reason</u>: Potentially **grandiose** (we've not learned leaflet yet!)
 - Weekly case numbers (2012-W01 to 2020-W20) from [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)
   - <u>Reason</u>: More up-to-date data available from MOH
@@ -223,22 +218,22 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
   - According to the news report, East region has the largest number of clusters compared to other parts of Singapore
   - In particular, does Marine Parade and Sembawang (or Queenstown?) have any differences in their weather variables?
 
-### Considerations and limitations
-- Time lag: Dengue cases manifest 1-2 weeks after infection
-  - Timing adjustments have to be made for ostensibly associated variables
+### Address these
 - Seasonal effects
   - "Vector" months (June, July, August, September, October)
+- Time lag: Dengue cases manifest 1-2 weeks after infection
+  - Timing adjustments have to be made for ostensibly associated variables
 - COVID-19 cases vs. dengue cases
   - 90% foreign workers, expect a correlation
   - Compare against number of cases from Apr - Jul 2020
 
 
 
-# Preliminary Survey of Data Collected so Far
+# Explore
 
 ---
 
-```{r, import_mss_records, include=FALSE}
+```{r, weather_import_tidy, include=FALSE}
 get_mss_daily <- function(years, stations = "Changi") {
   #' Historical Daily Weather Records
   #' 
@@ -433,99 +428,137 @@ get_mss_daily <- function(years, stations = "Changi") {
 #                                       "Tai Seng",
 #                                       "Tengah"))
 
-weather <- readr::read_csv("../data/mss_daily_2012_2020_14stations_20200708.csv")
+weather <- readr::read_csv("../data/mss_daily_2012_2020_14stations_20200709.csv")
 ```
 
-```{r, prep_overall, include=FALSE}
-grouped_epiweek_changi <- weather %>%
-  dplyr::filter(Station == "Changi") %>%
-  dplyr::select(Year, Epiweek, matches("Rainfall_Total|Temperature"), -Station) %>% 
-  dplyr::group_by(Year, Epiweek) %>% 
-  dplyr::summarise(Rainfall = sum(Daily_Rainfall_Total_mm),
-                   Temperature = mean(Mean_Temperature_degC))
+```{r geo_import_tidy, include=FALSE}
+import_kmls <- function(paths) {
+  do.call("rbind", lapply(paths, rgdal::readOGR))
+}
 
-df <- bulletin %>% 
-  dplyr::rename(Epiweek = `Epidemiology Wk`) %>% 
-  dplyr::select(Year, Epiweek, Start, Dengue) %>% 
-  tidyr::drop_na() %>% 
-  dplyr::left_join(grouped_epiweek_changi, c("Year", "Epiweek"))
-```
+calc_centroids <- function(spdf) {
+  spdf@data = spdf@data %>% 
+    dplyr::bind_cols(as.data.frame(rgeos::gCentroid(spdf, byid = T))) %>% 
+    dplyr::rename(cx = x,
+                  cy = y)
+  spdf
+}
 
-```{r, viz_overall, echo=FALSE, warning=FALSE, fig.width=8, fig.height=6}
-f2 <- df %>% 
-  ggplot(aes(x = Start, y = Rainfall)) + 
-  geom_line(size = 1, color = "deepskyblue4", alpha = 0.7) + 
-  labs(title = "Total weekly Rainfall from 2012 to 2020",
-       subtitle = "",
-       x = "",
-       y = "Total Rainfall (mm)",
-       caption = "Source: moh.gov.sg")
+extract_labels <- function(spdf) {
+  spdf@data$parea <-
+    gsub(".*?<td>(.*?)</td>.*", "\\1", spdf@data$Description) %>% 
+    tolower() %>% 
+    tools::toTitleCase()
+  spdf
+}
 
-f3 <- df %>% 
-  ggplot(aes(x = Start, y = Temperature)) + 
-  geom_line(size = 1, color = "darkgreen", alpha = 0.7) + 
-  labs(title = "Average weekly Temperature from 2012 to 2020",
-       subtitle = "",
-       x = "",
-       y = "Temperature (\u00b0C)",
-       caption = "Source: moh.gov.sg")
+extract_ncases <- function(spdf) {
+  # spdf@data <- spdf@data %>% 
+  #   tidyr::extract(Description, "ncases", ".*Cases : (\\d+).*", convert = T)
+  spdf@data$ncases <-
+    as.numeric(gsub(".*Cases : (\\d+).*", "\\1", spdf@data$Description))
+  spdf
+}
 
-gridExtra::grid.arrange(f1, f2, f3, nrow = 3, top = "Is there a relationship?")
-```
+calc_indiv_coords <- function(spdf) {
+  df = data.frame(matrix(ncol = 3, nrow = sum(spdf@data$ncases)))
+  names(df) <- c("dup", "cx", "cy")
+  
+  i = 1L
+  for (j in 1:nrow(spdf@data)) {
+    for (k in 1:spdf@data[j, "ncases"]) {
+      df[i, "dup"] = k
+      df[i, "cx"] = spdf@data[j, "cx"]
+      df[i, "cy"] = spdf@data[j, "cy"]
+      i = i + 1L
+    }
+  }
+  
+  df
+}
 
----
+# Import ----
+dengue_clusters <- import_kmls(c(
+  "../data/dengue-cases-central/dengue-cases-central-kml.kml",
+  "../data/dengue-cases-north-east/dengue-cases-north-east-kml.kml",
+  "../data/dengue-cases-south-east/dengue-cases-south-east-kml.kml",
+  "../data/dengue-cases-south-west/dengue-cases-south-west-kml.kml"
+))
 
-```{r prep_geo, include=FALSE}
-station_positions <- readr::read_csv("../data/Station_Records.csv") %>% 
+planning_areas <- import_kmls("../data/master-plan-2019-planning-area-boundary-no-sea/planning-boundary-area.kml")
+
+climate_stations <- readr::read_csv("../data/Station_Records.csv") %>% 
   tidyr::drop_na(`Period of Daily Rain Records`,
                  `Period of Mean Temperature`,
                  `Period of Max and Min Temperature`) %>% 
   dplyr::rename(Lat = `Lat.(N)`,
                 Long = `Long. (E)`) %>% 
+  dplyr::filter(Station %in% c("Admiralty",
+                               "Ang Mo Kio",
+                               "Changi",
+                               "Choa Chu Kang (South)",
+                               "Clementi",
+                               "East Coast Parkway",
+                               "Jurong (West)",
+                               "Khatib",
+                               "Marina Barrage",
+                               "Newton",
+                               "Pasir Panjang",
+                               "Sembawang",
+                               "Tai Seng",
+                               "Tengah")) %>% 
   dplyr::mutate(Station = paste(Station, "Climate Station")) %>% 
   dplyr::select(Station, Lat, Long) %>%
   dplyr::arrange(Station)
 
+# Transform ----
+dengue_clusters <- dengue_clusters %>% 
+  extract_ncases() %>% 
+  calc_centroids()
 
+dengue_cases <- calc_indiv_coords(dengue_clusters)
 
-lspdf <- rgdal::readOGR("../data/master-plan-2019-planning-area-boundary-no-sea/planning-boundary-area.kml")
+planning_areas <- planning_areas %>% 
+  extract_labels() %>% 
+  calc_centroids()
 
-lspdf@data <- lspdf@data %>% 
-  dplyr::mutate(area_name = gsub(".*?<td>(.*?)</td>.*", "\\1", Description) %>% 
-                  tolower() %>% 
-                  tools::toTitleCase())
+# Pre-visualize ----
+cases_pal <- leaflet::colorNumeric("Reds", dengue_clusters@data$ncases)
 
-centers <- rgeos::gCentroid(lspdf, byid = T)
-centers$region <- lspdf@data$area_name
-
-pal <- leaflet::colorFactor(RColorBrewer::brewer.pal(length(lspdf), "Set3"), NULL)
+area_pal <- leaflet::colorFactor(RColorBrewer::brewer.pal(length(planning_areas), "Set3"), NULL)
 ```
 
-## Climate Stations with Planning Areas Overlay
+## Dengue Clusters with Planning Areas and Climate Stations Overlay
 
-```{r, viz_geo, echo=FALSE}
-lspdf %>% 
+```{r, geo_visualize, echo=FALSE}
+dengue_clusters %>% 
   leaflet::leaflet(width = "100%") %>%
   leaflet::addTiles() %>%
-  leaflet::addPolygons(stroke = T,
+  leaflet::addPolygons(data = planning_areas,
+                       stroke = T,
                        opacity = 1,
-                       # color = "black",
                        smoothFactor = 0.5,
                        fillOpacity = 0.5,
-                       fillColor = ~pal(area_name),
-                       weight = 1,
-                       popup = ~as.character(area_name)) %>% 
-  leaflet::addLabelOnlyMarkers(data = centers,
-                               lng = centers$x,
-                               lat = centers$y,
-                               label = ~region,
-                               labelOptions = leaflet::labelOptions(
-                                 noHide = T,
-                                 textOnly = T,
-                                 textsize = "10px",
-                                 direction = "auto")
-                               ) %>% 
-  leaflet::addMarkers(data = station_positions,
+                       fillColor = ~area_pal(parea),
+                       weight = 0.5,
+                       popup = ~as.character(parea)) %>%
+  leaflet::addPolygons(stroke = T,
+                       opacity = 5,
+                       color = "black",
+                       weight = 0.5,
+                       smoothFactor = 0.5,
+                       fillOpacity = 0.5,
+                       fillColor = ~cases_pal(ncases),
+                       label = ~as.character(ncases),
+                       popup = ~as.character(ncases)) %>%
+  leaflet::addCircleMarkers(data = dengue_cases,
+                            lng = ~cx,
+                            lat = ~cy,
+                            radius = 5,
+                            color = "red",
+                            fillOpacity = 0.5,
+                            clusterOptions = leaflet::markerClusterOptions()) %>%
+  leaflet::addMarkers(data = climate_stations,
                       lng = ~Long,
                       lat = ~Lat,
                       popup = ~as.character(Station),
@@ -534,60 +567,3 @@ lspdf %>%
 ```
 
 ---
-
-```{r prep_weather_monthly, include=FALSE}
-grouped_month <- weather %>%
-  dplyr::select(Station, Year, Month, matches("Rainfall_Total|Temperature")) %>% 
-  dplyr::group_by(Station, Year, Month) %>% 
-  dplyr::summarise(Rainfall_Total = sum(Daily_Rainfall_Total_mm),
-                   Mean_Temperature = mean(Mean_Temperature_degC),
-                   Maximum_Temperature = mean(Maximum_Temperature_degC),
-                   Minimum_Temperature = mean(Minimum_Temperature_degC))
-```
-
-```{r, viz_weather_monthly, echo=FALSE, fig.width=8, fig.height=5}
-w1 <- grouped_month %>% 
-  dplyr::filter(Station == "Changi") %>% 
-  tibble::add_column(x = 1:nrow(.)) %>% 
-  dplyr::select(-Rainfall_Total) %>% 
-  tidyr::gather("Variable",
-                "Value",
-                Mean_Temperature,
-                Maximum_Temperature,
-                Minimum_Temperature) %>% 
-  ggplot(aes(x = x, y = Value, color = Variable)) + 
-  scale_x_continuous(breaks = c(1 + 12 * (0:8)),
-                     label = c(2012:2020)) +
-  geom_line(size = 1) + 
-  labs(title = "Average monthly Temperature from 2012 to 2020",
-       subtitle = "",
-       x = "",
-       y = "Temperature (\u00b0C)",
-       caption = "Source: weather.gov.sg")
-
-w2 <- grouped_month %>% 
-  dplyr::select(Station, Year, Month, Rainfall_Total) %>% 
-  dplyr::mutate(x = (Year - 2012) * 12 + Month) %>% 
-  ggplot(aes(x = x, y = Rainfall_Total, color = Station)) + 
-  scale_x_continuous(breaks = c(1 + 12 * (0:8)),
-                     label = c(2012:2020)) +
-  geom_line(size = 1, alpha = 0.5) + 
-  labs(title = "Total monthly Rainfall from 2012 to 2020",
-       subtitle = "",
-       x = "",
-       y = "Total Rainfall (mm)",
-       caption = "Source: weather.gov.sg")
-
-gridExtra::grid.arrange(w1, w2, nrow = 2)
-```
-
----
-
-```{r, viz_density, echo=FALSE, warning=FALSE, fig.width=8, fig.height=3}
-{
-  par(mfrow = c(1, 3))
-  plot(density(df$Dengue[!is.na(df$Dengue)]), main = "Cases")
-  plot(density(df$Rainfall[!is.na(df$Rainfall)]), main = "Rainfall")
-  plot(density(df$Temperature[!is.na(df$Temperature)]), main = "Temperature")
-}
-```

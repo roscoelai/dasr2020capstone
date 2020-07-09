@@ -68,7 +68,6 @@ get_mss_daily <- function(years, stations = "Changi") {
   #   captured temperature and wind speed data, in addition to rainfall data 
   #   which was common to all stations. Their names are associated with their 
   #   numbers in the following vector.
-  
   stations_lookup = c(
     "Admiralty" = 104,
     "Ang Mo Kio" = 109,
@@ -119,8 +118,10 @@ get_mss_daily <- function(years, stations = "Changi") {
   #   combinations, remembering the underscore ("_") between the station number 
   #   and the year.
   station_year_months = station_nums %>% 
-    outer(year_months, FUN = paste, sep = "_") %>%  # Argument passing magic!
+    outer(year_months, FUN = paste, sep = "_") %>% 
     sort()  # This would also order by station number, but that's fine
+  
+  # TODO: Try out tidyr::crossing()
   
   # Full URLs list:
   # We simply prefix with the base URL and suffix with ".csv"
