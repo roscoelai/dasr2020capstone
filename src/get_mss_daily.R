@@ -199,5 +199,5 @@ get_mss_daily <- function(years, stations = "Changi") {
 #                                       "Tengah"))
 # 
 # write.csv(weather,
-#           "../results/mss_daily_2012_2020_14stations_20200808.csv",
+#           "../results/mss_daily_2012_2020_14stations_20200709.csv",
 #           row.names = F)
