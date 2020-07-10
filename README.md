@@ -36,6 +36,14 @@
 - R scripts for data import and tidy (and maybe collect... and maybe transform)
   - [x] Tidy MOH weekly bulletin data
   - [x] Import MSS daily weather data
+- Spatial Analysis
+  - Different regions have different number of cases
+  - Unfair to just compare numbers
+  - Depends on local population / population density
+  - Depends on local testing capacity
+  - Depends on atomospheric factors
+  - ... anything else?
+  - Consider removing Pasir Panjang from the climate station list (n = 6)
 
 ### Others
 - Q6: Find intervention data (optional)
