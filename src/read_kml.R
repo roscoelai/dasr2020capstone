@@ -97,7 +97,7 @@ cases_pal <- leaflet::colorNumeric("Reds", dengue_clusters@data$ncases)
 area_pal <- leaflet::colorFactor(RColorBrewer::brewer.pal(length(planning_areas), "Set3"), NULL)
 
 dengue_clusters %>% 
-  leaflet::leaflet() %>%
+  leaflet::leaflet(width = "100%") %>%
   leaflet::addTiles() %>%
   leaflet::addPolygons(data = planning_areas,
                        stroke = T,
@@ -130,7 +130,7 @@ dengue_clusters %>%
                       label = ~as.character(Station),
                       labelOptions = leaflet::labelOptions(noHide = F))
 
-# Plot Dengue Clusters ----
+# Plot Dengue Clusters ---- From NEA/Data.gov.sg
 real_dc <- import_kmls("../data/data_gov_1/dengue-clusters/dengue-clusters-kml.kml")
 
 real_dc %>% 

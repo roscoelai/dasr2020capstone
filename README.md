@@ -1,5 +1,3 @@
-[Preview Current Version of Slides](https://roscoelai.github.io/dasr2020capstone/src/capstone_project_ioslides.html)
-
 [Preview Current Version of Document](https://roscoelai.github.io/dasr2020capstone/src/capstone_project_html.html)
 
 # Analysing Dengue Cases in Singapore
@@ -35,10 +33,9 @@
   - [x] Filter climate stations based on completeness of data
     - [x] Going with: >3 days/week, >35 weeks/year (except 2020)
     - [x] Down to 10 stations
-- R scripts for data import
-  - And maybe collect
-  - And maybe tidy
-  - And maybe transform
+- R scripts for data import and tidy (and maybe collect... and maybe transform)
+  - [x] Tidy MOH weekly bulletin data
+  - [x] Import MSS daily weather data
 
 ### Others
 - Q6: Find intervention data (optional)

@@ -15,7 +15,7 @@ library(ggplot2)
 ```
 
 ```{r, bulletin_import_tidy, include=FALSE}
-import_moh_eweekly <- function(path) {
+import_moh_weekly <- function(path) {
   #' Weekly Infectious Diseases Bulletin
   #' 
   #' @description
@@ -127,7 +127,7 @@ import_moh_eweekly <- function(path) {
     dplyr::arrange(Year, `Epidemiology Wk`)
 }
 
-# bulletin <- import_moh_eweekly("../data/weekly-infectious-disease-bulletin-year-2020ef64ac3712334d4dba1206de20313f78.xlsx")
+# bulletin <- import_moh_weekly("../data/weekly-infectious-disease-bulletin-year-2020ef64ac3712334d4dba1206de20313f78.xlsx")
 
 bulletin <- readr::read_csv("../data/moh_weekly_bulletin_2012_2020_tidy_20200708.csv")
 ```
@@ -175,15 +175,11 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
       - [x] Choa Chu Kang (South)
       - [x] Clementi
       - [x] East Coast Parkway
-      - [x] Jurong (West)
       - [x] Khatib
-      - [x] Marina Barrage
       - [x] Newton
       - [x] Pasir Panjang
-      - [x] Sembawang
       - [x] Tai Seng
-      - [x] Tengah
-  - [ ] Aggregate data to months
+  - [ ] Aggregate data to <s>months</s> weeks
     - Mean/Median rainfall
     - Mean/Median temperature
     - Temperature range (max-min)
@@ -198,7 +194,6 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
 - Monthly Air Temperature And Sunshine, Relative Humidity And Rainfall from [Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)
   - <u>Reason</u>: Higher resolution (daily) data available from MSS
   - Might reconsider if humidity data is needed
-  - <u>Reason</u>: Potentially **grandiose** (we've not learned leaflet yet!)
 - Weekly case numbers (2012-W01 to 2020-W20) from [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)
   - <u>Reason</u>: More up-to-date data available from MOH
 
