@@ -4,8 +4,6 @@
 
 # Analysing Dengue Cases in Singapore
 
----
-
 ## Meeting (08 Jul 2020)
 ### S
 - Q1: Case numbers for different diseases across 2012-2020
@@ -27,11 +25,19 @@
 - Q5: Identify highest rainfall months and plot the number of cases over the years
 
 ### R
-- Q7: Compare cases across singapore regions
+- Q7: Compare cases across Singapore regions
   - Compare differences of cases among regions in Singapore
   - Geographical plots using Leaflet
   - Leaflet with clusterOptions
-- R scripts for data import and tidy (and maybe collect... and maybe transform)
+  - Associate cases with climate stations
+- Data
+  - Filter climate stations based on completeness of data
+    - Going with: >3 days/week, >35 weeks/year
+    - Down to 10 stations
+- R scripts for data import
+  - And maybe collect
+  - And maybe tidy
+  - And maybe transform
 
 ### Others
 - Q6: Find intervention data (optional)
@@ -63,13 +69,12 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
 - Latest number of cases by named regions in Singapore from [National Environment Agency (NEA)](https://www.nea.gov.sg/dengue-zika/dengue/dengue-clusters)
 - Yearly population distribution across named regions in Singapore
 - COVID-19 cases (Apr - Jul 2020)
+- Latest number of cases by regions with geocoordinates from [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)
 
 ### Deprecated Data
 - Monthly Air Temperature And Sunshine, Relative Humidity And Rainfall from [Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)
   - <u>Reason</u>: Higher resolution (daily) data available from MSS
   - Might reconsider if humidity data is needed
-- Latest number of cases by regions with geocoordinates from [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)
-  - <u>Reason</u>: Potentially **grandiose** (we've not learned leaflet yet!)
 - Weekly case numbers (2012-W01 to 2020-W20) from [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)
   - <u>Reason</u>: More up-to-date data available from MOH
 
@@ -100,21 +105,6 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
   - 90% foreign workers, expect a correlation
   - Compare against number of cases from Apr - Jul 2020
 
-
-
-## Todo
-- [ ] [This might be useful](http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf)
-  - [ ] Extract table from .pdf
-    - [ ] Not happening without Java :pensive:
-    - [x] Convert to .csv using Excel
-    - [x] Tidy with R
+---
 
 ![](./climate_stations.png)
-
-- [ ] Google Trends analysis (like what Prof. Roh did for COVID-19)?
-    - Search term frequency for symptoms of dengue vs. number of cases
-- [ ] Grandiose (!)
-  - Population distribution
-  - Spatial analysis (of what variables)?
-    - Breeding habitat vs. number of cases?
-    - Property prices vs. number of cases?
