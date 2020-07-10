@@ -146,6 +146,8 @@ f1 <- bulletin %>%
        caption = "Source: moh.gov.sg")
 
 f1
+
+# ggsave("../results/img01.png", width = 12, height = 6)
 ```
 
 

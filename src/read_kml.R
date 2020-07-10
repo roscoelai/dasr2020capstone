@@ -4,6 +4,11 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 library(magrittr)
 
+# https://data.gov.sg/dataset/dengue-cases-central
+# https://data.gov.sg/dataset/dengue-cases-north-east
+# https://data.gov.sg/dataset/dengue-cases-south-east
+# https://data.gov.sg/dataset/dengue-cases-south-west
+
 import_kmls <- function(paths) {
   do.call("rbind", lapply(paths, rgdal::readOGR))
 }
@@ -51,37 +56,29 @@ calc_indiv_coords <- function(spdf) {
 
 # Import ----
 dengue_clusters <- import_kmls(c(
-  "../data/dengue-cases-central/dengue-cases-central-kml.kml",
-  "../data/dengue-cases-north-east/dengue-cases-north-east-kml.kml",
-  "../data/dengue-cases-south-east/dengue-cases-south-east-kml.kml",
-  "../data/dengue-cases-south-west/dengue-cases-south-west-kml.kml"
+  "../data/data_gov_2/dengue-cases-central/dengue-cases-central-kml.kml",
+  "../data/data_gov_2/dengue-cases-north-east/dengue-cases-north-east-kml.kml",
+  "../data/data_gov_2/dengue-cases-south-east/dengue-cases-south-east-kml.kml",
+  "../data/data_gov_2/dengue-cases-south-west/dengue-cases-south-west-kml.kml"
 ))
 
-planning_areas <- import_kmls("../data/master-plan-2019-planning-area-boundary-no-sea/planning-boundary-area.kml")
+planning_areas <- import_kmls("../data/data_gov_2/master-plan-2019-planning-area-boundary-no-sea/planning-boundary-area.kml")
 
 climate_stations <- readr::read_csv("../data/Station_Records.csv") %>% 
-  tidyr::drop_na(`Period of Daily Rain Records`,
-                 `Period of Mean Temperature`,
-                 `Period of Max and Min Temperature`) %>% 
-  dplyr::rename(Lat = `Lat.(N)`,
-                Long = `Long. (E)`) %>% 
   dplyr::filter(Station %in% c("Admiralty",
                                "Ang Mo Kio",
                                "Changi",
                                "Choa Chu Kang (South)",
                                "Clementi",
                                "East Coast Parkway",
-                               "Jurong (West)",
                                "Khatib",
-                               "Marina Barrage",
                                "Newton",
                                "Pasir Panjang",
-                               "Sembawang",
-                               "Tai Seng",
-                               "Tengah")) %>% 
+                               "Tai Seng")) %>% 
   dplyr::mutate(Station = paste(Station, "Climate Station")) %>% 
-  dplyr::select(Station, Lat, Long) %>%
-  dplyr::arrange(Station)
+  dplyr::rename(Lat = `Lat.(N)`,
+                Long = `Long. (E)`) %>% 
+  dplyr::select(Station, Lat, Long)
 
 # Transform ----
 dengue_clusters <- dengue_clusters %>% 
@@ -132,5 +129,16 @@ dengue_clusters %>%
                       popup = ~as.character(Station),
                       label = ~as.character(Station),
                       labelOptions = leaflet::labelOptions(noHide = F))
-  
 
+# Plot Dengue Clusters ----
+real_dc <- import_kmls("../data/data_gov_1/dengue-clusters/dengue-clusters-kml.kml")
+
+real_dc %>% 
+  leaflet::leaflet() %>%
+  leaflet::addTiles() %>%
+  leaflet::addPolygons(stroke = T,
+                       opacity = 1,
+                       smoothFactor = 0.5,
+                       fillOpacity = 0.5,
+                       weight = 0.5,
+                       popup = ~Description)

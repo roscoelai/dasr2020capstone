@@ -1,4 +1,4 @@
-[Preview Current Version of Slides](https://roscoelai.github.io/dasr2020capstone/tmp/project_proposal.html)
+[Preview Current Version of Slides](https://roscoelai.github.io/dasr2020capstone/src/capstone_project_ioslides.html)
 
 [Preview Current Version of Document](https://roscoelai.github.io/dasr2020capstone/src/capstone_project_html.html)
 
@@ -26,14 +26,15 @@
 
 ### R
 - Q7: Compare cases across Singapore regions
-  - Compare differences of cases among regions in Singapore
-  - Geographical plots using Leaflet
-  - Leaflet with clusterOptions
-  - Associate cases with climate stations
+  - [x] Geographical plots using Leaflet
+  - [x] Leaflet with clusterOptions
+  - [ ] Associate cases with climate stations
+    - [ ] Voronoi diagram
+    - [ ] Filter out climate stations without any assigned points
 - Data
-  - Filter climate stations based on completeness of data
-    - Going with: >3 days/week, >35 weeks/year
-    - Down to 10 stations
+  - [x] Filter climate stations based on completeness of data
+    - [x] Going with: >3 days/week, >35 weeks/year (except 2020)
+    - [x] Down to 10 stations
 - R scripts for data import
   - And maybe collect
   - And maybe tidy
@@ -47,7 +48,7 @@
 
 # Capstone Project Proposal
 
-<img src="./ncases_2012_2020.png" width="50%">
+<img src="./imgs/ncases_2012_2020.png" width="100%">
 
 ## Overview
 Dengue fever is a vector-borne infectious disease that are endemic in the tropical world. Singapore is one of several countries with high disease burden of dengue. In 2020, Singapore saw 1,158 dengue cases in a week of June - the highest number of weekly dengue cases ever recorded since 2014. Why is there a sudden spike in dengue cases this year?
@@ -107,4 +108,4 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
 
 ---
 
-![](./climate_stations.png)
+![](./imgs/climate_stations.png)
