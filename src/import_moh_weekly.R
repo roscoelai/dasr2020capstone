@@ -4,7 +4,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 library(magrittr)
 
-import_moh_weekly <- function(path) {
+import_moh_weekly <- function(path = NULL) {
   #' Weekly Infectious Diseases Bulletin
   #' 
   #' @description
@@ -71,6 +71,15 @@ import_moh_weekly <- function(path) {
   #' @param path The file path of the dataset.
   #' @return A table containing the combined weekly records.
   
+  # # If no file path is given, download the file from MOH
+  # if (is.null(path)) {
+  #   url = "https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/"
+  #   file = "weekly-infectious-disease-bulletin-year-2020301ce94d47e44d24aa16207418a38cff.xlsx"
+  #   path = paste0("../results/", file)
+  #   
+  #   download.file(paste0(url, file), destfile = path)
+  # }
+  
   # There are variations in some column names over the years
   # The headers for 2020 will be chosen as the standard
   colnames_2020 = c(
@@ -118,7 +127,7 @@ import_moh_weekly <- function(path) {
 
 # bulletin <- import_moh_weekly("../data/weekly-infectious-disease-bulletin-year-2020301ce94d47e44d24aa16207418a38cff.xlsx")
 # 
-# bulletin_s <- bulletin %>% 
+# bulletin_s <- bulletin %>%
 #   dplyr::select(Year,
 #                 `Epidemiology Wk`,
 #                 Start,
@@ -133,3 +142,26 @@ import_moh_weekly <- function(path) {
 # write.csv(bulletin_s,
 #           "../data/moh_weekly_bulletin_s_2012_2020_tidy_20200711.csv",
 #           row.names = F)
+
+library(ggplot2)
+
+bulletin_s %>% 
+  dplyr::select(-DHF, -`Salmonellosis(non-enteric fevers)`) %>% 
+  tidyr::pivot_longer(cols = c("Dengue",
+                               "HFMD",
+                               "Acute Upper Respiratory Tract infections",
+                               "Acute Diarrhoea"),
+                      names_to = "Diseases",
+                      values_to = "Numbers") %>% 
+  tidyr::drop_na() %>%
+  ggplot(aes(x = Start, y = Numbers, color = Diseases, group = Diseases)) + 
+  geom_point(size = 1, alpha = 0.4) +
+  geom_line(size = 0.5) + 
+  labs(title = "Weekly cases for select diseases from 2012 to 2020",
+       subtitle = "Why is there a sudden spike in dengue cases this year?",
+       x = "",
+       y = "Numbers",
+       caption = "Source: moh.gov.sg") + 
+  ggthemes::theme_fivethirtyeight()
+
+# ggsave("../imgs/ncases_4diseases_2012_2020.png", width = 12, height = 6)
