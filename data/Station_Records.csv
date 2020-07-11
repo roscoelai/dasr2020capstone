@@ -1,0 +1,64 @@
+Station,Lat.(N),Long. (E),Period of Daily Rain Records,"Period of 30,60,120-Min Rain Records",Period of Mean Temperature,Period of Max and Min Temperature,Period of Mean Wind Speed,Period of Max Wind Speed
+Paya Lebar,1.3524,103.9007,Jan 1980-current,,,Jan 1981-current,Jan 1981-current,Jan 2010-current
+Macritchie Reservoir,1.3417,103.8338,Jan 1980-current,Jan 2014-current,,,,
+Lower Peirce Reservoir,1.3701,103.8271,Jan 2010-current,Jan 2014-current,,,,
+Tengah,1.3858,103.7114,Jan 1980-current,,Aug 1986-current,Jan 1985-current,Jan 1985-current,Jan 2010-current
+Changi,1.3678,103.9826,Jan 1981-current,Jan 2014-current,Jan 1982-current,Jan 1982-current,Jan 1983-current,Jan 1983-current
+Seletar,1.4166,103.8654,Jan 1980-current,,Aug 1986-current,Jan 1985-current,Jan 1985-current,Jan 2010-current
+Pasir Ris (West),1.3863,103.9412,Jan 1980-current,Jan 2014-current,,,,
+Kampong Bahru,1.2745,103.828,Jan 1980-current,Jan 2014-Oct 2016,,,,
+Jurong Pier,1.3081,103.71,Jan 1980-current,Jan 2014-current,,,,
+Ulu Pandan,1.3329,103.7556,Jan 1980-current,Jan 2014-current,,,,
+Serangoon,1.3382,103.8657,Jan 1980-current,Jan 2014-current,,,,
+Jurong (East),1.3262,103.7354,Jan 1980-current,Jan 2014-Aug 2014,,,,
+Mandai,1.4036,103.7898,Jan 1980-current,Jan 2014-current,,,,
+Tai Seng,1.3399,103.8878,Jan 1980-current,Jan 2014-current,May 2011-current,May 2011-current,May 2011-current,May 2011-current
+Jurong (West),1.3455,103.6806,Jan 1980-current,Jan 2014-current,Mar 2009-current,Mar 2009-current,Mar 2009-current,Mar 2009-current
+Upper Thomson,1.3416,103.8106,Jan 1980-current,Jan 2014-current,,,,
+Ang Mo Kio,1.3764,103.8492,Sep 2009-current,Jan 2014-current,Sep 2009-current,Sep 2009-current,Sep 2009-current,Sep 2009-current
+Clementi,1.3337,103.7768,Jan 1980-current,Jan 2014-current,Apr 2010-current,Apr 2010-current,Apr 2010-current,Apr 2010-current
+Admiralty,1.4439,103.7854,Jan 2009-current,Jan 2014-current,Jan 2009-current,Jan 2009-current,Jan 2009-current,Jan 2009-current
+Buangkok,1.3837,103.886,Jan 1980-current,Jan 2014-current,,,,
+Sentosa Island,1.25,103.8279,Jan1980-current,Jan 2014-current,Mar 2010-current,Mar 2010-current,Mar 2010-current,Mar 2010-current
+Boon Lay (West),1.3275,103.7042,Jan 1980-current,Jan 2014-current,,,,
+Bukit Panjang,1.3824,103.7603,Jan 1980-current,Jan 2014-current,,,,
+Kranji Reservoir,1.4387,103.7363,Jan 1980-current,Jan 2014-current,,,,
+Tanjong Pagar,1.274,103.8482,Jan 1983-current,Jan 2014-Oct 2015,,,,
+Admiralty (West),1.4582,103.7953,Jan 2009-current,Jan 2014-current,,,,
+Queenstown,1.2937,103.8125,Jan 1980-current,Jan 2014-current,,,,
+Tanjong Katong,1.307,103.8907,Jan 1980-current,Jan 2014-current,,,,
+Chai Chee,1.3277,103.9203,Dec 2009-current,Jan 2014-current,,,,
+Upper Peirce Reservoir,1.37,103.805,Feb 2010-current,Jan 2014-current,,,,
+Kent Ridge,1.2923,103.7815,Mar 2009-current,Jan 2014-current,,,,
+Somerset,1.3004,103.8372,Apr 2011-current,Jan 2014-current,,,,
+Sembawang,1.4252,103.8202,Jan 1991-current,,Jan 1991-current,Jan 1991-current,Jan 1991-current,Jan 2010-current
+Punggol,1.4029,103.9092,Jun 2009-current,Jan 2014-current,,,,
+Tuas West,1.3247,103.6351,Mar 2009-current,Jan 2014-current,,,,
+Simei,1.3437,103.9444,Jun 2009-current,Jan 2014-current,,,,
+Boon Lay (East),1.3302,103.7205,Dec 2009-current,Jan 2014-Dec 2015,Dec 2009-current,Dec 2009-current,Dec 2009-current,Dec 2009-current
+Toa Payoh,1.3415,103.8519,Mar 2010-current,Jan 2014-current,,,,
+Tuas,1.3199,103.6616,Jan 2009-current,Jan 2014-current,,,,
+Bukit Timah,1.3191,103.8191,Mar 2009-current,Jan 2014-current,,,,
+Yishun,1.4301,103.8308,May 2009-current,Jan 2014-current,,,,
+Buona Vista,1.2841,103.7886,Mar 2009-current,Jan 2014-current,,,,
+Pasir Ris Central,1.3679,103.9489,Mar 2010-current,Jan 2014-current,,,,
+Jurong (North),1.3505,103.7134,Jan 2009-current,Jan 2014-current,,,,
+Semakau Island,1.189,103.768,Jan 2009-current,Jan 2014-current,Jan 2009-current,Jan 2009-current,Jan 2009-current,Jan 2009-current
+Pulau Ubin,1.4168,103.9673,Jan 2009-current,Jan 2014-current,Jan 2009-current,Jan 2009-current,Jan 2009-current,Jan 2009-current
+East Coast Parkway,1.3134,103.9619,Jun 2009-current,Jan 2014-current,Jun 2009-current,Jun 2009-current,Jun 2009-current,Jun 2009-current
+Marina Barrage,1.2799,103.8703,Jul 2010-current,Jan 2014-current,Jul 2010-current,Jul 2010-current,Jul 2010-current,Jul 2010-current
+Choa Chu Kang (West),1.3746,103.6938,Jan 1980-current,Jan 2014-current,,,,
+Serangoon North,1.3606,103.8697,Jun 2009-current,Jan 2014-current,,,,
+Newton,1.3106,103.8365,Oct 2009-current,Jan 2014-current,Oct 2009-current,Oct 2009-current,Oct 2009-current,Oct 2009-current
+Lim Chu Kang,1.4385,103.7013,Jan 2010-current,Jan 2014-current,,,,
+Marine Parade,1.3065,103.9107,May 2009-current,Jan 2014-current,,,,
+Choa Chu Kang (Central),1.3819,103.7386,Dec 2009-current,Jan 2014-current,,,,
+Tuas South,1.2938,103.6184,Apr 2011-current,Jan 2014-current,Apr 2011-current,Apr 2011-current,Apr 2011-current,Apr 2011-current
+Pasir Panjang,1.281,103.754,Mar 2010-current,Jan 2014-current,Mar 2010-current,Mar 2010-current,Mar 2010-current,Mar 2010-current
+Jurong Island,1.2542,103.6741,Aug 2011-current,Jan 2014-current,Aug 2011-current,Aug 2011-current,Aug 2011-current,Aug 2011-current
+Dhoby Ghaut,1.2994,103.8461,Sep 2010-current,Jan 2014-current,,,,
+Nicoll Highway,1.3011,103.8666,Sep 2010-current,Jan 2014-current,,,,
+Botanic Garden,1.3087,103.818,Sep 2010-current,Jan 2014-current,,,,
+Choa Chu Kang (South),1.3729,103.7224,Apr 2011-current,Jan 2014-current,Apr 2011-current,Apr 2011-current,Apr 2011-current,Apr 2011-current
+Khatib,1.4173,103.8249,Oct 2010-current,Jan 2014-current,Oct 2010-current,Oct 2010-current,Oct 2010-current,Oct 2010-current
+Whampoa,1.3214,103.8577,Oct 2011-current,Jan 2014-current,,,,

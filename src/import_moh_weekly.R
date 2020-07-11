@@ -9,7 +9,7 @@ import_moh_weekly <- function(path) {
   #' 
   #' @description
   #' Weekly infectious diseases bulletin from the Ministry of Health (MOH). 
-  #' Data from 2012-W01 to 2020-W26. Follow the URLs below to download the 
+  #' Data from 2012-W01 to 2020-W27. Follow the URLs below to download the 
   #' dataset (single Excel file; 1 year's data per sheet). This function will 
   #' combine all data into a single table.
   #' 
@@ -66,7 +66,7 @@ import_moh_weekly <- function(path) {
   #' @details
   #' \href{https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin}{MOH Weekly Infectious Disease Bulletin}
   #'
-  #' \href{https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020ef64ac3712334d4dba1206de20313f78.xlsx}{Latest data (as of 08 Jul 2020)}
+  #' \href{https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020301ce94d47e44d24aa16207418a38cff.xlsx}{Latest data (as of 11 Jul 2020)}
   #' 
   #' @param path The file path of the dataset.
   #' @return A table containing the combined weekly records.
@@ -116,8 +116,20 @@ import_moh_weekly <- function(path) {
     dplyr::arrange(Year, `Epidemiology Wk`)
 }
 
-# bulletin <- import_moh_weekly("../data/weekly-infectious-disease-bulletin-year-2020ef64ac3712334d4dba1206de20313f78.xlsx")
+# bulletin <- import_moh_weekly("../data/weekly-infectious-disease-bulletin-year-2020301ce94d47e44d24aa16207418a38cff.xlsx")
 # 
-# write.csv(bulletin, 
-#           "../results/moh_weekly_bulletin_2012_2020_tidy_20200708.csv", 
+# bulletin_s <- bulletin %>% 
+#   dplyr::select(Year,
+#                 `Epidemiology Wk`,
+#                 Start,
+#                 End,
+#                 Dengue,
+#                 DHF,
+#                 HFMD,
+#                 `Salmonellosis(non-enteric fevers)`,
+#                 `Acute Upper Respiratory Tract infections`,
+#                 `Acute Diarrhoea`)
+# 
+# write.csv(bulletin_s,
+#           "../data/moh_weekly_bulletin_s_2012_2020_tidy_20200711.csv",
 #           row.names = F)
