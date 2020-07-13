@@ -223,7 +223,7 @@ weather %>%
   dplyr::filter(n > 3) %>% 
   # How many weeks of data is there per year? Exclude 2020
   dplyr::select(-n) %>% 
-  # dplyr::filter(Epiyear < 2020) %>% 
+  dplyr::filter(Epiyear < 2020) %>%
   dplyr::group_by(Station, Epiyear, Variable) %>%
   dplyr::count() %>% 
   dplyr::arrange(n) %>% 

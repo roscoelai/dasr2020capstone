@@ -2,6 +2,7 @@
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
+library(ggplot2)
 library(magrittr)
 
 import_moh_weekly <- function(path = NULL) {
@@ -143,8 +144,6 @@ import_moh_weekly <- function(path = NULL) {
 #           "../data/moh_weekly_bulletin_s_2012_2020_tidy_20200711.csv",
 #           row.names = F)
 
-library(ggplot2)
-
 bulletin_s %>% 
   dplyr::select(-DHF, -`Salmonellosis(non-enteric fevers)`) %>% 
   tidyr::pivot_longer(cols = c("Dengue",
@@ -154,14 +153,19 @@ bulletin_s %>%
                       names_to = "Diseases",
                       values_to = "Numbers") %>% 
   tidyr::drop_na() %>%
-  ggplot(aes(x = Start, y = Numbers, color = Diseases, group = Diseases)) + 
-  geom_point(size = 1, alpha = 0.4) +
-  geom_line(size = 0.5) + 
+  ggplot(aes(x = Start, y = Numbers)) + 
+  geom_point(aes(color = Diseases), size = 1, alpha = 0.4) +
+  geom_line(aes(color = Diseases), size = 0.5) + 
   labs(title = "Weekly cases for select diseases from 2012 to 2020",
        subtitle = "Why is there a sudden spike in dengue cases this year?",
        x = "",
        y = "Numbers",
        caption = "Source: moh.gov.sg") + 
-  ggthemes::theme_fivethirtyeight()
+  ggthemes::theme_fivethirtyeight() + 
+  geom_line(data = bulletin_s %>% tidyr::drop_na(),
+            aes(x = Start, y = Dengue),
+            color = "#11eebb",
+            size = 5,
+            alpha = 0.25)
 
 # ggsave("../imgs/ncases_4diseases_2012_2020.png", width = 12, height = 6)
