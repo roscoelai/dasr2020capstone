@@ -1,6 +1,8 @@
+# Analysing Dengue Cases in Singapore
+
 [Preview Current Version of Document](https://roscoelai.github.io/dasr2020capstone/src/capstone_project_html.html)
 
-# Analysing Dengue Cases in Singapore
+[Preview Current Version of Leaflet Map](https://roscoelai.github.io/dasr2020capstone/src/capstone_leaflet_html.html)
 
 ## Meeting (08 Jul 2020)
 ### S
@@ -53,9 +55,9 @@
 
 # Capstone Project Proposal
 
-<img src="./imgs/ncases_2012_2020.png" width="100%">
-
 ![](./imgs/ncases_4diseases_2012_2020.png)
+
+![](./imgs/ncases_2012_2020.png)
 
 ## Overview
 Dengue fever is a vector-borne infectious disease that are endemic in the tropical world. Singapore is one of several countries with high disease burden of dengue. In 2020, Singapore saw 1,158 dengue cases in a week of June - the highest number of weekly dengue cases ever recorded since 2014. Why is there a sudden spike in dengue cases this year?

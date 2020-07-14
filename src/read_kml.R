@@ -2,8 +2,22 @@
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-library(ggplot2)
 library(magrittr)
+
+# This is getting messy:
+# 1. Import and combine polygons of cases
+# 2. Transform to points of cases (use centroids of polygons)
+#     - Use points for leaflet::markerClusterOptions()
+# 3. Import planning areas
+# 4. Assign counts of points to planning areas
+# 5. Filter out planning areas with no counts
+# 6. Import climate station positions
+# 7. Plot planning areas, polygons of cases, points of cases, climate stations
+
+# TODO:
+# - Assign climate stations to planning areas
+# - Assign populations to planning areas
+# - Assign number of clinics to planning areas
 
 # Import ----
 import_kmls <- function(paths) {
@@ -42,7 +56,10 @@ repeat_markers <- function(polygon_df) {
     }
   }
   
-  sf::st_as_sf(df1)
+  df1 = sf::st_as_sf(df1)
+  sf::st_crs(df1) <- sf::st_crs(df0)
+  
+  df1
 }
 
 dengue_clusters <- dengue_clusters %>% 
@@ -57,14 +74,8 @@ planning_areas <- planning_areas %>%
 dengue_cases <- repeat_markers(dengue_clusters)
 
 climate_stations <- climate_stations %>% 
-  dplyr::filter(Station %in% c("Admiralty",
-                               "Ang Mo Kio",
+  dplyr::filter(Station %in% c("Ang Mo Kio",
                                "Changi",
-                               "Choa Chu Kang (South)",
-                               "Clementi",
-                               "East Coast Parkway",
-                               "Khatib",
-                               "Newton",
                                "Pasir Panjang",
                                "Tai Seng")) %>% 
   dplyr::mutate(Station = paste(Station, "Climate Station")) %>% 
@@ -73,31 +84,41 @@ climate_stations <- climate_stations %>%
   dplyr::select(Station, Lat, Long) %>%
   sf::st_as_sf(x = ., coords = c("Long", "Lat"))
 
+# Points within area ----
+planning_areas <- planning_areas %>% 
+  dplyr::left_join(sf::st_intersects(dengue_cases, planning_areas) %>% 
+                     tibble::as_tibble() %>% 
+                     dplyr::group_by(col.id) %>% 
+                     dplyr::count(name = "ncases") %>% 
+                     dplyr::rename(Name = col.id) %>% 
+                     dplyr::mutate(Name = paste0("kml_", Name)),
+                   by = "Name") %>% 
+  dplyr::filter(!is.na(ncases))
+
+
+
 # Visualize ----
 
-cases_pal <- leaflet::colorNumeric("Reds", as.numeric(dengue_clusters$ncases))
+cases_pal <- leaflet::colorNumeric("Reds", dengue_clusters$ncases)
 
 area_pal <- colors() %>% 
   .[grep("gr(a|e)y", ., invert = T)] %>% 
   sample(nrow(planning_areas)) %>% 
   leaflet::colorFactor(NULL)
 
-dengue_clusters %>% 
-  leaflet::leaflet(width = "100%") %>%
+leaflet::leaflet(height = 700, width = "100%") %>%
   leaflet::addTiles() %>%
   leaflet::addPolygons(data = planning_areas,
-                       stroke = T,
                        opacity = 1,
                        smoothFactor = 0.5,
                        fillOpacity = 0.25,
                        fillColor = ~area_pal(area_name),
                        weight = 0.5,
+                       label = ~as.character(ncases),
                        popup = ~as.character(area_name)) %>%
-  leaflet::addPolygons(stroke = T,
+  leaflet::addPolygons(data = dengue_clusters,
                        weight = 0.3,
                        opacity = 0.5,
-                       # color = "red",
-                       # smoothFactor = 0.5,
                        fillOpacity = 0.8,
                        fillColor = ~cases_pal(as.numeric(ncases)),
                        label = ~as.character(ncases),
@@ -112,7 +133,7 @@ dengue_clusters %>%
                       label = ~as.character(Station)) %>%
   {.}
 
-# Plot Dengue Clusters ---- From NEA/Data.gov.sg
+# Plot Dengue Clusters (From NEA/Data.gov.sg) ----
 quick_leaf <- function(paths) {
   import_kmls(paths) %>% 
     leaflet::leaflet(width = "100%") %>% 

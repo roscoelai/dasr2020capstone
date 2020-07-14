@@ -91,8 +91,8 @@ import_mss_daily <- function(years, stations = NULL) {
     "Tuas South" = "115_"
   )
   
-  # Check that all provided station names are in the list, if not, exit the 
-  #   function and print out the list (of names) for the user.
+  # Check that all provided station names are in the list, if not, exit and 
+  #   print out the list (of names) for the user.
   mask = !(stations %in% names(stations_lookup))
   if (any(mask)) {
     stop("The following station names are not recognized:\n",
@@ -183,7 +183,7 @@ import_mss_daily <- function(years, stations = NULL) {
 # import_mss_daily(years = 2012:2020) %>% 
 #   readr::write_csv("../data/mss_daily_2012_2020_19stations_20200714.csv")
 
-# Explore ---- Completeness
+# Check completeness ----
 weather <- readr::read_csv("../data/mss_daily_2012_2020_19stations_20200714.csv")
 
 # From 2012 to 2019, find the climate stations with at least 52 weeks of data 
