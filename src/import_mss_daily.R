@@ -4,7 +4,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 library(magrittr)
 
-import_mss_daily <- function(years, stations = "Changi") {
+import_mss_daily <- function(years, stations = NULL) {
   #' Historical Daily Weather Records
   #' 
   #' @description
@@ -56,9 +56,10 @@ import_mss_daily <- function(years, stations = "Changi") {
   #' \href{http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf}{List of stations, weather parameters and periods of records}
   #' 
   #' @param years A vector of years of interest.
-  #' @param stations A vector of climate station names. Defaults to "Changi".
+  #' @param stations A vector of climate station names.
   #' @return A table containing the combined daily records.
   #' @examples
+  #' import_mss_daily(2012:2020, "Changi")
   #' import_mss_daily(2012:2020, c("Changi", "Clementi", "Khatib", "Newton"))
   
   # MSS is nice enough to have their data accessible as .csv files, and they 
@@ -69,65 +70,68 @@ import_mss_daily <- function(years, stations = "Changi") {
   #   which was common to all stations. Their names are associated with their 
   #   numbers in the following vector.
   stations_lookup = c(
-    "Admiralty" = 104,
-    "Ang Mo Kio" = 109,
-    "Changi" = 24,
-    "Choa Chu Kang (South)" = 121,
-    "Clementi" = 50,
-    "East Coast Parkway" = 107,
-    "Jurong (West)" = 44,
-    "Jurong Island" = 117,
-    "Khatib" = 122,
-    "Marina Barrage" = 108,
-    "Newton" = 111,
-    "Pasir Panjang" = 116,
-    "Pulau Ubin" = 106,
-    "Seletar" = 25,
-    "Sembawang" = 80,
-    "Sentosa Island" = 60,
-    "Tai Seng" = 43,
-    "Tengah" = 23,
-    "Tuas South" = 115
+    "Admiralty" = "104_",
+    "Ang Mo Kio" = "109_",
+    "Changi" = "24_",
+    "Choa Chu Kang (South)" = "121_",
+    "Clementi" = "50_",
+    "East Coast Parkway" = "107_",
+    "Jurong (West)" = "44_",
+    "Jurong Island" = "117_",
+    "Khatib" = "122_",
+    "Marina Barrage" = "108_",
+    "Newton" = "111_",
+    "Pasir Panjang" = "116_",
+    "Pulau Ubin" = "106_",
+    "Seletar" = "25_",
+    "Sembawang" = "80_",
+    "Sentosa Island" = "60_",
+    "Tai Seng" = "43_",
+    "Tengah" = "23_",
+    "Tuas South" = "115_"
   )
+  
+  # Check that all provided station names are in the list, if not, exit the 
+  #   function and print out the list (of names) for the user.
+  mask = !(stations %in% names(stations_lookup))
+  if (any(mask)) {
+    stop("The following station names are not recognized:\n",
+         paste(stations[mask], collapse = "\n"),
+         "\n\nPlease select from the following:\n",
+         paste(names(stations_lookup), collapse = "\n"))
+  }
+  
+  # If no station names specified, take the full list
+  if (is.null(stations)) {
+    station_nums = stations_lookup
+  } else {
+    station_nums = stations_lookup[stations]
+  }
   
   # The full URL to each .csv file follows a certain convention:
   # - The base URL is: "http://www.weather.gov.sg/files/dailydata/DAILYDATA_S"
   # - Format: "<base URL><station number>_<YYYY><MM>.csv"
   # - We need to enumerate all <station number>-<year>-<month> combinations
+  url_base = "http://www.weather.gov.sg/files/dailydata/DAILYDATA_S"
   
-  # Station numbers:
-  # We find the station numbers from the user-input station names using the 
-  #   look-up vector given above.
-  station_nums = stations %>% 
-    match(., names(stations_lookup)) %>%  # Find index positions of matches
-    stations_lookup[.]  # Retrieve cognate station numbers
+  # We take the Cartesian product of the station numbers (derived from the 
+  #   user-input station names), the user-input years, and the 12 months ("01" 
+  #   to "12"), flatten the result into a vector, then prefix with the base URL 
+  #   and suffix with ".csv" to get the URLs of the desired files.
   
-  # Year-month combinations:
-  # We will enumerate all user-input years with all 12 months by taking the 
-  #   Cartesian product of the user-input years with a vector of 12 months 
-  #   (from "01" to "12", with leading zeroes). Some stations might not have 
-  #   data for certain months (so the .csv file does not exist), but we'll 
-  #   handle that using tryCatch().
-  year_months = years %>% 
-    outer(sprintf("%02d", 1:12),  # Use sprintf() to left pad with "0"
-          FUN = paste0) %>%  # Cartesian product using paste0()
-    sort()  # Flatten and arrange in chronological order
+  # Base R
+  urls = station_nums %>% 
+    outer(years, FUN = paste0) %>% 
+    outer(sprintf("%02d", 1:12), FUN = paste0) %>% 
+    sort() %>%  # Flatten and arrange in alphabetical order
+    paste0(url_base, ., ".csv")  # Prefix with base URL, suffix with ".csv"
   
-  # Station number-year-month combinations:
-  # We now take the Cartesian product of the station numbers and the year-month 
-  #   combinations, remembering the underscore ("_") between the station number 
-  #   and the year.
-  station_year_months = station_nums %>% 
-    outer(year_months, FUN = paste, sep = "_") %>% 
-    sort()  # This would also order by station number, but that's fine
-  
-  # TODO: Try out tidyr::crossing()
-  
-  # Full URLs list:
-  # We simply prefix with the base URL and suffix with ".csv"
-  urls = paste0("http://www.weather.gov.sg/files/dailydata/DAILYDATA_S",
-                station_year_months,
-                ".csv")
+  # TODO: tidyverse-way
+  # urls = station_nums %>% 
+  #   tidyr::crossing(years, sprintf("%02d", 1:12)) %>% 
+  #   tidyr::unite("station_year_month", sep = "") %>% 
+  #   dplyr::pull() %>% 
+  #   paste0(url_base, ., ".csv")  # Prefix with base URL, suffix with ".csv"
   
   # Now we (attempt to) read data from each URL into a list of tables:
   # It was noted that in some of the column headers, a variant of the "degree 
@@ -172,82 +176,56 @@ import_mss_daily <- function(years, stations = "Changi") {
     dplyr::mutate(Date = lubridate::ymd(paste(Year, Month, Day, sep = "-")),
                   Epiyear = lubridate::epiyear(Date),
                   Epiweek = lubridate::epiweek(Date)) %>% 
-    dplyr::select(Station,
-                  Epiyear,
-                  Epiweek,
-                  Date,
-                  everything(),
-                  -Year,
-                  -Month,
-                  -Day) %>% 
-    dplyr::arrange(Station, Date)
+    dplyr::select(Station, Epiyear, Epiweek, everything(), -Date) %>% 
+    dplyr::arrange(Station, Year, Month, Day)
 }
 
-# weather <- import_mss_daily(years = 2012:2020,
-#                          stations = c("Admiralty",
-#                                       "Ang Mo Kio",
-#                                       "Changi",
-#                                       "Choa Chu Kang (South)",
-#                                       "Clementi",
-#                                       "East Coast Parkway",
-#                                       "Jurong (West)",
-#                                       "Khatib",
-#                                       "Marina Barrage",
-#                                       "Newton",
-#                                       "Pasir Panjang",
-#                                       "Sembawang",
-#                                       "Tai Seng",
-#                                       "Tengah"))
-# 
-# write.csv(weather,
-#           "../results/mss_daily_2012_2020_14stations_20200709.csv",
-#           row.names = F)
+# import_mss_daily(years = 2012:2020) %>% 
+#   readr::write_csv("../data/mss_daily_2012_2020_19stations_20200714.csv")
 
 # Explore ---- Completeness
+weather <- readr::read_csv("../data/mss_daily_2012_2020_19stations_20200714.csv")
 
-weather <- readr::read_csv("../data/mss_daily_2012_2020_14stations_20200709.csv")
-
-weather %>% 
-  # We'll not use these variables, and there are too many NAs anyway
+# From 2012 to 2019, find the climate stations with at least 52 weeks of data 
+#   per year for 6 variables.
+# Step 1: Find the stations with 52 weeks of data per year
+# Step 2: Check if any of the candidates has less than 6 variables
+wks_per_stn_yr_var <- weather %>% 
+  dplyr::filter(Epiyear < 2020) %>% 
   dplyr::select(-matches("Highest")) %>% 
-  # Now every row is a value
   tidyr::pivot_longer(cols = Daily_Rainfall_Total_mm:Max_Wind_Speed_kmh,
                       names_to = "Variable",
                       values_to = "Values") %>% 
-  # Remove all missing values
   tidyr::drop_na() %>% 
-  # How many days of data is there per week?
-  dplyr::group_by(Station, Epiyear, Epiweek, Variable) %>%
-  dplyr::count() %>% 
-  # We'll accept as little as 4 days (out of 7)
-  dplyr::filter(n > 3) %>% 
-  # How many weeks of data is there per year? Exclude 2020
-  dplyr::select(-n) %>% 
-  dplyr::filter(Epiyear < 2020) %>%
-  dplyr::group_by(Station, Epiyear, Variable) %>%
-  dplyr::count() %>% 
-  dplyr::arrange(n) %>% 
-  View()
+  dplyr::group_by(Station, Epiyear, Epiweek, Variable) %>% 
+  dplyr::count(name = "days") %>% 
+  dplyr::group_by(Station, Epiyear, Variable) %>% 
+  dplyr::count(name = "weeks")
+
+c_stns <- setdiff(unique(weather$Station),
+                  wks_per_stn_yr_var %>% 
+                    dplyr::filter(weeks < 52) %>% 
+                    .$Station %>% 
+                    unique())
+
+wks_per_stn_yr_var %>% 
+  dplyr::filter(Station %in% c_stns) %>% 
+  dplyr::group_by(Station, Epiyear) %>% 
+  dplyr::count(name = "vars") %>% 
+  dplyr::filter(vars < 6)
+
+# Nothing is good
 
 weather2 <- weather %>% 
-  dplyr::select(-matches("Highest")) %>% 
-  dplyr::filter(!Station %in% c("Jurong (West)",
-                                "Marina Barrage",
-                                "Sembawang",
-                                "Tengah"))
+  dplyr::filter(Station %in% c_stns) %>% 
+  dplyr::select(-matches("Highest"))
 
-# weather <- import_mss_daily(years = 2012:2020,
-#                          stations = c("Admiralty",
-#                                       "Ang Mo Kio",
+# weather2 <- import_mss_daily(years = 2012:2020,
+#                          stations = c("Ang Mo Kio",
 #                                       "Changi",
-#                                       "Choa Chu Kang (South)",
-#                                       "Clementi",
-#                                       "East Coast Parkway",
-#                                       "Khatib",
-#                                       "Newton",
 #                                       "Pasir Panjang",
 #                                       "Tai Seng"))
 # 
-# write.csv(weather2,
-#           "../data/mss_daily_2012_2020_10stations_20200710.csv",
-#           row.names = F)
+# weather2 %>% 
+#   dplyr::select(-matches("Highest")) %>% 
+#   readr::write_csv("../data/mss_daily_2012_2020_4stations_20200714.csv")
