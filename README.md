@@ -28,11 +28,6 @@
 - Q7: Compare cases across Singapore regions
   - [x] Geographical plots using Leaflet
   - [x] Leaflet with clusterOptions
-  - [ ] Associate cases with climate stations
-- Data
-  - [x] Filter climate stations based on completeness of data
-    - [x] Going with: >3 days/week, >35 weeks/year (except 2020)
-    - [x] Down to 10 stations
 - R scripts for data import and tidy (and maybe collect... and maybe transform)
   - [x] Tidy MOH weekly bulletin data
   - [x] Import MSS daily weather data
@@ -42,9 +37,58 @@
   - [x] Number of clinics
   - [ ] Weather
     - [ ] Reintroduce **more** climate stations
+  - [ ] Age group
+  - [ ] Type of housing
 
 ### Others
 - Q6: Find intervention data (optional)
+
+---
+
+## Data
+- [Weekly Infectious Disease Bulletin, Ministry of Health (MOH)](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
+  - [Manual download (2012-W01 to 2020-W27)](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020301ce94d47e44d24aa16207418a38cff.xlsx)
+  - [Tidied subset](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh_weekly_bulletin_s_2012_2020_tidy_20200711.csv)
+- [Historical Daily Records, Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
+  - Daily rainfall
+  - Daily temperature and wind speed measurements for some climate stations
+  - [Script](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_mss_daily.R) to consolidate selected time periods for selected stations
+  - [Tidied subset](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss_daily_2012_2020_4stations_20200714.csv)
+- Approximate geocoordinates of dengue cases, [Data.gov.sg](https://data.gov.sg/)
+  - 2020-06-26
+    - [Central](https://geo.data.gov.sg/denguecase-central-area/2020/06/26/kml/denguecase-central-area.kml)
+    - [North East](https://geo.data.gov.sg/denguecase-northeast-area/2020/06/26/kml/denguecase-northeast-area.kml)
+    - [South East](https://geo.data.gov.sg/denguecase-southeast-area/2020/06/26/kml/denguecase-southeast-area.kml)
+    - [South West](https://geo.data.gov.sg/denguecase-southwest-area/2020/06/26/kml/denguecase-southwest-area.kml)
+  - 2020-07-07
+    - [Central](https://geo.data.gov.sg/denguecase-central-area/2020/07/07/kml/denguecase-central-area.kml)
+    - [North East](https://geo.data.gov.sg/denguecase-northeast-area/2020/07/07/kml/denguecase-northeast-area.kml)
+    - [South East](https://geo.data.gov.sg/denguecase-southeast-area/2020/07/07/kml/denguecase-southeast-area.kml)
+    - [South West](https://geo.data.gov.sg/denguecase-southwest-area/2020/07/07/kml/denguecase-southwest-area.kml)
+  - 2020-07-09
+    - [Central](https://geo.data.gov.sg/denguecase-central-area/2020/07/09/kml/denguecase-central-area.kml)
+    - [North East](https://geo.data.gov.sg/denguecase-northeast-area/2020/07/09/kml/denguecase-northeast-area.kml)
+    - [South East](https://geo.data.gov.sg/denguecase-southeast-area/2020/07/09/kml/denguecase-southeast-area.kml)
+    - [South West](https://geo.data.gov.sg/denguecase-southwest-area/2020/07/09/kml/denguecase-southwest-area.kml)
+- [Master Plan 2014 Planning Area Boundary (No Sea)](https://geo.data.gov.sg/mp14-plng-area-no-sea-pl/2016/05/11/kml/mp14-plng-area-no-sea-pl.zip), [Data.gov.sg](https://data.gov.sg/)
+  - Names and sizes of planning areas
+- [Resident Population by Planning Area/Subzone, Age Group and Sex, 2015](https://storage.data.gov.sg/resident-population-by-planning-area-subzone-age-group-and-sex-2015/resources/resident-population-by-planning-area-age-group-and-sex-2019-07-30T03-02-18Z.csv), [Data.gov.sg](https://data.gov.sg/)
+  - Populations of planning areas
+  - Breakdown by age groups
+- [Resident Population by Planning Area/Subzone and Type of Dwelling, 2015](https://storage.data.gov.sg/resident-population-by-planning-area-subzone-and-type-of-dwelling-2015/resources/resident-population-by-planning-area-and-type-of-dwelling-2020-07-15T06-05-58Z.csv), [Data.gov.sg](https://data.gov.sg/)
+  - Populations of planning areas
+  - Breakdown by type of dwelling
+- [CHAS Clinics](https://geo.data.gov.sg/moh-chas-clinics/2020/07/05/kml/moh-chas-clinics.kml), [Data.gov.sg](https://data.gov.sg/)
+  - Geocoordinates of CHAS clinics
+
+### Unsourceable
+- Yearly population distribution across named regions in Singapore
+- COVID-19 cases (Apr - Jul 2020)
+
+### Deprecated
+- [Monthly Air Temperature And Sunshine, Relative Humidity And Rainfall, Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)
+  - Higher resolution (daily) data available from MSS
+  - Might reconsider if humidity data is needed
 
 ---
 
@@ -66,44 +110,8 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
 
 
 
-## Data
-- [Weekly Infectious Disease Bulletin (2012-W01 to 2020-W27)](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020301ce94d47e44d24aa16207418a38cff.xlsx), [Ministry of Health (MOH)](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
-  - Number of cases per week for dengue and other infectious diseases
-  - Manually download the latest dataset
-- [Historical Daily Records](http://www.weather.gov.sg/climate-historical-daily/), Meteorological Service Singapore (MSS)
-  - Daily rainfall
-  - Daily temperature and wind speed measurements for some climate stations
-  - Automate data collection for selected stations at selected timepoints
-- Spatial maps of dengue cases, [Data.gov.sg](https://data.gov.sg)
-  - [Central](https://data.gov.sg/dataset/dengue-cases-central)
-  - [North East](https://data.gov.sg/dataset/dengue-cases-north-east)
-  - [South East](https://data.gov.sg/dataset/dengue-cases-south-east)
-  - [South West](https://data.gov.sg/dataset/dengue-cases-south-west)
-  - Approximate geocoordinates of cases
-  - Manually download the latest datasets
-- [Master Plan 2014 Planning Area Boundary (No Sea)](https://data.gov.sg/dataset/master-plan-2014-planning-area-boundary-no-sea), [Data.gov.sg](https://data.gov.sg)
-  - Names and sizes of planning areas
-  - Manually download dataset
-- [Resident Population by Planning Area/Subzone, Age Group and Sex, 2015](https://data.gov.sg/dataset/resident-population-by-planning-area-subzone-age-group-and-sex-2015), [Data.gov.sg](https://data.gov.sg)
-  - Populations of planning areas
-  - Breakdown by age groups
-  - Manually download dataset
-- [CHAS Clinics](https://data.gov.sg/dataset/chas-clinics), [Data.gov.sg](https://data.gov.sg)
-  - Geocoordinates of CHAS clinics
-  - Manually download dataset
-
-### Check this out
-- [Resident Population by Planning Area/Subzone and Type of Dwelling, 2015](https://data.gov.sg/dataset/resident-population-by-planning-area-subzone-and-type-of-dwelling-2015), [Data.gov.sg](https://data.gov.sg)
-
-### Unsourceable
-- Yearly population distribution across named regions in Singapore
-- COVID-19 cases (Apr - Jul 2020)
-
-### Deprecated data
-- Monthly Air Temperature And Sunshine, Relative Humidity And Rainfall from [Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)
-  - <u>Reason</u>: Higher resolution (daily) data available from MSS
-  - Might reconsider if humidity data is needed
-- Latest number of cases by named regions in Singapore from [National Environment Agency (NEA)](https://www.nea.gov.sg/dengue-zika/dengue/dengue-clusters)
+## <s>Data</s>
+(Moved)
 
 
 
@@ -123,7 +131,7 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
   - According to the news report, East region has the largest number of clusters than other parts of Singapore
   - In particular, does Marine Parade and Sembawang (or Queenstown?) have any differences in their weather variable?
 
-### Address these
+### Address
 - Time lag: Dengue cases manifest 1-2 weeks after infection
   - Timing adjustments have to be made for ostensibly associated variables
 - Seasonal effects
