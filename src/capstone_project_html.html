@@ -11,7 +11,7 @@
 
 <meta name="author" content="Shayne, Roscoe, Anu" />
 
-<meta name="date" content="2020-07-14" />
+<meta name="date" content="2020-07-15" />
 
 <title>Analysing Dengue Cases in Singapore</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Analysing Dengue Cases in Singapore</h1>
 <h4 class="author">Shayne, Roscoe, Anu</h4>
-<h4 class="date">14 July 2020</h4>
+<h4 class="date">15 July 2020</h4>
 
 </div>
 
@@ -391,66 +391,67 @@ summary {
 <div id="data" class="section level2">
 <h2>Data</h2>
 <ul>
-<li><a href="http://www.weather.gov.sg/climate-historical-daily/">Daily records</a> from Meteorological Service Singapore (MSS)
+<li><a href="https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020301ce94d47e44d24aa16207418a38cff.xlsx">Weekly Infectious Disease Bulletin (2012-W01 to 2020-W27)</a>, <a href="https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin">Ministry of Health (MOH)</a>
 <ul>
-<li>Relevant variables: Rainfall, Temperature</li>
-<li>Data from 2012 to 2020 will be gathered from selected climate stations
+<li>Number of cases per week for dengue and other infectious diseases</li>
+<li>Manually download the latest dataset</li>
+</ul></li>
+<li><a href="http://www.weather.gov.sg/climate-historical-daily/">Historical Daily Records</a>, Meteorological Service Singapore (MSS)
 <ul>
-<li><a href="http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf">Climate station records</a> indicate the following stations might have both rainfall and temperature data:
+<li>Daily rainfall</li>
+<li>Daily temperature and wind speed measurements for some climate stations</li>
+<li>Automate data collection for selected stations at selected timepoints</li>
+</ul></li>
+<li>Spatial maps of dengue cases, <a href="https://data.gov.sg">Data.gov.sg</a>
 <ul>
-<li><input type="checkbox" disabled checked></input>
-Admiralty</li>
-<li><input type="checkbox" disabled checked></input>
-Ang Mo Kio</li>
-<li><input type="checkbox" disabled checked></input>
-Changi</li>
-<li><input type="checkbox" disabled checked></input>
-Choa Chu Kang (South)</li>
-<li><input type="checkbox" disabled checked></input>
-Clementi</li>
-<li><input type="checkbox" disabled checked></input>
-East Coast Parkway</li>
-<li><input type="checkbox" disabled checked></input>
-Khatib</li>
-<li><input type="checkbox" disabled checked></input>
-Newton</li>
-<li><input type="checkbox" disabled checked></input>
-Pasir Panjang</li>
-<li><input type="checkbox" disabled checked></input>
-Tai Seng</li>
+<li><a href="https://data.gov.sg/dataset/dengue-cases-central">Central</a></li>
+<li><a href="https://data.gov.sg/dataset/dengue-cases-north-east">North East</a></li>
+<li><a href="https://data.gov.sg/dataset/dengue-cases-south-east">South East</a></li>
+<li><a href="https://data.gov.sg/dataset/dengue-cases-south-west">South West</a></li>
+<li>Approximate geocoordinates of cases</li>
+<li>Manually download the latest datasets</li>
 </ul></li>
-</ul></li>
-<li><input type="checkbox" disabled></input>
-Aggregate data to <s>months</s> weeks<ul>
-<li>Mean/Median rainfall</li>
-<li>Mean/Median temperature</li>
-<li>Temperature range (max-min)</li>
-</ul></li>
-</ul></li>
-<li><a href="https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020ef64ac3712334d4dba1206de20313f78.xlsx">Weekly infectious diesease bulletin (2012-W01 to 2020-W26)</a> from <a href="https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin">Ministry of Health (MOH)</a>
+<li><a href="https://data.gov.sg/dataset/master-plan-2014-planning-area-boundary-no-sea">Master Plan 2014 Planning Area Boundary (No Sea)</a>, <a href="https://data.gov.sg">Data.gov.sg</a>
 <ul>
-<li><input type="checkbox" disabled></input>
-Aggregate data to months</li>
+<li>Names and sizes of planning areas</li>
+<li>Manually download dataset</li>
 </ul></li>
-<li>Latest number of cases by named regions in Singapore from <a href="https://www.nea.gov.sg/dengue-zika/dengue/dengue-clusters">National Environment Agency (NEA)</a></li>
-<li>Yearly population distribution across named regions in Singapore</li>
-<li>COVID-19 cases (Apr - Jul 2020)</li>
-<li>Latest number of cases by regions with geocoordinates from <a href="https://data.gov.sg/dataset?q=Dengue">Data.gov.sg</a></li>
+<li><a href="https://data.gov.sg/dataset/resident-population-by-planning-area-subzone-age-group-and-sex-2015">Resident Population by Planning Area/Subzone, Age Group and Sex, 2015</a>, <a href="https://data.gov.sg">Data.gov.sg</a>
+<ul>
+<li>Populations of planning areas</li>
+<li>Breakdown by age groups</li>
+<li>Manually download dataset</li>
+</ul></li>
+<li><a href="https://data.gov.sg/dataset/chas-clinics">CHAS Clinics</a>, <a href="https://data.gov.sg">Data.gov.sg</a>
+<ul>
+<li>Geocoordinates of CHAS clinics</li>
+<li>Manually download dataset</li>
+</ul></li>
+</ul>
+<div id="check-this-out" class="section level3">
+<h3>Check this out</h3>
+<ul>
+<li><a href="https://data.gov.sg/dataset/resident-population-by-planning-area-subzone-and-type-of-dwelling-2015">Resident Population by Planning Area/Subzone and Type of Dwelling, 2015</a>, <a href="https://data.gov.sg">Data.gov.sg</a></li>
 </ul>
 </div>
-<div id="deprecated-data" class="section level2">
-<h2>Deprecated Data</h2>
+<div id="unsourceable" class="section level3">
+<h3>Unsourceable</h3>
+<ul>
+<li>Yearly population distribution across named regions in Singapore</li>
+<li>COVID-19 cases (Apr - Jul 2020)</li>
+</ul>
+</div>
+<div id="deprecated-data" class="section level3">
+<h3>Deprecated data</h3>
 <ul>
 <li>Monthly Air Temperature And Sunshine, Relative Humidity And Rainfall from <a href="https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv">Singapore Department of Statistics (DOS)</a>
 <ul>
 <li><u>Reason</u>: Higher resolution (daily) data available from MSS</li>
 <li>Might reconsider if humidity data is needed</li>
 </ul></li>
-<li>Weekly case numbers (2012-W01 to 2020-W20) from <a href="https://data.gov.sg/dataset?q=Dengue">Data.gov.sg</a>
-<ul>
-<li><u>Reason</u>: More up-to-date data available from MOH</li>
-</ul></li>
+<li>Latest number of cases by named regions in Singapore from <a href="https://www.nea.gov.sg/dengue-zika/dengue/dengue-clusters">National Environment Agency (NEA)</a></li>
 </ul>
+</div>
 </div>
 <div id="analysis-plan" class="section level2">
 <h2>Analysis Plan</h2>

@@ -29,8 +29,6 @@
   - [x] Geographical plots using Leaflet
   - [x] Leaflet with clusterOptions
   - [ ] Associate cases with climate stations
-    - [ ] Voronoi diagram
-    - [ ] Filter out climate stations without any assigned points
 - Data
   - [x] Filter climate stations based on completeness of data
     - [x] Going with: >3 days/week, >35 weeks/year (except 2020)
@@ -39,17 +37,14 @@
   - [x] Tidy MOH weekly bulletin data
   - [x] Import MSS daily weather data
 - Spatial Analysis
-  - Different regions have different number of cases
-  - Unfair to just compare numbers
-  - Depends on local population / population density
-  - Depends on local testing capacity
-  - Depends on atomospheric factors
-  - ... anything else?
-  - Consider removing Pasir Panjang from the climate station list (n = 6)
+  - [x] Population
+  - [x] Area
+  - [x] Number of clinics
+  - [ ] Weather
+    - [ ] Reintroduce **more** climate stations
 
 ### Others
 - Q6: Find intervention data (optional)
-- Addresses or geocoords of clinics
 
 ---
 
@@ -72,21 +67,43 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
 
 
 ## Data
-- Daily climate records from [Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
-  - Relevant variables: Rainfall, Temperature
-  - Data for 2012 to 2020 will be gathered from selected climate stations
-- Weekly case numbers (2012-W01 to 2020-W25) from [Ministry of Health (MOH)](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020ea2c0b1cec1549009844537d52f2377f.xlsx)
-- Latest number of cases by named regions in Singapore from [National Environment Agency (NEA)](https://www.nea.gov.sg/dengue-zika/dengue/dengue-clusters)
+- [Weekly Infectious Disease Bulletin (2012-W01 to 2020-W27)](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020301ce94d47e44d24aa16207418a38cff.xlsx), [Ministry of Health (MOH)](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
+  - Number of cases per week for dengue and other infectious diseases
+  - Manually download the latest dataset
+- [Historical Daily Records](http://www.weather.gov.sg/climate-historical-daily/), Meteorological Service Singapore (MSS)
+  - Daily rainfall
+  - Daily temperature and wind speed measurements for some climate stations
+  - Automate data collection for selected stations at selected timepoints
+- Spatial maps of dengue cases, [Data.gov.sg](https://data.gov.sg)
+  - [Central](https://data.gov.sg/dataset/dengue-cases-central)
+  - [North East](https://data.gov.sg/dataset/dengue-cases-north-east)
+  - [South East](https://data.gov.sg/dataset/dengue-cases-south-east)
+  - [South West](https://data.gov.sg/dataset/dengue-cases-south-west)
+  - Approximate geocoordinates of cases
+  - Manually download the latest datasets
+- [Master Plan 2014 Planning Area Boundary (No Sea)](https://data.gov.sg/dataset/master-plan-2014-planning-area-boundary-no-sea), [Data.gov.sg](https://data.gov.sg)
+  - Names and sizes of planning areas
+  - Manually download dataset
+- [Resident Population by Planning Area/Subzone, Age Group and Sex, 2015](https://data.gov.sg/dataset/resident-population-by-planning-area-subzone-age-group-and-sex-2015), [Data.gov.sg](https://data.gov.sg)
+  - Populations of planning areas
+  - Breakdown by age groups
+  - Manually download dataset
+- [CHAS Clinics](https://data.gov.sg/dataset/chas-clinics), [Data.gov.sg](https://data.gov.sg)
+  - Geocoordinates of CHAS clinics
+  - Manually download dataset
+
+### Check this out
+- [Resident Population by Planning Area/Subzone and Type of Dwelling, 2015](https://data.gov.sg/dataset/resident-population-by-planning-area-subzone-and-type-of-dwelling-2015), [Data.gov.sg](https://data.gov.sg)
+
+### Unsourceable
 - Yearly population distribution across named regions in Singapore
 - COVID-19 cases (Apr - Jul 2020)
-- Latest number of cases by regions with geocoordinates from [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)
 
-### Deprecated Data
+### Deprecated data
 - Monthly Air Temperature And Sunshine, Relative Humidity And Rainfall from [Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)
   - <u>Reason</u>: Higher resolution (daily) data available from MSS
   - Might reconsider if humidity data is needed
-- Weekly case numbers (2012-W01 to 2020-W20) from [Data.gov.sg](https://data.gov.sg/dataset?q=Dengue)
-  - <u>Reason</u>: More up-to-date data available from MOH
+- Latest number of cases by named regions in Singapore from [National Environment Agency (NEA)](https://www.nea.gov.sg/dengue-zika/dengue/dengue-clusters)
 
 
 
@@ -106,7 +123,7 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
   - According to the news report, East region has the largest number of clusters than other parts of Singapore
   - In particular, does Marine Parade and Sembawang (or Queenstown?) have any differences in their weather variable?
 
-### Considerations and limitations
+### Address these
 - Time lag: Dengue cases manifest 1-2 weeks after infection
   - Timing adjustments have to be made for ostensibly associated variables
 - Seasonal effects
@@ -115,6 +132,3 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
   - 90% foreign workers, expect a correlation
   - Compare against number of cases from Apr - Jul 2020
 
----
-
-![](./imgs/climate_stations.png)

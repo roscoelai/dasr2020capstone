@@ -17,12 +17,12 @@ library(magrittr)
 # - Assign populations to planning areas
 # - Assign number of clinics to planning areas
 # - Assign planning areas to climate stations
+# - Area? Sea areas are problematic... We need another map (use 2014)
 
 # TODO:
 # - Assign population age groups to planning areas
-# - Area? Sea areas are problematic...
 
-# Get dengue cases ----
+# Import... a lot of stuff ----
 
 dengue_polys <- c(
   # https://data.gov.sg/dataset/dengue-cases-central
@@ -70,12 +70,17 @@ chas_points <- "../data/data_gov_2/chas-clinics/chas-clinics-kml.kml" %>%
 
 
 planning_areas <- 
-  paste0("../data/data_gov_2/master-plan-2019-planning-area-boundary-no-sea/",
-         "planning-boundary-area.kml") %>% 
+  paste0("../data/data_gov_3/master-plan-2014-planning-area-boundary-no-sea/",
+         "MP14_PLNG_AREA_NO_SEA_PL.kml") %>% 
   sf::st_read() %>% 
-  tibble::as_tibble() %>% 
-  tidyr::extract(Description, "plan_area", ".*?<td>(.*?)</td>.*") %>% 
-  dplyr::mutate(plan_area = tools::toTitleCase(tolower(plan_area))) %>% 
+  # tibble::as_tibble() %>% 
+  # tidyr::extract(Description, "plan_area", ".*?<td>(.*?)</td>.*") %>% 
+  # dplyr::mutate(plan_area = tools::toTitleCase(tolower(plan_area))) %>% 
+  dplyr::mutate(Name = tools::toTitleCase(tolower(Name)),
+                area_km2 = gsub(".*Area<.*?<td>(.*?)<.*", "\\1", Description),
+                area_km2 = as.numeric(area_km2) / 1e6) %>% 
+  dplyr::rename(plan_area = Name) %>% 
+  dplyr::select(-Description) %>% 
   sf::st_as_sf() %>% 
   sf::st_zm()
 
@@ -94,31 +99,28 @@ planning_areas$stn <- planning_areas %>%
   apply(1, FUN = which.min) %>% 
   climate_stations$Station[.]
 
-# planning_areas$area <- sf::st_area(planning_areas)
-
 # Points within area ----
 
 # Check Coordinate Reference Systems
 # sf::st_crs(dengue_points)
 # sf::st_crs(planning_areas)
 
-ncases_in_areas <- sf::st_intersects(dengue_points, planning_areas) %>% 
-  tibble::as_tibble() %>% 
-  dplyr::rename(Name = col.id) %>% 
-  dplyr::mutate(Name = paste0("kml_", Name)) %>% 
-  dplyr::group_by(Name) %>% 
-  dplyr::count(name = "ncases")
+count_pts_in_polys <- function(points, polygons, colname) {
+  sf::st_intersects(points, polygons) %>% 
+    tibble::as_tibble() %>% 
+    dplyr::rename(plan_area = col.id) %>% 
+    dplyr::mutate(plan_area = polygons$plan_area[plan_area]) %>% 
+    dplyr::group_by(plan_area) %>% 
+    dplyr::count(name = colname)
+}
 
-nclinics_in_areas <- sf::st_intersects(chas_points, planning_areas) %>% 
-  tibble::as_tibble() %>% 
-  dplyr::rename(Name = col.id) %>% 
-  dplyr::mutate(Name = paste0("kml_", Name)) %>% 
-  dplyr::group_by(Name) %>% 
-  dplyr::count(name = "nclinics")
+ncases_in_areas <- count_pts_in_polys(dengue_points, planning_areas, "ncases")
+
+nclinics_in_areas <- count_pts_in_polys(chas_points, planning_areas, "nclinics")
 
 joined_table <- ncases_in_areas %>% 
-  dplyr::inner_join(nclinics_in_areas, by = "Name") %>% 
-  dplyr::inner_join(planning_areas, by = "Name") %>% 
+  dplyr::inner_join(nclinics_in_areas, by = "plan_area") %>% 
+  dplyr::inner_join(planning_areas, by = "plan_area") %>% 
   dplyr::inner_join(populations, by = "plan_area") %>% 
   dplyr::mutate(label = htmltools::HTML(paste0(plan_area,
                                                "<br/>Cases: ",
@@ -127,8 +129,8 @@ joined_table <- ncases_in_areas %>%
                                                nclinics,
                                                "<br/>Population: ",
                                                pop,
-                                               # "<br/>Area: ",
-                                               # area,
+                                               "<br/>Area: ",
+                                               round(area_km2, 2),
                                                "<br/>Climate station: ",
                                                stn))) %>% 
   sf::st_as_sf()
@@ -203,5 +205,6 @@ quick_points <- function(paths) {
                               clusterOptions = leaflet::markerClusterOptions())
 }
 
+quick_polys("../data/data_gov_3/master-plan-2014-planning-area-boundary-no-sea/MP14_PLNG_AREA_NO_SEA_PL.kml")
 quick_polys("../data/data_gov_1/dengue-clusters/dengue-clusters-kml.kml")
 quick_points("../data/data_gov_2/chas-clinics/chas-clinics-kml.kml")
