@@ -54,7 +54,7 @@
   - Daily temperature and wind speed measurements for some climate stations
   - [Script](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_mss_daily.R) to consolidate selected time periods for selected stations
   - [Tidied subset](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss_daily_2012_2020_4stations_20200714.csv)
-- Approximate geocoordinates of dengue cases, [Data.gov.sg](https://data.gov.sg/)
+- Approximate geocoordinates of dengue cases, [Data.gov.sg](https://data.gov.sg/search?q=denguecases)
   - 2020-06-26
     - [Central](https://geo.data.gov.sg/denguecase-central-area/2020/06/26/kml/denguecase-central-area.kml)
     - [North East](https://geo.data.gov.sg/denguecase-northeast-area/2020/06/26/kml/denguecase-northeast-area.kml)
@@ -70,16 +70,14 @@
     - [North East](https://geo.data.gov.sg/denguecase-northeast-area/2020/07/09/kml/denguecase-northeast-area.kml)
     - [South East](https://geo.data.gov.sg/denguecase-southeast-area/2020/07/09/kml/denguecase-southeast-area.kml)
     - [South West](https://geo.data.gov.sg/denguecase-southwest-area/2020/07/09/kml/denguecase-southwest-area.kml)
-- [Master Plan 2014 Planning Area Boundary (No Sea)](https://geo.data.gov.sg/mp14-plng-area-no-sea-pl/2016/05/11/kml/mp14-plng-area-no-sea-pl.zip), [Data.gov.sg](https://data.gov.sg/)
-  - Names and sizes of planning areas
-- [Resident Population by Planning Area/Subzone, Age Group and Sex, 2015](https://storage.data.gov.sg/resident-population-by-planning-area-subzone-age-group-and-sex-2015/resources/resident-population-by-planning-area-age-group-and-sex-2019-07-30T03-02-18Z.csv), [Data.gov.sg](https://data.gov.sg/)
-  - Populations of planning areas
-  - Breakdown by age groups
-- [Resident Population by Planning Area/Subzone and Type of Dwelling, 2015](https://storage.data.gov.sg/resident-population-by-planning-area-subzone-and-type-of-dwelling-2015/resources/resident-population-by-planning-area-and-type-of-dwelling-2020-07-15T06-05-58Z.csv), [Data.gov.sg](https://data.gov.sg/)
+- [Singapore Residents by Planning Area and Type of Dwelling, Jun 2017](https://data.gov.sg/dataset/singapore-residents-by-planning-area-and-type-of-dwelling-jun-2017), Data.gov.sg
+  - Planning areas (URA MP14)
   - Populations of planning areas
   - Breakdown by type of dwelling
-- [CHAS Clinics](https://geo.data.gov.sg/moh-chas-clinics/2020/07/05/kml/moh-chas-clinics.kml), [Data.gov.sg](https://data.gov.sg/)
+  - [.kml file](https://geo.data.gov.sg/plan-bdy-dwelling-type-2017/2017/09/27/kml/plan-bdy-dwelling-type-2017.kml)
+- [CHAS Clinics](https://data.gov.sg/dataset/chas-clinics), Data.gov.sg
   - Geocoordinates of CHAS clinics
+  - [.kml file](https://geo.data.gov.sg/moh-chas-clinics/2020/07/05/kml/moh-chas-clinics.kml)
 
 ### Unsourceable
 - Yearly population distribution across named regions in Singapore
@@ -89,6 +87,17 @@
 - [Monthly Air Temperature And Sunshine, Relative Humidity And Rainfall, Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)
   - Higher resolution (daily) data available from MSS
   - Might reconsider if humidity data is needed
+- [Resident Population by Planning Area/Subzone and Type of Dwelling, 2015](https://data.gov.sg/dataset/resident-population-by-planning-area-subzone-and-type-of-dwelling-2015), Data.gov.sg
+  - Populations of planning areas
+  - Breakdown by type of dwelling
+  - [.csv file](https://storage.data.gov.sg/resident-population-by-planning-area-subzone-and-type-of-dwelling-2015/resources/resident-population-by-planning-area-and-type-of-dwelling-2020-07-15T06-05-58Z.csv)
+- [Resident Population by Planning Area/Subzone, Age Group and Sex, 2015](https://data.gov.sg/dataset/resident-population-by-planning-area-subzone-age-group-and-sex-2015), Data.gov.sg
+  - Populations of planning areas
+  - Breakdown by age groups
+  - [.csv file](https://storage.data.gov.sg/resident-population-by-planning-area-subzone-age-group-and-sex-2015/resources/resident-population-by-planning-area-age-group-and-sex-2019-07-30T03-02-18Z.csv)
+- [Master Plan 2014 Planning Area Boundary (No Sea)](https://data.gov.sg/dataset/master-plan-2014-planning-area-boundary-no-sea), Data.gov.sg
+  - Names and sizes of planning areas
+  - [.zip file](https://geo.data.gov.sg/mp14-plng-area-no-sea-pl/2016/05/11/kml/mp14-plng-area-no-sea-pl.zip)
 
 ---
 
