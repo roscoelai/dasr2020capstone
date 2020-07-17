@@ -35,10 +35,9 @@
   - [x] Population
   - [x] Area
   - [x] Number of clinics
+  - [x] Type of housing
   - [ ] Weather
     - [ ] Reintroduce **more** climate stations
-  - [ ] Age group
-  - [ ] Type of housing
 
 ### Others
 - Q6: Find intervention data (optional)
@@ -47,29 +46,36 @@
 
 ## Data
 - [Weekly Infectious Disease Bulletin, Ministry of Health (MOH)](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
-  - [Manual download (2012-W01 to 2020-W27)](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020301ce94d47e44d24aa16207418a38cff.xlsx)
-  - [Tidied subset](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh_weekly_bulletin_s_2012_2020_tidy_20200711.csv)
+  - [Manual download (2012-W01 to 2020-W28)](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020f3b1838244614d8a812f10e1febd31b1.xlsx)
+  - [Tidied subset (2012-W01 to 2020-W28)](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh_weekly_bulletin_s_2012_2020_tidy_20200717.csv)
 - [Historical Daily Records, Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
   - Daily rainfall
   - Daily temperature and wind speed measurements for some climate stations
   - [Script](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_mss_daily.R) to consolidate selected time periods for selected stations
   - [Tidied subset](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss_daily_2012_2020_4stations_20200714.csv)
 - Approximate geocoordinates of dengue cases, [Data.gov.sg](https://data.gov.sg/search?q=denguecases)
-  - 2020-06-26
-    - [Central](https://geo.data.gov.sg/denguecase-central-area/2020/06/26/kml/denguecase-central-area.kml)
-    - [North East](https://geo.data.gov.sg/denguecase-northeast-area/2020/06/26/kml/denguecase-northeast-area.kml)
-    - [South East](https://geo.data.gov.sg/denguecase-southeast-area/2020/06/26/kml/denguecase-southeast-area.kml)
-    - [South West](https://geo.data.gov.sg/denguecase-southwest-area/2020/06/26/kml/denguecase-southwest-area.kml)
-  - 2020-07-07
-    - [Central](https://geo.data.gov.sg/denguecase-central-area/2020/07/07/kml/denguecase-central-area.kml)
-    - [North East](https://geo.data.gov.sg/denguecase-northeast-area/2020/07/07/kml/denguecase-northeast-area.kml)
-    - [South East](https://geo.data.gov.sg/denguecase-southeast-area/2020/07/07/kml/denguecase-southeast-area.kml)
-    - [South West](https://geo.data.gov.sg/denguecase-southwest-area/2020/07/07/kml/denguecase-southwest-area.kml)
-  - 2020-07-09
-    - [Central](https://geo.data.gov.sg/denguecase-central-area/2020/07/09/kml/denguecase-central-area.kml)
-    - [North East](https://geo.data.gov.sg/denguecase-northeast-area/2020/07/09/kml/denguecase-northeast-area.kml)
-    - [South East](https://geo.data.gov.sg/denguecase-southeast-area/2020/07/09/kml/denguecase-southeast-area.kml)
-    - [South West](https://geo.data.gov.sg/denguecase-southwest-area/2020/07/09/kml/denguecase-southwest-area.kml)
+
+<div style="margin: auto; width: 80%">
+| Date       | Central        | North East      | South East      | South West      |
+|------------|----------------|-----------------|-----------------|-----------------|
+| 2020-06-26 | [.kml file][1] | [.kml file][2]  | [.kml file][3]  | [.kml file][4]  |
+| 2020-07-07 | [.kml file][5] | [.kml file][6]  | [.kml file][7]  | [.kml file][8]  |
+| 2020-07-09 | [.kml file][9] | [.kml file][10] | [.kml file][11] | [.kml file][12] |
+</div>
+
+[1]: https://geo.data.gov.sg/denguecase-central-area/2020/06/26/kml/denguecase-central-area.kml
+[2]: https://geo.data.gov.sg/denguecase-northeast-area/2020/06/26/kml/denguecase-northeast-area.kml
+[3]: https://geo.data.gov.sg/denguecase-southeast-area/2020/06/26/kml/denguecase-southeast-area.kml
+[4]: https://geo.data.gov.sg/denguecase-southwest-area/2020/06/26/kml/denguecase-southwest-area.kml
+[5]: https://geo.data.gov.sg/denguecase-central-area/2020/07/07/kml/denguecase-central-area.kml
+[6]: https://geo.data.gov.sg/denguecase-northeast-area/2020/07/07/kml/denguecase-northeast-area.kml
+[7]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/07/kml/denguecase-southeast-area.kml
+[8]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/07/kml/denguecase-southwest-area.kml
+[9]: https://geo.data.gov.sg/denguecase-central-area/2020/07/09/kml/denguecase-central-area.kml
+[10]: https://geo.data.gov.sg/denguecase-northeast-area/2020/07/09/kml/denguecase-northeast-area.kml
+[11]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/09/kml/denguecase-southeast-area.kml
+[12]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/09/kml/denguecase-southwest-area.kml
+
 - [Singapore Residents by Planning Area and Type of Dwelling, Jun 2017](https://data.gov.sg/dataset/singapore-residents-by-planning-area-and-type-of-dwelling-jun-2017), Data.gov.sg
   - Planning areas (URA MP14)
   - Populations of planning areas
@@ -84,9 +90,10 @@
 - COVID-19 cases (Apr - Jul 2020)
 
 ### Deprecated
-- [Monthly Air Temperature And Sunshine, Relative Humidity And Rainfall, Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)
+- [Monthly Air Temperature And Sunshine, Relative Humidity And Rainfall, Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/initApiList.action)
   - Higher resolution (daily) data available from MSS
   - Might reconsider if humidity data is needed
+  - [.csv file](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)
 - [Resident Population by Planning Area/Subzone and Type of Dwelling, 2015](https://data.gov.sg/dataset/resident-population-by-planning-area-subzone-and-type-of-dwelling-2015), Data.gov.sg
   - Populations of planning areas
   - Breakdown by type of dwelling
@@ -103,7 +110,7 @@
 
 # Capstone Project Proposal
 
-![](./imgs/ncases_4diseases_2012_2020.png)
+![](./imgs/ncases_4diseases_sep_2012_2020.png)
 
 ![](./imgs/ncases_2012_2020.png)
 
@@ -149,3 +156,4 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
   - 90% foreign workers, expect a correlation
   - Compare against number of cases from Apr - Jul 2020
 
+---

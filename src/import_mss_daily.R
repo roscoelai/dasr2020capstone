@@ -204,7 +204,8 @@ wks_per_stn_yr_var <- weather %>%
 
 c_stns <- setdiff(unique(weather$Station),
                   wks_per_stn_yr_var %>% 
-                    dplyr::filter(weeks < 52) %>% 
+                    dplyr::filter(weeks < 52) %>%
+                    # dplyr::filter(weeks < 37) %>%
                     .$Station %>% 
                     unique())
 
@@ -214,7 +215,7 @@ wks_per_stn_yr_var %>%
   dplyr::count(name = "vars") %>% 
   dplyr::filter(vars < 6)
 
-# Nothing is good
+# Nothing is good!
 
 weather2 <- weather %>% 
   dplyr::filter(Station %in% c_stns) %>% 
@@ -226,6 +227,36 @@ weather2 <- weather %>%
 #                                       "Pasir Panjang",
 #                                       "Tai Seng"))
 # 
-# weather2 %>% 
-#   dplyr::select(-matches("Highest")) %>% 
+# weather2 %>%
+#   dplyr::select(-matches("Highest")) %>%
 #   readr::write_csv("../data/mss_daily_2012_2020_4stations_20200714.csv")
+
+dplyr::glimpse(weather2)
+
+weather_wks <- weather2 %>% 
+  dplyr::group_by(Station, Epiyear, Epiweek) %>% 
+  dplyr::summarise(mean_rainfall_mm = mean(Daily_Rainfall_Total_mm),
+                   med_rainfall_mm = median(Daily_Rainfall_Total_mm),
+                   mean_temp_degc = mean(Mean_Temperature_degC),
+                   med_temp_degc = median(Mean_Temperature_degC),
+                   min_temp_degc = min(Minimum_Temperature_degC),
+                   max_temp_degc = max(Maximum_Temperature_degC),
+                   temp_rng = max_temp_degc - min_temp_degc,
+                   mean_wind_kmh = mean(Mean_Wind_Speed_kmh),
+                   med_wind_kmh = median(Mean_Wind_Speed_kmh))
+
+dplyr::glimpse(weather_wks)
+
+library(ggplot2)
+
+weather_wks %>% 
+  dplyr::filter(!Station %in% c("Admiralty",
+                                "Jurong Island",
+                                "Khatib",
+                                "Tuas South")) %>% 
+  dplyr::mutate(year = as.factor(Epiyear)) %>% 
+  ggplot(aes(x = Epiweek, y = temp_rng, color = year)) + 
+  geom_line() +
+  geom_point(alpha = 0.25) + 
+  facet_grid(year ~ Station)
+

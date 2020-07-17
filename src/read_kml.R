@@ -51,10 +51,23 @@ dengue_polys <- c(
 
 # We might want more stations, and explore how to aggregate their data
 climate_stations <- readr::read_csv("../data/Station_Records.csv") %>% 
+  # dplyr::filter(Station %in% c("Ang Mo Kio",
+  #                              "Changi",
+  #                              "Pasir Panjang",
+  #                              "Tai Seng")) %>%
   dplyr::filter(Station %in% c("Ang Mo Kio",
+                               # "Admiralty",
                                "Changi",
+                               "Choa Chu Kang (South)",
+                               "Clementi",
+                               "East Coast Parkway",
+                               # "Jurong Island",
+                               # "Khatib",
+                               "Marina Barrage",
+                               "Newton",
                                "Pasir Panjang",
-                               "Tai Seng")) %>% 
+                               # "Tuas South"
+                               "Tai Seng")) %>%
   dplyr::select(Station, matches("Lat|Long")) %>% 
   sf::st_as_sf(coords = c("Long. (E)", "Lat.(N)")) %>% 
   sf::`st_crs<-`("WGS84")
@@ -92,6 +105,9 @@ planning_areas <- "../data/data_gov/plan-bdy-dwelling-type-2017.kml" %>%
                   climate_stations$Station[.]) %>% 
   dplyr::select(-Name, -Description)
 
+planning_areas$stn %>% 
+  unique()
+
 # Transform ----
 count_pts_in_polys <- function(points, polygons, colname) {
   sf::st_intersects(points, polygons) %>% 
@@ -128,6 +144,9 @@ joined_table <- dengue_points %>%
                                                "<br/>Climate station: ",
                                                stn))) %>% 
   sf::st_as_sf()
+
+climate_stations <- climate_stations %>% 
+  dplyr::filter(Station %in% joined_table$stn)
 
 # Visualize ----
 set.seed(336483)
