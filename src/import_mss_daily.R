@@ -204,8 +204,8 @@ wks_per_stn_yr_var <- weather %>%
 
 c_stns <- setdiff(unique(weather$Station),
                   wks_per_stn_yr_var %>% 
-                    dplyr::filter(weeks < 52) %>%
-                    # dplyr::filter(weeks < 37) %>%
+                    # dplyr::filter(weeks < 52) %>%
+                    dplyr::filter(weeks < 37) %>%
                     .$Station %>% 
                     unique())
 
@@ -233,6 +233,10 @@ weather2 <- weather %>%
 
 dplyr::glimpse(weather2)
 
+bulletin <- "../data/moh_weekly_bulletin_s_2012_2020_tidy_20200717.csv" %>% 
+  readr::read_csv() %>% 
+  dplyr::select(Epiyear:Dengue)
+
 weather_wks <- weather2 %>% 
   dplyr::group_by(Station, Epiyear, Epiweek) %>% 
   dplyr::summarise(mean_rainfall_mm = mean(Daily_Rainfall_Total_mm),
@@ -243,20 +247,41 @@ weather_wks <- weather2 %>%
                    max_temp_degc = max(Maximum_Temperature_degC),
                    temp_rng = max_temp_degc - min_temp_degc,
                    mean_wind_kmh = mean(Mean_Wind_Speed_kmh),
-                   med_wind_kmh = median(Mean_Wind_Speed_kmh))
+                   med_wind_kmh = median(Mean_Wind_Speed_kmh)) %>% 
+  dplyr::filter(!Station %in% c("Admiralty",
+                                "Jurong Island",
+                                "Khatib",
+                                "Marina Barrage",
+                                "Tuas South")) %>% 
+  dplyr::filter(Station %in% c("Ang Mo Kio",
+                               "Changi",
+                               "Pasir Panjang",
+                               "Tai Seng")) %>% 
+  dplyr::filter(Station == "Changi") %>% 
+  dplyr::left_join(bulletin, by = c("Epiyear", "Epiweek"))
 
 dplyr::glimpse(weather_wks)
 
 library(ggplot2)
 
 weather_wks %>% 
-  dplyr::filter(!Station %in% c("Admiralty",
-                                "Jurong Island",
-                                "Khatib",
-                                "Tuas South")) %>% 
-  dplyr::mutate(year = as.factor(Epiyear)) %>% 
-  ggplot(aes(x = Epiweek, y = temp_rng, color = year)) + 
+  dplyr::mutate(Epiyear = as.factor(Epiyear)) %>% 
+  ggplot(aes(x = Start, y = temp_rng, color = Epiyear)) + 
   geom_line() +
   geom_point(alpha = 0.25) + 
-  facet_grid(year ~ Station)
+  facet_grid(Station ~ .)
 
+weather_wks %>% 
+  dplyr::transmute(start_date = paste(Epiyear, Epiweek, "Sun", sep = "-") %>% 
+                     lubridate::parse_date_time("Y-W-a"))
+
+weather_wks %>% 
+  dplyr::mutate(Dengue = dplyr::lag(Dengue, 1)) %>% 
+  ggplot(aes(x = mean_temp_degc, y = Dengue)) + 
+  geom_point(color = "deepskyblue4", alpha = 0.5) + 
+  geom_smooth(method = "lm", formula = y ~ x)
+
+weather_wks %>% 
+  dplyr::mutate(Dengue = dplyr::lag(Dengue, 1)) %>% 
+  lm(Dengue ~ mean_temp_degc, data = .) %>% 
+  summary()
