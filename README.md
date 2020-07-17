@@ -58,23 +58,10 @@
 <div style="margin: auto; width: 80%">
 | Date       | Central        | North East      | South East      | South West      |
 |------------|----------------|-----------------|-----------------|-----------------|
-| 2020-06-26 | [.kml file][1] | [.kml file][2]  | [.kml file][3]  | [.kml file][4]  |
-| 2020-07-07 | [.kml file][5] | [.kml file][6]  | [.kml file][7]  | [.kml file][8]  |
-| 2020-07-09 | [.kml file][9] | [.kml file][10] | [.kml file][11] | [.kml file][12] |
+| 2020-06-26 | [.kml file](https://geo.data.gov.sg/denguecase-central-area/2020/06/26/kml/denguecase-central-area.kml) | [.kml file](https://geo.data.gov.sg/denguecase-northeast-area/2020/06/26/kml/denguecase-northeast-area.kml)  | [.kml file](https://geo.data.gov.sg/denguecase-southeast-area/2020/06/26/kml/denguecase-southeast-area.kml)  | [.kml file](https://geo.data.gov.sg/denguecase-southwest-area/2020/06/26/kml/denguecase-southwest-area.kml)  |
+| 2020-07-07 | [.kml file](https://geo.data.gov.sg/denguecase-central-area/2020/07/07/kml/denguecase-central-area.kml) | [.kml file](https://geo.data.gov.sg/denguecase-northeast-area/2020/07/07/kml/denguecase-northeast-area.kml)  | [.kml file](https://geo.data.gov.sg/denguecase-southeast-area/2020/07/07/kml/denguecase-southeast-area.kml)  | [.kml file](https://geo.data.gov.sg/denguecase-southwest-area/2020/07/07/kml/denguecase-southwest-area.kml)  |
+| 2020-07-09 | [.kml file](https://geo.data.gov.sg/denguecase-central-area/2020/07/09/kml/denguecase-central-area.kml) | [.kml file](https://geo.data.gov.sg/denguecase-northeast-area/2020/07/09/kml/denguecase-northeast-area.kml) | [.kml file](https://geo.data.gov.sg/denguecase-southeast-area/2020/07/09/kml/denguecase-southeast-area.kml) | [.kml file](https://geo.data.gov.sg/denguecase-southwest-area/2020/07/09/kml/denguecase-southwest-area.kml) |
 </div>
-
-[1]: https://geo.data.gov.sg/denguecase-central-area/2020/06/26/kml/denguecase-central-area.kml
-[2]: https://geo.data.gov.sg/denguecase-northeast-area/2020/06/26/kml/denguecase-northeast-area.kml
-[3]: https://geo.data.gov.sg/denguecase-southeast-area/2020/06/26/kml/denguecase-southeast-area.kml
-[4]: https://geo.data.gov.sg/denguecase-southwest-area/2020/06/26/kml/denguecase-southwest-area.kml
-[5]: https://geo.data.gov.sg/denguecase-central-area/2020/07/07/kml/denguecase-central-area.kml
-[6]: https://geo.data.gov.sg/denguecase-northeast-area/2020/07/07/kml/denguecase-northeast-area.kml
-[7]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/07/kml/denguecase-southeast-area.kml
-[8]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/07/kml/denguecase-southwest-area.kml
-[9]: https://geo.data.gov.sg/denguecase-central-area/2020/07/09/kml/denguecase-central-area.kml
-[10]: https://geo.data.gov.sg/denguecase-northeast-area/2020/07/09/kml/denguecase-northeast-area.kml
-[11]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/09/kml/denguecase-southeast-area.kml
-[12]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/09/kml/denguecase-southwest-area.kml
 
 - [Singapore Residents by Planning Area and Type of Dwelling, Jun 2017](https://data.gov.sg/dataset/singapore-residents-by-planning-area-and-type-of-dwelling-jun-2017), Data.gov.sg
   - Planning areas (URA MP14)
