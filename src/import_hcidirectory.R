@@ -130,22 +130,17 @@ import_hcidirectory <- function() {
   df = tbls %>% 
     dplyr::bind_rows()
   
-  # Clean
-  
-  
   # Inspect
   df %>% 
     dplyr::glimpse()
-    # View()
-  
-  tail(df)
-  
-  # Save
-  df %>%
-    readr::write_csv("../results/scrape_hci_20200720.csv")
   
   # Check
   sum(duplicated(df))
+  
+  # TODO: Clean
+  # - Dental
+  # - Specialists
+  # - Duplicate addresses
   
   df %>% 
     .[duplicated(.$add) | duplicated(.$add, fromLast = T),] %>% 
@@ -164,8 +159,11 @@ import_hcidirectory <- function() {
   gc()
   system("taskkill /im java.exe /f", intern = F, ignore.stdout = F)
   
-  tbls %>% 
-    dplyr::bind_rows()
+  df
 }
 
 df <- import_hcidirectory()
+
+# Save
+# df %>%
+#   readr::write_csv("../results/scrape_hci_20200720.csv")
