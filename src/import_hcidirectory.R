@@ -62,38 +62,69 @@ import_hcidirectory <- function() {
     as.numeric()
   
   # DEBUG
-  npages = 2
+  # npages = 2
   
-  # Scrape all pages
-  tbls = lapply(1:npages, function(i) {
+  # # Scrape all pages
+  # tbls = lapply(1:npages, function(i) {
+  #   results = remDr$findElement("#results", using = "css")
+  #   
+  #   t = results$getElementAttribute("innerHTML")[[1]] %>% 
+  #     xml2::read_html() %>% 
+  #     rvest::html_nodes(".result_container:not(.showing_results)") %>% 
+  #     rvest::html_nodes(".name,.add") %>% 
+  #     rvest::html_text() %>% 
+  #     gsub("\\s+", " ", .) %>% 
+  #     trimws() %>% 
+  #     { cbind(.[c(TRUE,FALSE)], .[!c(TRUE,FALSE)]) } %>% 
+  #     tibble::as_tibble() %>% 
+  #     setNames(c("name", "add"))
+  #   
+  #   print(paste0(i, " of ", npages, " (", round(i / npages * 100, 2), "%)"))
+  #   
+  #   # Navigate to the next page (if available)
+  #   tryCatch({
+  #     nextpage = remDr$findElement("#PageControl > div.r_arrow", using = "css")
+  #     nextpage$clickElement()
+  #   },
+  #   error = function(e) {
+  #     print(paste("No more pages after page", i))
+  #   })
+  #   
+  #   t
+  # })
+  
+  # Might have to use this method... (takes about 5-10 min)
+  tbls = vector(mode = "list", length = npages)
+
+  for (i in 1:npages) {
     results = remDr$findElement("#results", using = "css")
-    
-    t = results$getElementAttribute("innerHTML")[[1]] %>% 
-      xml2::read_html() %>% 
-      rvest::html_nodes(".result_container:not(.showing_results)") %>% 
-      rvest::html_nodes(".name,.add") %>% 
-      rvest::html_text() %>% 
-      gsub("\\s+", " ", .) %>% 
-      trimws() %>% 
-      { cbind(.[c(TRUE,FALSE)], .[!c(TRUE,FALSE)]) } %>% 
-      tibble::as_tibble() %>% 
+
+    tbls[[i]] = results$getElementAttribute("innerHTML")[[1]] %>%
+      xml2::read_html() %>%
+      rvest::html_nodes(".result_container:not(.showing_results)") %>%
+      rvest::html_nodes(".name,.add") %>%
+      rvest::html_text() %>%
+      gsub("\\s+", " ", .) %>%
+      trimws() %>%
+      { cbind(.[c(TRUE,FALSE)], .[!c(TRUE,FALSE)]) } %>%
+      tibble::as_tibble() %>%
       setNames(c("name", "add"))
-    
+
     print(paste0(i, " of ", npages, " (", round(i / npages * 100, 2), "%)"))
-    
+
     # Navigate to the next page (if available)
-    tryCatch({
+    terminate = tryCatch({
       nextpage = remDr$findElement("#PageControl > div.r_arrow", using = "css")
       nextpage$clickElement()
+      F
     },
     error = function(e) {
       print(paste("No more pages after page", i))
+      T
     })
-    
-    t
-  })
-  
-  
+
+    if (terminate) break
+  }
   
   # Combine
   df = tbls %>% 
