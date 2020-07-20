@@ -8,17 +8,20 @@ import_hcidirectory <- function() {
   #' Import Healthcare Institutions Directory Records
   #' 
   #' @description
-  #' 
+  #' The Healthcare Institutions Directory website is quite fancy, it cannot be 
+  #' webscraped using naive methods.
   #' 
   #' Variables:
   #' \enumerate{
-  #'   \item 
+  #'   \item name: Name of clinic
+  #'   \item add: Address of clinic
   #' }
   #' 
   #' @details
   #' \href{http://hcidirectory.sg/hcidirectory/}{Healthcare Institutions Directory}
   #' 
-  #' @return A table containing .
+  #' @return A table containing names and addresses of clinics registered in 
+  #' the Healthcare Institutions Directory.
   
   # Run a Selenium Server using `RSelenium::rsDriver()`. The parameters e.g. 
   #   `browser`, `chromever` (or `geckover` if using Firefox, or other drivers 
@@ -38,74 +41,89 @@ import_hcidirectory <- function() {
   # Navigate to the given URL
   remDr$navigate("http://hcidirectory.sg/hcidirectory/")
   
-  # Get page 1
+  # Click 3 things:
+  # 1. "MORE SEARCH OPTIONS"
+  # 2. "Medical Clinics Only"
+  # 3. "Search"
   c(
     "options" = "#moreSearchOptions",
     "medclins" = "#criteria > table > tbody > tr:nth-child(2) > td > label",
     "search" = "#search_btn_left"
   ) %>% 
-    sapply(remDr$findElement, using = "css") %>% 
-    sapply(function(elem) { elem$clickElement() })
+    lapply(remDr$findElement, using = "css") %>% 
+    purrr::walk(function(elem) elem$clickElement())
   
-  webElems = c(
-    "results" = "#results",
-    "nextpage" = "#PageControl > div.r_arrow > a"
-  ) %>% 
-    sapply(remDr$findElement, using = "css")
-  
-  scrape_field = function(node, class) {
-    node %>% 
-      rvest::html_node(class) %>% 
-      rvest::html_text() %>% 
-      gsub("\\s+", " ", .) %>% 
-      trimws()
-  }
-  
-  scrape_page = function(res_html) {
-    res_html %>% 
-      rvest::html_nodes(".result_container") %>% 
-      .[2:11] %>% 
-      sapply(function(node) {
-        c(
-          name = scrape_field(node, ".name"),
-          add = scrape_field(node, ".add")
-        )
-      }) %>% 
-      t() %>% 
-      tibble::as_tibble()
-  }
-  
-  tbls = list(scrape_page(res_html))
-  
-  # Get page > 1
-  npages = webElems$results$getElementAttribute("innerHTML")[[1]] %>% 
+  # Find the number of pages
+  results = remDr$findElement("#results", using = "css")
+  npages = results$getElementAttribute("innerHTML")[[1]] %>% 
     xml2::read_html() %>% 
     rvest::html_node("#totalPage") %>% 
     rvest::html_attr("value") %>% 
     as.numeric()
   
-  npages = 4
+  # DEBUG
+  npages = 2
   
-  for (i in 2:npages) {
-   tryCatch({
-     webElems$nextpage$clickElement()
-     
-     webElems = c(
-       "results" = "#results",
-       "nextpage" = "#PageControl > div.r_arrow > a"
-     ) %>% 
-       sapply(remDr$findElement, using = "css")
-     
-     res_html = webElems$results$getElementAttribute("innerHTML")[[1]] %>% 
-       xml2::read_html()
-     
-     tbls[[i]] = scrape_page(res_html)
-   },
-   error = function(e) { NA })
+  # Scrape all pages
+  tbls = lapply(1:npages, function(i) {
+    results = remDr$findElement("#results", using = "css")
     
-  }
+    t = results$getElementAttribute("innerHTML")[[1]] %>% 
+      xml2::read_html() %>% 
+      rvest::html_nodes(".result_container:not(.showing_results)") %>% 
+      rvest::html_nodes(".name,.add") %>% 
+      rvest::html_text() %>% 
+      gsub("\\s+", " ", .) %>% 
+      trimws() %>% 
+      { cbind(.[c(TRUE,FALSE)], .[!c(TRUE,FALSE)]) } %>% 
+      tibble::as_tibble() %>% 
+      setNames(c("name", "add"))
+    
+    print(paste0(i, " of ", npages, " (", round(i / npages * 100, 2), "%)"))
+    
+    # Navigate to the next page (if available)
+    tryCatch({
+      nextpage = remDr$findElement("#PageControl > div.r_arrow", using = "css")
+      nextpage$clickElement()
+    },
+    error = function(e) {
+      print(paste("No more pages after page", i))
+    })
+    
+    t
+  })
   
-  remDr$findElement("#PageControl > ul > li:nth-child(1) > a", using = "css")
+  
+  
+  # Combine
+  df = tbls %>% 
+    dplyr::bind_rows()
+  
+  # Clean
+  
+  
+  # Inspect
+  df %>% 
+    dplyr::glimpse()
+    # View()
+  
+  tail(df)
+  
+  # Save
+  df %>%
+    readr::write_csv("../results/scrape_hci_20200720.csv")
+  
+  # Check
+  sum(duplicated(df))
+  
+  df %>% 
+    .[duplicated(.$add) | duplicated(.$add, fromLast = T),] %>% 
+    dplyr::arrange(add) %>% 
+    View()
+  
+  df %>% 
+    dplyr::filter(grepl("(?i)dental", name))
+  
   
   
   # Clean up: Close browser, stop server, kill Java instance(s) inside RStudio
@@ -113,9 +131,9 @@ import_hcidirectory <- function() {
   rD[["server"]]$stop()
   rm(rD)
   gc()
-  system("taskkill /im java.exe /f", intern=FALSE, ignore.stdout=FALSE)
+  system("taskkill /im java.exe /f", intern = F, ignore.stdout = F)
   
-  tables %>% 
+  tbls %>% 
     dplyr::bind_rows()
 }
 
