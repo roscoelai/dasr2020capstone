@@ -4,8 +4,43 @@
 
 [Preview Current Version of Leaflet Map](https://roscoelai.github.io/dasr2020capstone/src/capstone_leaflet_html.html)
 
+---
+
+## Meeting (27 Jul 2020) <- ?
+### Agenda
+#### Temporal
+- [ ] How to aggreagate overall/island-wide meteorological data?
+  - [ ] Choose 1 climate station (e.g. Changi)
+  - [ ] Average climate stations with sufficient data (4 stations)
+  - [ ] Weighted average? (!)
+- [ ] Transform meteorological data
+  - [ ] Daily -> Weekly aggregation protocol (mean, median, max-min, etc.)
+- [ ] Combine meteorological and epidemiological data
+- [ ] Model meteorological variables vs. number of cases
+  - [ ] Time displacement (1 week? 2 weeks?)
+
+#### Spatial
+- [ ] How to aggregate recent weather data (13 stations with data for 2020)?
+  - [ ] Past 1 month?
+  - [ ] Past 0.5 month?
+  - [ ] Daily -> Weekly aggregation protocol (mean, median, max-min, etc.)
+- [ ] Combine locality data with:
+  - [ ] Area
+  - [ ] Population
+  - [ ] Dwelling type
+  - [ ] Number of cases
+  - [ ] Number of clinics
+  - [ ] Meteorological data
+- [ ] Transform number of cases to a fairer indicator (n/area, n/pop, etc.)
+  - [ ] Standard choropleth weaknesses:
+    - [ ] Modifiable areal unit problem (MAUP)
+    - [ ] Ecological fallacy
+- [ ] Model everything (?) vs. indicator
+
+---
+
 ## Meeting (08 Jul 2020)
-### S
+#### S
 - Q1: Case numbers for different diseases across 2012-2020
   - Plot weekly by months for each year - line/bar graph and heat map
   - Compare significant differences between years
@@ -14,7 +49,7 @@
   - Aggregate to weekly data - median, mean, min, max, range
   - Plot weekly by months for each year - bar graph and heat map
 
-### A
+#### A
 - Q3: Correlate case numbers and weather variables in general
   - For each disease to each weather variables
   - Which disease is most related to weather
@@ -24,21 +59,20 @@
   - Y (number of cases) = temperature range + total rainfall + humidity + e
 - Q5: Identify highest rainfall months and plot the number of cases over the years
 
-### R
+#### R
 - Q7: Compare cases across Singapore regions
   - [x] Geographical plots using Leaflet
   - [x] Leaflet with clusterOptions
 - R scripts for data import and tidy (and maybe collect... and maybe transform)
   - [x] Tidy MOH weekly bulletin data
   - [x] Import MSS daily weather data
-  - [x] Scrape HCI data
+  - [x] Scrape HCI data (+get coordinates)
 - Spatial Analysis
   - [x] Area
   - [x] Population
   - [x] Type of housing
   - [x] Number of clinics
-  - [ ] Weather
-    - [ ] Check for complete weather data for the past month
+  - [x] Weather (for 2020, 13 stations)
 
 ### Others
 - Q6: Find intervention data (optional)
@@ -54,7 +88,7 @@
   - Daily temperature and wind speed measurements for some climate stations
   - Script for [webscraping](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_mss_daily.R)
   - [Tidied subset](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss_daily_2012_2020_4stations_20200714.csv)
-- [Listing of Licensed Healthcare Institutions](http://hcidirectory.sg/hcidirectory/)
+- [Listing of Licensed Healthcare Institutions, Ministry of Health (MOH)](http://hcidirectory.sg/hcidirectory/)
   - Name and address of HCI
   - Scripts for [webscraping](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_hcidirectory.R) and [deriving coordinates](https://github.com/roscoelai/dasr2020capstone/blob/master/src/get_geocodes.R)
 - [Approximate geocoordinates of dengue cases](https://data.gov.sg/search?q=denguecases), Data.gov.sg
