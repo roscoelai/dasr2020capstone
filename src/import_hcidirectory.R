@@ -8,8 +8,8 @@ import_hcidirectory <- function() {
   #' Import Healthcare Institutions Directory Records
   #' 
   #' @description
-  #' The Healthcare Institutions Directory website is quite fancy, it cannot be 
-  #' webscraped using naive methods.
+  #' The Healthcare Institutions Directory website is rather fancy, it cannot 
+  #' be webscraped using naive methods. Time for RSelenium.
   #' 
   #' Variables:
   #' \enumerate{
@@ -41,13 +41,15 @@ import_hcidirectory <- function() {
   # Navigate to the given URL
   remDr$navigate("http://hcidirectory.sg/hcidirectory/")
   
-  # Click 3 things:
+  # Click 4 things:
   # 1. "MORE SEARCH OPTIONS"
   # 2. "Medical Clinics Only"
-  # 3. "Search"
+  # 3. "General Medical"
+  # 4. "Search"
   c(
     "options" = "#moreSearchOptions",
     "medclins" = "#criteria > table > tbody > tr:nth-child(2) > td > label",
+    "genmed" = "#isGenMed",
     "search" = "#search_btn_left"
   ) %>% 
     lapply(remDr$findElement, using = "css") %>% 
@@ -61,109 +63,97 @@ import_hcidirectory <- function() {
     rvest::html_attr("value") %>% 
     as.numeric()
   
-  # DEBUG
-  # npages = 2
+  # We'll use this "append-to-empty-tibble" approach, for now
+  df = tibble::tibble(
+    no = character(),
+    name = character(),
+    add = character()
+  )
   
-  # # Scrape all pages
-  # tbls = lapply(1:npages, function(i) {
-  #   results = remDr$findElement("#results", using = "css")
-  #   
-  #   t = results$getElementAttribute("innerHTML")[[1]] %>% 
-  #     xml2::read_html() %>% 
-  #     rvest::html_nodes(".result_container:not(.showing_results)") %>% 
-  #     rvest::html_nodes(".name,.add") %>% 
-  #     rvest::html_text() %>% 
-  #     gsub("\\s+", " ", .) %>% 
-  #     trimws() %>% 
-  #     { cbind(.[c(TRUE,FALSE)], .[!c(TRUE,FALSE)]) } %>% 
-  #     tibble::as_tibble() %>% 
-  #     setNames(c("name", "add"))
-  #   
-  #   print(paste0(i, " of ", npages, " (", round(i / npages * 100, 2), "%)"))
-  #   
-  #   # Navigate to the next page (if available)
-  #   tryCatch({
-  #     nextpage = remDr$findElement("#PageControl > div.r_arrow", using = "css")
-  #     nextpage$clickElement()
-  #   },
-  #   error = function(e) {
-  #     print(paste("No more pages after page", i))
-  #   })
-  #   
-  #   t
-  # })
-  
-  # Might have to use this method... (takes about 5-10 min)
-  tbls = vector(mode = "list", length = npages)
-
-  for (i in 1:npages) {
+  i = 1
+  while (T) {
     results = remDr$findElement("#results", using = "css")
-
-    tbls[[i]] = results$getElementAttribute("innerHTML")[[1]] %>%
-      xml2::read_html() %>%
-      rvest::html_nodes(".result_container:not(.showing_results)") %>%
-      rvest::html_nodes(".name,.add") %>%
+    
+    html = results$getElementAttribute("innerHTML")[[1]] %>% 
+      xml2::read_html()
+    
+    idx = html %>% 
+      rvest::html_nodes(".col1") %>% 
+      .[1] %>% 
       rvest::html_text() %>%
-      gsub("\\s+", " ", .) %>%
-      trimws() %>%
-      { cbind(.[c(TRUE,FALSE)], .[!c(TRUE,FALSE)]) } %>%
-      tibble::as_tibble() %>%
-      setNames(c("name", "add"))
-
-    print(paste0(i, " of ", npages, " (", round(i / npages * 100, 2), "%)"))
-
-    # Navigate to the next page (if available)
-    terminate = tryCatch({
+      gsub("\\s+", " ", .) %>% 
+      gsub(",", "", .) %>% 
+      sub(".*Showing (\\d+) - (\\d+) of .*", "\\1,\\2", .) %>% 
+      strsplit(split = ",") %>% 
+      unlist() %>% 
+      as.numeric() %>% 
+      { .[1]:.[2] }
+    
+    # This would ensure only unique indices get added to the table
+    if (!any(idx %in% df$no)) {
+      next_10 = html %>%
+        rvest::html_nodes(".name,.add") %>%
+        rvest::html_text() %>%
+        gsub("\\s+", " ", .) %>%
+        trimws() %>%
+        { cbind(idx, .[c(TRUE,FALSE)], .[!c(TRUE,FALSE)]) } %>%
+        tibble::as_tibble() %>% 
+        setNames(c("no", "name", "add"))
+      
+      df = df %>% 
+        dplyr::bind_rows(next_10)
+      
+      message(i, " of ", npages, " done (", round(i / npages * 100, 2), "%)")
+      
+      i = i + 1
+    }
+    
+    if (i > npages) break
+    
+    # Navigate to the next page (if available, else stop)
+    the_end = tryCatch({
       nextpage = remDr$findElement("#PageControl > div.r_arrow", using = "css")
       nextpage$clickElement()
       F
-    },
-    error = function(e) {
-      print(paste("No more pages after page", i))
+    }, error = function(e) {
+      # Should not reach here under normal conditions
+      print(paste("There are no more pages after", i))
       T
     })
-
-    if (terminate) break
+    
+    if (the_end) break
   }
   
-  # Combine
-  df = tbls %>% 
-    dplyr::bind_rows()
-  
-  # Inspect
-  df %>% 
-    dplyr::glimpse()
-  
-  # Check
-  sum(duplicated(df))
-  
-  # TODO: Clean
-  # - Dental
-  # - Specialists
-  # - Duplicate addresses
-  
-  df %>% 
-    .[duplicated(.$add) | duplicated(.$add, fromLast = T),] %>% 
-    dplyr::arrange(add) %>% 
-    View()
-  
-  df %>% 
-    dplyr::filter(grepl("(?i)dental", name))
-  
-  
-  
-  # Clean up: Close browser, stop server, kill Java instance(s) inside RStudio
+  # Clean up RSelenium
   remDr$close()
   rD[["server"]]$stop()
-  rm(rD)
+  rm(rD, remDr)
   gc()
+  # Kill Java instance(s) inside RStudio
+  # docs.microsoft.com/en-us/windows-server/administration/windows-commands/taskkill
   system("taskkill /im java.exe /f", intern = F, ignore.stdout = F)
   
   df
 }
 
-df <- import_hcidirectory()
+hci <- import_hcidirectory()
 
 # Save
-# df %>%
-#   readr::write_csv("../results/scrape_hci_20200720.csv")
+hci %>%
+  readr::write_csv("../results/scrape_hci_20200721.csv")
+
+# Load
+hci <- readr::read_csv("../results/scrape_hci_20200721.csv")
+
+# Check
+hci %>% 
+  .[duplicated(.$add) | duplicated(.$add, fromLast = T),] %>% 
+  dplyr::arrange(add)
+
+# Clean duplicate addresses
+hci_nodup <- hci %>% 
+  .[!duplicated(.$add, fromLast = T),]
+
+# Save
+hci_nodup %>%
+  readr::write_csv("../results/scrape_hci_nodup_20200721.csv")
