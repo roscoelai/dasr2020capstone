@@ -62,5 +62,7 @@ df %>%
   dplyr::bind_cols(geocoords)
 
 # Save again (?)
-
-
+df %>% 
+  dplyr::select(-zip) %>% 
+  dplyr::bind_cols(geocoords) %>% 
+  readr::write_csv("../results/clinics_geocoords_20200722.csv")

@@ -8,8 +8,8 @@ library(magrittr)
 
 # Some background story:
 # - There are 2 general approaches for reading spatial data:
-#   - sp -> rgdal::readOGR()
-#   - sf -> sf::st_read()
+#   - sp-way -> rgdal::readOGR()
+#   - sf-way -> sf::st_read()
 # - The sp approach was used at first, but was abandoned chiefly because the sp 
 #     classes (e.g. SpatialPolygonsDataFrame) had rather complex structures 
 #     that impeded method chaining.
@@ -34,13 +34,16 @@ library(magrittr)
 #   - Add clinics in planning areas
 #   - Determine climate station for planning areas
 
+# TODO:
+# - Clinics
+#   - http://hcidirectory.sg/hcidirectory/
 
 # The squares are (200 m) x (200 m)
 dengue_polys <- c(
-  "../data/data_gov/20200709/dengue-cases-central-kml.kml",
-  "../data/data_gov/20200709/dengue-cases-north-east-kml.kml",
-  "../data/data_gov/20200709/dengue-cases-south-east-kml.kml",
-  "../data/data_gov/20200709/dengue-cases-south-west-kml.kml"
+  "../data/data_gov/20200715/denguecase-central-area.kml",
+  "../data/data_gov/20200715/denguecase-northeast-area.kml",
+  "../data/data_gov/20200715/denguecase-southeast-area.kml",
+  "../data/data_gov/20200715/denguecase-southwest-area.kml"
 ) %>% 
   lapply(sf::st_read) %>% 
   dplyr::bind_rows() %>% 
@@ -48,6 +51,11 @@ dengue_polys <- c(
   tidyr::extract(Description, "ncases", ".*Cases : (\\d+).*", convert = T) %>%
   sf::st_as_sf() %>% 
   sf::st_zm()
+
+dengue_points <- dengue_polys %>%
+  sf::st_centroid() %>%
+  .[rep(1:nrow(.), .$ncases),] %>%
+  dplyr::select(-Name, -ncases)
 
 # We might want more stations, and explore how to aggregate their data
 climate_stations <- readr::read_csv("../data/Station_Records.csv") %>% 
@@ -71,6 +79,22 @@ climate_stations <- readr::read_csv("../data/Station_Records.csv") %>%
   dplyr::select(Station, matches("Lat|Long")) %>% 
   sf::st_as_sf(coords = c("Long. (E)", "Lat.(N)")) %>% 
   sf::`st_crs<-`("WGS84")
+
+clinics <- readr::read_csv("../results/clinics_geocoords_20200722.csv") %>% 
+  .[!apply(is.na(.), 1, any),] %>% 
+  sf::st_as_sf(coords = c("lon", "lat")) %>% 
+  sf::`st_crs<-`("WGS84")
+
+clinics %>% 
+  leaflet::leaflet() %>% 
+  leaflet::addTiles() %>% 
+  leaflet::addCircleMarkers(radius = 5,
+                            color = "red",
+                            fillOpacity = 0.5,
+                            popup = ~name,
+                            clusterOptions = leaflet::markerClusterOptions())
+
+count_pts_in_polys(clinics, planning_areas, "nclinics")
 
 planning_areas <- "../data/data_gov/plan-bdy-dwelling-type-2017.kml" %>% 
   sf::st_read() %>% 
@@ -118,20 +142,17 @@ count_pts_in_polys <- function(points, polygons, colname) {
     dplyr::count(name = colname)
 }
 
-dengue_points <- dengue_polys %>%
-  sf::st_centroid() %>%
-  .[rep(1:nrow(.), .$ncases),] %>%
-  dplyr::select(-Name, -ncases)
-
 joined_table <- dengue_points %>% 
   count_pts_in_polys(planning_areas, "ncases") %>% 
-  dplyr::inner_join("../data/data_gov/chas-clinics-kml.kml" %>% 
-                      sf::st_read() %>% 
-                      count_pts_in_polys(planning_areas, "nclinics"),
+  # dplyr::inner_join("../data/data_gov/moh-chas-clinics.kml" %>% 
+  #                     sf::st_read() %>% 
+  #                     count_pts_in_polys(planning_areas, "nclinics"),
+  #                   by = "plan_area") %>% 
+  dplyr::inner_join(count_pts_in_polys(clinics, planning_areas, "nclinics"),
                     by = "plan_area") %>% 
   dplyr::inner_join(planning_areas, by = "plan_area") %>% 
   dplyr::mutate(popden = pop / area_km2,
-                caseden = as.numeric(ncases / popden),
+                caseden = as.numeric(ncases / area_km2),
                 label = htmltools::HTML(paste0(plan_area,
                                                "<br/>Cases: ",
                                                ncases,
@@ -211,7 +232,8 @@ joined_table %>%
 # Convenience functions ----
 quick_polys <- function(paths) {
   paths %>% 
-    sf::st_read() %>% 
+    lapply(sf::st_read) %>% 
+    dplyr::bind_rows() %>% 
     sf::st_zm() %>% 
     leaflet::leaflet(width = "100%") %>% 
     leaflet::addTiles() %>% 
@@ -238,3 +260,31 @@ quick_points("../data/data_gov_2/chas-clinics/chas-clinics-kml.kml")
 
 quick_polys("../data/data_gov/singapore-residents-by-planning-area-and-type-of-dwelling-jun-2017-kml.kml")
 quick_polys("../data/data_gov/plan-bdy-dwelling-type-2017.kml")
+quick_polys("../data/data_gov/areas-with-high-aedes-population/areas-with-high-aedes-population-kml.kml")
+
+df <- c(
+  "../data/data_gov/20200714/aedes-mosquito-breeding-habitats-central-kml.kml",
+  "../data/data_gov/20200714/aedes-mosquito-breeding-habitats-north-east-kml.kml",
+  "../data/data_gov/20200714/aedes-mosquito-breeding-habitats-north-west-kml.kml",
+  "../data/data_gov/20200714/aedes-mosquito-breeding-habitats-south-east-kml.kml",
+  "../data/data_gov/20200714/aedes-mosquito-breeding-habitats-south-west-kml.kml"
+) %>% 
+   lapply(sf::st_read) %>% 
+   dplyr::bind_rows() %>% 
+   sf::st_zm() %>% 
+   dplyr::mutate(nhab = sub(".*Habitats : (\\d+).*", "\\1", Description) %>% 
+                   as.numeric())
+
+nhab_pal <- leaflet::colorNumeric("Reds", df$nhab)
+
+df %>% 
+  # dplyr::glimpse() %>% 
+  leaflet::leaflet(width = "100%") %>% 
+  leaflet::addTiles() %>% 
+  leaflet::addPolygons(fillOpacity = 1,
+                       fillColor = ~nhab_pal(nhab),
+                       popup = ~Description,
+                       weight = 1)
+
+df$nhab %>% 
+  summary()

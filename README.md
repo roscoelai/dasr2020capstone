@@ -31,13 +31,12 @@
 - R scripts for data import and tidy (and maybe collect... and maybe transform)
   - [x] Tidy MOH weekly bulletin data
   - [x] Import MSS daily weather data
+  - [x] Scrape HCI data
 - Spatial Analysis
-  - [x] Population
   - [x] Area
-  - [ ] Number of clinics
-    - [x] CHAS
-    - [ ] Get data from [HCI directory](http://hcidirectory.sg/hcidirectory/)
+  - [x] Population
   - [x] Type of housing
+  - [x] Number of clinics
   - [ ] Weather
     - [ ] Check for complete weather data for the past month
 
@@ -53,8 +52,11 @@
 - [Historical Daily Records, Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
   - Daily rainfall
   - Daily temperature and wind speed measurements for some climate stations
-  - [Script](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_mss_daily.R) to consolidate selected time periods for selected stations
+  - Script for [webscraping](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_mss_daily.R)
   - [Tidied subset](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss_daily_2012_2020_4stations_20200714.csv)
+- [Listing of Licensed Healthcare Institutions](http://hcidirectory.sg/hcidirectory/)
+  - Name and address of HCI
+  - Scripts for [webscraping](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_hcidirectory.R) and [deriving coordinates](https://github.com/roscoelai/dasr2020capstone/blob/master/src/get_geocodes.R)
 - [Approximate geocoordinates of dengue cases](https://data.gov.sg/search?q=denguecases), Data.gov.sg
 
 | Date       | Central     | North East  | South East  | South West  |
@@ -63,6 +65,7 @@
 | 2020-07-07 | [.kml][c5]  | [.kml][c6]  | [.kml][c7]  | [.kml][c8]  |
 | 2020-07-09 | [.kml][c9]  | [.kml][c10] | [.kml][c11] | [.kml][c12] |
 | 2020-07-15 | [.kml][c13] | [.kml][c14] | [.kml][c15] | [.kml][c16] |
+| 2020-07-17 | [.kml][c17] | [.kml][c18] | [.kml][c19] | [.kml][c20] |
 
 [c1]: https://geo.data.gov.sg/denguecase-central-area/2020/06/26/kml/denguecase-central-area.kml
 [c2]: https://geo.data.gov.sg/denguecase-northeast-area/2020/06/26/kml/denguecase-northeast-area.kml
@@ -80,30 +83,36 @@
 [c14]: https://geo.data.gov.sg/denguecase-northeast-area/2020/07/15/kml/denguecase-northeast-area.kml
 [c15]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/15/kml/denguecase-southeast-area.kml
 [c16]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/15/kml/denguecase-southwest-area.kml
+[c17]: https://geo.data.gov.sg/denguecase-central-area/2020/07/17/kml/denguecase-central-area.kml
+[c18]: https://geo.data.gov.sg/denguecase-northeast-area/2020/07/17/kml/denguecase-northeast-area.kml
+[c19]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/17/kml/denguecase-southeast-area.kml
+[c20]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/17/kml/denguecase-southwest-area.kml
 
 - [Approximate geocoordinates of _Aedes_ mosquito breeding habitats](https://data.gov.sg/search?q=aedes+habitats), Data.gov.sg
 
 Date       | Central     | North East  | North West  | South East  | South West 
 :--------: | :---------: | :---------: | :---------: | :---------: | :---------:
 2020-07-14 | [.kml][h1]  | [.kml][h2]  | [.kml][h3]  | [.kml][h4]  | [.kml][h5] 
+2020-07-17 | [.kml][h6]  | [.kml][h7]  | [.kml][h8]  | [.kml][h9]  | [.kml][h10]
 
 [h1]: https://geo.data.gov.sg/breedinghabitat-central-area/2020/07/14/kml/breedinghabitat-central-area.kml
 [h2]: https://geo.data.gov.sg/breedinghabitat-northeast-area/2020/07/14/kml/breedinghabitat-northeast-area.kml
 [h3]: https://geo.data.gov.sg/breedinghabitat-northwest-area/2020/07/14/kml/breedinghabitat-northwest-area.kml
-[h4]: https://geo.data.gov.sg/breedinghabitat-southeast-area/2020/07/15/kml/breedinghabitat-southeast-area.kml
+[h4]: https://geo.data.gov.sg/breedinghabitat-southeast-area/2020/07/14/kml/breedinghabitat-southeast-area.kml
 [h5]: https://geo.data.gov.sg/breedinghabitat-southwest-area/2020/07/14/kml/breedinghabitat-southwest-area.kml
+[h6]: https://geo.data.gov.sg/breedinghabitat-central-area/2020/07/17/kml/breedinghabitat-central-area.kml
+[h7]: https://geo.data.gov.sg/breedinghabitat-northeast-area/2020/07/17/kml/breedinghabitat-northeast-area.kml
+[h8]: https://geo.data.gov.sg/breedinghabitat-northwest-area/2020/07/17/kml/breedinghabitat-northwest-area.kml
+[h9]: https://geo.data.gov.sg/breedinghabitat-southeast-area/2020/07/17/kml/breedinghabitat-southeast-area.kml
+[h10]: https://geo.data.gov.sg/breedinghabitat-southwest-area/2020/07/17/kml/breedinghabitat-southwest-area.kml
 
 - [Singapore Residents by Planning Area and Type of Dwelling, Jun 2017](https://data.gov.sg/dataset/singapore-residents-by-planning-area-and-type-of-dwelling-jun-2017), Data.gov.sg
   - Planning areas (URA MP14)
   - Populations of planning areas
   - Breakdown by type of dwelling
   - [.kml file](https://geo.data.gov.sg/plan-bdy-dwelling-type-2017/2017/09/27/kml/plan-bdy-dwelling-type-2017.kml)
-- [CHAS Clinics](https://data.gov.sg/dataset/chas-clinics), Data.gov.sg
-  - Geocoordinates of CHAS clinics
-  - [.kml file](https://geo.data.gov.sg/moh-chas-clinics/2020/07/05/kml/moh-chas-clinics.kml)
 
 ### Unsourceable
-- Yearly population distribution across named regions in Singapore
 - COVID-19 cases (Apr - Jul 2020)
 
 ### Deprecated
@@ -111,6 +120,9 @@ Date       | Central     | North East  | North West  | South East  | South West
   - Higher resolution (daily) data available from MSS
   - Might reconsider if humidity data is needed
   - [.csv file](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)
+- [Master Plan 2014 Planning Area Boundary (No Sea)](https://data.gov.sg/dataset/master-plan-2014-planning-area-boundary-no-sea), Data.gov.sg
+  - Names and sizes of planning areas
+  - [.zip file](https://geo.data.gov.sg/mp14-plng-area-no-sea-pl/2016/05/11/kml/mp14-plng-area-no-sea-pl.zip)
 - [Resident Population by Planning Area/Subzone and Type of Dwelling, 2015](https://data.gov.sg/dataset/resident-population-by-planning-area-subzone-and-type-of-dwelling-2015), Data.gov.sg
   - Populations of planning areas
   - Breakdown by type of dwelling
@@ -119,9 +131,9 @@ Date       | Central     | North East  | North West  | South East  | South West
   - Populations of planning areas
   - Breakdown by age groups
   - [.csv file](https://storage.data.gov.sg/resident-population-by-planning-area-subzone-age-group-and-sex-2015/resources/resident-population-by-planning-area-age-group-and-sex-2019-07-30T03-02-18Z.csv)
-- [Master Plan 2014 Planning Area Boundary (No Sea)](https://data.gov.sg/dataset/master-plan-2014-planning-area-boundary-no-sea), Data.gov.sg
-  - Names and sizes of planning areas
-  - [.zip file](https://geo.data.gov.sg/mp14-plng-area-no-sea-pl/2016/05/11/kml/mp14-plng-area-no-sea-pl.zip)
+- [CHAS Clinics](https://data.gov.sg/dataset/chas-clinics), Data.gov.sg
+  - Geocoordinates of CHAS clinics
+  - [.kml file](https://geo.data.gov.sg/moh-chas-clinics/2020/07/05/kml/moh-chas-clinics.kml)
 
 ---
 
