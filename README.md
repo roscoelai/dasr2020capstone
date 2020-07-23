@@ -21,16 +21,17 @@
 
 #### Spatial
 - [ ] How to aggregate recent weather data (13 stations with data for 2020)?
-  - [ ] Past 1 month?
+  - [x] Past 1 month?
   - [ ] Past 0.5 month?
   - [ ] Daily -> Weekly aggregation protocol (mean, median, max-min, etc.)
-- [ ] Combine locality data with:
-  - [ ] Area
-  - [ ] Population
-  - [ ] Dwelling type
-  - [ ] Number of cases
-  - [ ] Number of clinics
-  - [ ] Meteorological data
+- [x] Combine locality data with:
+  - [x] Area
+  - [x] Population
+  - [x] Dwelling type
+  - [x] Number of cases
+  - [x] Number of clinics
+  - [x] Meteorological data
+    - [x] Inverse distance weighted (IDW) from 13 stations
 - [ ] Transform number of cases to a fairer indicator (n/area, n/pop, etc.)
   - [ ] Standard choropleth weaknesses:
     - [ ] Modifiable areal unit problem (MAUP)
