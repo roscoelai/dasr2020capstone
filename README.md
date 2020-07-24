@@ -91,12 +91,14 @@
 ## Data
 - [Weekly Infectious Disease Bulletin, Ministry of Health (MOH)](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
   - [Manual download (2012-W01 to 2020-W29) as of 24 Jul 2020](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx)
+  - Script for [tidying](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_moh_weekly.R)
   - [Tidied dataset (2012-W01 to 2020-W29) as of 24 Jul 2020](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh_weekly_bulletin_20200724.csv)
 - [Historical Daily Records, Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
   - Daily rainfall
   - Daily temperature and wind speed measurements for some climate stations
   - Script for [webscraping](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_mss_daily.R)
-  - [Tidied subset](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss_daily_2012_2020_4stations_20200714.csv)
+  - [Tidied subset (2012-2020)](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss_daily_2012_2020_4stations_20200714.csv)
+  - [Tidied subset (2020)](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss_daily_2020_13stations_20200722.csv)
 - [Listing of Licensed Healthcare Institutions, Ministry of Health (MOH)](http://hcidirectory.sg/hcidirectory/)
   - Name and address of HCI
   - Scripts for [webscraping](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_hcidirectory.R) and [deriving coordinates](https://github.com/roscoelai/dasr2020capstone/blob/master/src/get_geocodes.R)

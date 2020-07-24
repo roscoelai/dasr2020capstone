@@ -113,6 +113,8 @@ import_moh_weekly <- function(path) {
     dplyr::arrange(Start)
 }
 
+# Import START ----
+
 bulletin <- 
   paste0(
     "../data/weekly-infectious-disease-bulletin-year-2020",

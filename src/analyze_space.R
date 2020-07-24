@@ -123,7 +123,7 @@ planning_areas <- "../data/data_gov/plan-bdy-dwelling-type-2017.kml" %>%
     # Calculate inverse distance weighted (IDW) averages
     M = polys %>% 
       sf::st_centroid() %>% 
-      sf::st_distance(weather_points) %>% 
+      sf::st_distance(points) %>% 
       # units::set_units(km) %>% 
       # The power is a hyperparameter
       # A very high power would result in proximity (Thiessen) interpolation
@@ -162,12 +162,10 @@ joined_table <- list(
                          "<br/>Area: ", round(area_km2, 2),
                          "<br/>Cases: ", ncases,
                          "<br/>Clinics: ", nclinics,
-                         "<br/>Population: ", pop)
+                         "<br/>Population: ", pop,
+                         "<br/><i>Aedes</i> habitats: ", nhabs)
                 )) %>%
   sf::st_as_sf()
-
-joined_table %>% 
-  class()
 
 # Visualize ----
 
@@ -237,38 +235,3 @@ joined_table %>%
 # Do not extend conclusions for one level of aggregation to another
 
 
-
-
-
-# Convenience functions ----
-quick_polys <- function(paths) {
-  paths %>% 
-    lapply(sf::st_read) %>% 
-    dplyr::bind_rows() %>% 
-    sf::st_zm() %>% 
-    leaflet::leaflet(width = "100%") %>% 
-    leaflet::addTiles() %>% 
-    leaflet::addPolygons(popup = ~Description,
-                         weight = 1)
-}
-
-quick_points <- function(paths) {
-  paths %>% 
-    sf::st_read() %>% 
-    sf::st_zm() %>% 
-    leaflet::leaflet(width = "100%") %>%
-    leaflet::addTiles() %>%
-    leaflet::addCircleMarkers(radius = 5,
-                              color = "red",
-                              fillOpacity = 0.5,
-                              popup = ~Description,
-                              clusterOptions = leaflet::markerClusterOptions())
-}
-
-quick_polys("../data/data_gov_3/master-plan-2014-planning-area-boundary-no-sea/MP14_PLNG_AREA_NO_SEA_PL.kml")
-quick_polys("../data/data_gov_1/dengue-clusters/dengue-clusters-kml.kml")
-quick_points("../data/data_gov_2/chas-clinics/chas-clinics-kml.kml")
-
-quick_polys("../data/data_gov/singapore-residents-by-planning-area-and-type-of-dwelling-jun-2017-kml.kml")
-quick_polys("../data/data_gov/plan-bdy-dwelling-type-2017.kml")
-quick_polys("../data/data_gov/areas-with-high-aedes-population/areas-with-high-aedes-population-kml.kml")

@@ -180,6 +180,8 @@ import_mss_daily <- function(years, stations = NULL) {
     dplyr::arrange(Station, Year, Month, Day)
 }
 
+# Import START ----
+
 weather_data <- import_mss_daily(years = 2012:2020)
 
 weather_data %>%
@@ -187,7 +189,65 @@ weather_data %>%
 
 # Import END ----
 
-# Subset 2020 ----
+
+
+# Subset 2012-2020 START ----
+weather <- "../data/mss_daily_2012_2020_19stations_20200714.csv" %>% 
+  readr::read_csv()
+
+weather_2012_2020 <- weather %>% 
+  dplyr::select(-matches("Highest"))
+
+good_stations <- weather_2012_2020 %>% 
+  # Exclude 2020 as it surely has < 52 weeks, at the moment
+  dplyr::filter(Epiyear < 2020) %>% 
+  tidyr::pivot_longer(cols = Daily_Rainfall_Total_mm:Max_Wind_Speed_kmh) %>% 
+  tidyr::drop_na() %>% 
+  # No additional requirements for number of days
+  dplyr::group_by(Station, Epiyear, Epiweek, name) %>% 
+  dplyr::count(name = "ndays") %>% 
+  # Must have 6 variables
+  dplyr::group_by(Station, Epiyear, Epiweek) %>% 
+  dplyr::count(name = "nvars") %>% 
+  dplyr::filter(nvars >= 6) %>% 
+  # Must have 52 or more weeks
+  dplyr::group_by(Station, Epiyear) %>% 
+  dplyr::count(name = "nweeks") %>% 
+  dplyr::filter(nweeks >= 52) %>% 
+  # Must have 8 or more years
+  dplyr::group_by(Station) %>% 
+  dplyr::count(name = "nyears") %>% 
+  dplyr::filter(nyears >= 8) %>% 
+  .$Station
+
+# Check 2020
+weather_2012_2020 %>% 
+  dplyr::filter(Epiyear == 2020) %>% 
+  dplyr::filter(Station %in% good_stations) %>% 
+  tidyr::pivot_longer(cols = Daily_Rainfall_Total_mm:Max_Wind_Speed_kmh) %>% 
+  tidyr::drop_na() %>% 
+  # No additional requirements for number of days
+  dplyr::group_by(Station, Epiyear, Epiweek, name) %>% 
+  dplyr::count(name = "ndays") %>% 
+  # Must have 6 variables
+  dplyr::group_by(Station, Epiyear, Epiweek) %>% 
+  dplyr::count(name = "nvars") %>% 
+  dplyr::filter(nvars >= 6) %>% 
+  # Must have 52 or more weeks
+  dplyr::group_by(Station, Epiyear) %>% 
+  dplyr::count(name = "nweeks")
+
+weather_s <- weather_2012_2020 %>% 
+  dplyr::filter(Station %in% good_stations)
+
+weather_s %>%
+  readr::write_csv("../data/mss_daily_2012_2020_4stations_20200714.csv")
+
+# Subset 2012-2020 END ----
+
+
+
+# Subset 2020 START ----
 weather <- "../data/mss_daily_2012_2020_19stations_20200714.csv" %>% 
   readr::read_csv()
 
