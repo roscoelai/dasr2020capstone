@@ -28,12 +28,12 @@ weather_national <- weather_2012_2020 %>%
   dplyr::mutate(dtr = Maximum_Temperature_degC - Minimum_Temperature_degC) %>% 
   # Combine 4 stations' data, combine (up to) 7 days' data
   dplyr::group_by(Epiyear, Epiweek) %>% 
-  dplyr::summarise(mean_rainfall = mean(Daily_Rainfall_Total_mm),
-                   med_rainfall = median(Daily_Rainfall_Total_mm),
-                   mean_temp = mean(Mean_Temperature_degC),
-                   med_temp = median(Mean_Temperature_degC),
-                   mean_temp_rng = mean(dtr),
-                   med_temp_rng = median(dtr))
+  dplyr::summarise(mean_rainfall = mean(Daily_Rainfall_Total_mm, na.rm = T),
+                   med_rainfall = median(Daily_Rainfall_Total_mm, na.rm = T),
+                   mean_temp = mean(Mean_Temperature_degC, na.rm = T),
+                   med_temp = median(Mean_Temperature_degC, na.rm = T),
+                   mean_temp_rng = mean(dtr, na.rm = T),
+                   med_temp_rng = median(dtr, na.rm = T))
 
 combined <- weather_national %>% 
   dplyr::left_join(bulletin_s, by = c("Epiyear", "Epiweek"))
@@ -76,12 +76,17 @@ combined %>%
                 log10_med_rainfall = log10(med_rainfall)) %>% 
   tidyr::pivot_longer(everything()) %>% 
   ggplot(aes(x = value, color = name)) + 
-  geom_density() + 
+  geom_density(size = 1) + 
   facet_wrap(name ~ ., scales = "free") + 
+  labs(x = "",
+       caption = "Sources: moh.gov.sg, weather.gov.sg") + 
   theme(legend.position = "none")
 
+# ggsave("../imgs/densities_2012_2020.png", width = 16, height = 10)
+
 # Associations
-gridExtra::grid.arrange(
+g <- gridExtra::arrangeGrob(
+# gridExtra::grid.arrange(
   grobs = list(
     "med_rainfall",
     "med_temp",
@@ -95,13 +100,14 @@ gridExtra::grid.arrange(
         dplyr::mutate(Epiyear = as.factor(Epiyear)) %>% 
         ggplot(aes(x = combined[[var]], y = Dengue, color = Epiyear)) + 
         geom_point(alpha = 0.5) + 
-        geom_smooth(method = "lm", formula = y ~ x) + 
+        geom_smooth(method = "lm", formula = y ~ x, size = 0.5) + 
         facet_grid(. ~ Epiyear, scales = "free") + 
         labs(x = var) + 
         theme(legend.position = "none")
     }), nrow = 3
 )
 
+# ggsave("../imgs/dengue_weather3_2012_2020.png", g, width = 16, height = 10)
 
 
 # Model ----
@@ -112,7 +118,3 @@ combined %>%
   lm(log10(Dengue) ~ med_temp, data = .) %>% 
   summary()
   # gvlma::gvlma()
-
-combined %>% 
-  ggplot(aes(x = med_temp_rng)) + 
-  geom_density()

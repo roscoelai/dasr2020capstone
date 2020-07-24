@@ -144,8 +144,9 @@ joined_table <- list(
 
 # Visualize ----
 
-# set.seed(336483)
+# Leaflet
 
+# set.seed(336483)
 # area_pal <- colors() %>%
 #   .[grep("gr(a|e)y", ., invert = T)] %>%
 #   sample(nrow(planning_areas)) %>%
@@ -185,14 +186,39 @@ leaflet::leaflet(height = 700, width = "100%") %>%
                                )) %>%
   {.}
 
+dplyr::glimpse(joined_table)
+
+# Densities
+joined_table %>% 
+  tibble::as_tibble() %>% 
+  dplyr::select(matches("^(n|med_t|pop$)")) %>% 
+  tidyr::pivot_longer(everything()) %>% 
+  ggplot(aes(x = value, color = name)) + 
+  geom_density(size = 1) + 
+  facet_wrap(name ~ ., scales = "free") + 
+  labs(x = "",
+       caption = "Sources: data.gov.sg, weather.gov.sg") + 
+  theme(legend.position = "none")
+
+# Scatter
+joined_table %>% 
+  tibble::as_tibble() %>% 
+  dplyr::select(matches("^(n|med_t|pop$)")) %>% 
+  tidyr::pivot_longer(nhabs:med_temp_rng) %>% 
+  ggplot(aes(x = value, y = ncases, color = name)) + 
+  geom_point(alpha = 0.6) + 
+  geom_smooth(method = "lm", formula = y ~ x, size = 0.5) + 
+  facet_wrap(name ~ ., scales = "free") + 
+  labs(x = "",
+       caption = "Sources: data.gov.sg, weather.gov.sg") + 
+  theme(legend.position = "none")
+
 # Model ----
 
 # Modifiable areal unit problem (MAUP)
 # - Must be careful in how you frame the results
 # Ecological fallacy
 # - Do not extend conclusions for one level of aggregation to another
-
-dplyr::glimpse(joined_table)
 
 joined_table %>% 
   tibble::as_tibble() %>% 
@@ -209,20 +235,4 @@ gvlma::gvlma(m1)
 summary(m1)
 car::vif(m1)
 
-joined_table %>% 
-  tibble::as_tibble() %>% 
-  dplyr::select(matches("^(n|med_t|pop$)")) %>% 
-  tidyr::pivot_longer(everything()) %>% 
-  ggplot(aes(x = value, color = name)) + 
-  geom_density() + 
-  facet_wrap(name ~ ., scales = "free")
-
-joined_table %>% 
-  tibble::as_tibble() %>% 
-  dplyr::select(matches("^(n|med_t|pop$)")) %>% 
-  tidyr::pivot_longer(nhabs:med_temp_rng) %>% 
-  ggplot(aes(x = value, y = ncases, color = name)) + 
-  geom_point(alpha = 0.6) + 
-  geom_smooth(method = "lm", formula = y ~ x, size = 0.5) + 
-  facet_wrap(name ~ ., scales = "free")
 

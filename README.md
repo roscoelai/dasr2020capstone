@@ -19,10 +19,9 @@
 #### Temporal
 - [ ] How to aggreagate overall/island-wide meteorological data?
   - [ ] Choose 1 climate station (e.g. Changi)
-  - [ ] Average climate stations with sufficient data (4 stations)
-  - [ ] Weighted average? (!)
+  - [x] Average climate stations with sufficient data (4 stations)
 - [ ] Transform meteorological data
-  - [ ] Daily -> Weekly aggregation protocol (mean, median, max-min, etc.)
+  - [ ] Daily -> Weekly aggregation protocol (mean, median)
 - [ ] Combine meteorological and epidemiological data
 - [ ] Model meteorological variables vs. number of cases
   - [ ] Time displacement (1 week? 2 weeks?)
@@ -45,6 +44,14 @@
     - [ ] Modifiable areal unit problem (MAUP)
     - [ ] Ecological fallacy
 - [ ] Model everything (?) vs. indicator
+
+---
+
+![](./imgs/diseases4_weather3_2012_2020.png)
+
+![](./imgs/densities_2012_2020.png)
+
+![](./imgs/dengue_weather3_2012_2020.png)
 
 ---
 
@@ -75,7 +82,7 @@
 - R scripts for data import and tidy (and maybe collect... and maybe transform)
   - [x] Tidy MOH weekly bulletin data
   - [x] Import MSS daily weather data
-  - [x] Scrape HCI data (+get coordinates)
+  - [x] Scrape HCI data (+ get coordinates)
 - Spatial Analysis
   - [x] Area
   - [x] Population
