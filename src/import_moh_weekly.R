@@ -2,7 +2,6 @@
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-library(ggplot2)
 library(magrittr)
 
 import_moh_weekly <- function(path) {
@@ -10,7 +9,7 @@ import_moh_weekly <- function(path) {
   #' 
   #' @description
   #' Weekly infectious diseases bulletin from the Ministry of Health (MOH). 
-  #' Data from 2012-W01 to 2020-W28. Follow the URLs below to download the 
+  #' Data from 2012-W01 to 2020-W29. Follow the URLs below to download the 
   #' dataset (single Excel file; 1 year's data per sheet). This function will 
   #' combine all data into a single table.
   #' 
@@ -67,12 +66,12 @@ import_moh_weekly <- function(path) {
   #' @details
   #' \href{https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin}{MOH Weekly Infectious Disease Bulletin}
   #'
-  #' \href{https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020f3b1838244614d8a812f10e1febd31b1.xlsx}{Latest data as of 17 Jul 2020 (2012-W01 to 2020-W28)}
+  #' \href{https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx}{Latest data as of 24 Jul 2020 (2012-W01 to 2020-W29)}
   #' 
   #' @param path The file path of the dataset.
   #' @return A table containing the combined weekly records.
   
-  # The column headers will be made to conform to 2020
+  # Columns will be renamed to follow 2020
   colnames_2020 = c(
     "Campylobacter enterosis" = "Campylobacter enteritis",
     "Campylobacterenterosis" = "Campylobacter enteritis",
@@ -94,100 +93,34 @@ import_moh_weekly <- function(path) {
     lapply(function(sheetname) {
       df = readxl::read_xlsx(path, sheetname, skip = 1)
       
-      # By a stroke of serendipity (or good planning), the sheetnames just 
-      #   happen to be the epidemiological years. Otherwise, we could simply 
-      #   use lubridate::epiyear() on Start or End.
-      df$Epiyear = sheetname
-      
-      # Start and End date formats are dmy for 2020 (mdy for the others)
+      # Date formats are different for 2020
       if (sheetname == "2020") {
         df$Start = lubridate::dmy(df$Start)
         df$End = lubridate::dmy(df$End)
       }
       
-      # Change column names
+      # Find columns that need to be renamed
       mapper = na.omit(colnames_2020[names(df)])
       
       df %>% 
-        dplyr::rename_with(~mapper, names(mapper))
+        dplyr::rename_with(~mapper, names(mapper)) %>% 
+        # Take advantage of the sheetnames being the epidemiological years
+        dplyr::mutate(Epiyear = sheetname)
     }) %>% 
-    # Will work properly only if columns are standardized
     dplyr::bind_rows() %>% 
-    dplyr::select(Epiyear, everything()) %>% 
     dplyr::rename(Epiweek = `Epidemiology Wk`) %>% 
+    dplyr::select(Epiyear, everything()) %>% 
     dplyr::arrange(Start)
 }
 
-# bulletin <- import_moh_weekly("../data/weekly-infectious-disease-bulletin-year-2020f3b1838244614d8a812f10e1febd31b1.xlsx")
-# 
-# bulletin_s <- bulletin %>%
-#   dplyr::select(Epiyear,
-#                 Epiweek,
-#                 Start,
-#                 End,
-#                 Dengue,
-#                 DHF,
-#                 HFMD,
-#                 `Salmonellosis(non-enteric fevers)`,
-#                 `Acute Upper Respiratory Tract infections`,
-#                 `Acute Diarrhoea`)
-# 
-# bulletin_s %>% 
-#   readr::write_csv("../data/moh_weekly_bulletin_s_2012_2020_tidy_20200717.csv")
+bulletin <- 
+  paste0(
+    "../data/weekly-infectious-disease-bulletin-year-2020",
+    "71e221d63d4b4be0aa2b03e9c5e78ac2.xlsx"
+  ) %>% 
+  import_moh_weekly()
 
-bulletin_s <- "../data/moh_weekly_bulletin_s_2012_2020_tidy_20200717.csv" %>% 
-  readr::read_csv()
+bulletin %>%
+  readr::write_csv("../data/moh_weekly_bulletin_20200724.csv")
 
-dplyr::glimpse(bulletin_s)
-
-bulletin_s %>% 
-  dplyr::select(-DHF, -`Salmonellosis(non-enteric fevers)`) %>% 
-  tidyr::pivot_longer(cols = c("Dengue",
-                               "HFMD",
-                               "Acute Upper Respiratory Tract infections",
-                               "Acute Diarrhoea"),
-                      names_to = "Diseases",
-                      values_to = "Numbers") %>% 
-  tidyr::drop_na() %>%
-  ggplot(aes(x = Start, y = Numbers)) + 
-  geom_point(aes(color = Diseases), size = 1, alpha = 0.4) +
-  geom_line(aes(color = Diseases), size = 0.5) + 
-  labs(title = "Weekly cases for select diseases from 2012 to 2020",
-       subtitle = "Why is there a sudden spike in dengue cases this year?",
-       x = "",
-       y = "Numbers",
-       caption = "Source: moh.gov.sg") + 
-  ggthemes::theme_fivethirtyeight() + 
-  geom_line(data = bulletin_s %>% tidyr::drop_na(),
-            aes(x = Start, y = Dengue),
-            color = "#11eebb",
-            size = 5,
-            alpha = 0.25)
-
-# ggsave("../imgs/ncases_4diseases_2012_2020.png", width = 12, height = 6)
-
-dplyr::glimpse(bulletin_s)
-
-bulletin_s %>% 
-  dplyr::rename(`Acute URTI` = `Acute Upper Respiratory Tract infections`,
-                Salmonellosis = `Salmonellosis(non-enteric fevers)`) %>% 
-  dplyr::select(-DHF, -Salmonellosis) %>%
-  dplyr::mutate(Epiyear = as.factor(Epiyear)) %>%
-  tidyr::pivot_longer(cols = c("Acute Diarrhoea",
-                               "Acute URTI",
-                               "Dengue",
-                               # "DHF",
-                               # "Salmonellosis",
-                               "HFMD"),
-                      names_to = "Disease",
-                      values_to = "n") %>% 
-  ggplot(aes(x = Start, y = n, color = Epiyear)) + 
-  geom_line(size = 0.75) + 
-  geom_point(alpha = 0.25) + 
-  facet_grid(Disease ~ ., scales = "free_y") + 
-  labs(title = "Weekly numbers from 2012 to 2020",
-       x = "",
-       y = "",
-       caption = "Source: moh.gov.sg")
-
-# ggsave("../imgs/ncases_4diseases_sep_2012_2020.png", width = 12, height = 6)
+# Import END ----

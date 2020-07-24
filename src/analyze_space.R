@@ -1,4 +1,4 @@
-# read_kml.R
+# analyze_space.R
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
@@ -36,61 +36,50 @@ library(magrittr)
 # Reading from URLs is too slow - download the files and read from disk
 
 # The polygons are (200 m) x (200 m) squares
-read_200x200_polys_to_points <- function(filepaths) {
-  filepaths %>% 
-    lapply(sf::st_read) %>% 
-    dplyr::bind_rows() %>% 
-    dplyr::mutate(n = as.numeric(sub(".*: (\\d+).*", "\\1", Description))) %>%
-    sf::st_centroid() %>%
-    .[rep(1:nrow(.), .$n),] %>%
-    dplyr::select(-Name, -Description, -n)
-}
 
-dengue_case_points <- read_200x200_polys_to_points(c(
-  "../data/data_gov/20200717/denguecase-central-area.kml",
-  "../data/data_gov/20200717/denguecase-northeast-area.kml",
-  "../data/data_gov/20200717/denguecase-southeast-area.kml",
-  "../data/data_gov/20200717/denguecase-southwest-area.kml"
-))
+# read_200x200_polys_to_points <- function(filepaths) {
+#   filepaths %>% 
+#     lapply(sf::st_read) %>% 
+#     dplyr::bind_rows() %>% 
+#     dplyr::mutate(n = as.numeric(sub(".*: (\\d+).*", "\\1", Description))) %>%
+#     sf::st_centroid() %>%
+#     .[rep(1:nrow(.), .$n),] %>%
+#     dplyr::select(-Name, -Description, -n)
+# }
 
-aedes_hab_points <- read_200x200_polys_to_points(c(
-  "../data/data_gov/20200717/breedinghabitat-central-area.kml",
-  "../data/data_gov/20200717/breedinghabitat-northeast-area.kml",
-  "../data/data_gov/20200717/breedinghabitat-northwest-area.kml",
-  "../data/data_gov/20200717/breedinghabitat-southeast-area.kml",
-  "../data/data_gov/20200717/breedinghabitat-southwest-area.kml"
-))
+points <- list(
+  "dengue_cases" = c(
+    "../data/data_gov/20200717/denguecase-central-area.kml",
+    "../data/data_gov/20200717/denguecase-northeast-area.kml",
+    "../data/data_gov/20200717/denguecase-southeast-area.kml",
+    "../data/data_gov/20200717/denguecase-southwest-area.kml"
+  ),
+  "aedes_habs" = c(
+    "../data/data_gov/20200717/breedinghabitat-central-area.kml",
+    "../data/data_gov/20200717/breedinghabitat-northeast-area.kml",
+    "../data/data_gov/20200717/breedinghabitat-northwest-area.kml",
+    "../data/data_gov/20200717/breedinghabitat-southeast-area.kml",
+    "../data/data_gov/20200717/breedinghabitat-southwest-area.kml"
+  )
+) %>% 
+  lapply(function(filepaths) {
+    filepaths %>% 
+      lapply(sf::st_read) %>% 
+      dplyr::bind_rows() %>% 
+      dplyr::mutate(n = as.numeric(sub(".*: (\\d+).*", "\\1", Description))) %>%
+      sf::st_centroid() %>%
+      .[rep(1:nrow(.), .$n),] %>%
+      dplyr::select(-Name, -Description, -n)
+  })
 
-clinic_points <- "../data/hci_clinics_geocoords_20200722.csv" %>% 
+points[["clinics"]] <- "../data/hci_clinics_geocoords_20200722.csv" %>% 
   readr::read_csv() %>% 
   tidyr::drop_na() %>% 
   # .[!apply(is.na(.), 1, any),] %>%  # Base R
   sf::st_as_sf(coords = c("lon", "lat")) %>% 
   sf::`st_crs<-`("WGS84")
 
-planning_areas <- "../data/data_gov/plan-bdy-dwelling-type-2017.kml" %>% 
-  sf::st_read() %>% 
-  sf::st_zm() %>% 
-  # Extract data from the HTML in the Description column
-  dplyr::bind_cols(.$Description %>% 
-                     lapply(function(x) {
-                       xml2::read_html(x) %>% 
-                         rvest::html_node("table") %>% 
-                         rvest::html_table() %>% 
-                         t() %>% 
-                         `colnames<-`(.[1,]) %>% 
-                         .[2,]
-                     }) %>% 
-                     dplyr::bind_rows()) %>% 
-  dplyr::rename_all(tolower) %>% 
-  dplyr::rename(plan_area = pln_area_n,
-                pop = total) %>% 
-  dplyr::mutate(plan_area = tools::toTitleCase(tolower(plan_area)),
-                dplyr::across(pop:others, as.numeric),
-                area_km2 = units::set_units(sf::st_area(.), km^2)) %>% 
-  dplyr::select(-name, -description, -inc_crc, -fmel_upd_d)
-
-weather_points <- "../data/mss_daily_2020_13stations_20200722.csv" %>% 
+points[["weather"]] <- "../data/mss_daily_2020_13stations_20200722.csv" %>% 
   readr::read_csv() %>% 
   # Judgment call
   dplyr::filter(Epiweek > 23) %>%
@@ -108,26 +97,46 @@ weather_points <- "../data/mss_daily_2020_13stations_20200722.csv" %>%
   sf::st_as_sf(coords = c("Long. (E)", "Lat.(N)")) %>% 
   sf::`st_crs<-`("WGS84")
 
-# TODO: Relook at workflow to eliminate this reassignment
-planning_areas <- planning_areas %>% 
-  dplyr::bind_cols(list(planning_areas, weather_points) %>% 
-                     Reduce(function(planning_areas, weather_points) {
-                       # Calculate inverse distance weighted (IDW) averages
-                       M = planning_areas %>% 
-                         sf::st_centroid() %>% 
-                         sf::st_distance(weather_points) %>% 
-                         # units::set_units(km) %>% 
-                         { 1 / (. ^ 2) }
-                       
-                       weather_data = weather_points %>% 
-                         as.data.frame() %>%
-                         dplyr::select(-Station, -geometry) %>% 
-                         as.matrix()
-                       
-                       (M %*% weather_data / rowSums(M)) %>% 
-                         tibble::as_tibble()
-                     }, .))
-
+planning_areas <- "../data/data_gov/plan-bdy-dwelling-type-2017.kml" %>% 
+  sf::st_read() %>% 
+  sf::st_zm() %>% 
+  # Extract data from the HTML in the Description column (dwelling types)
+  dplyr::bind_cols(.$Description %>% 
+                     lapply(function(x) {
+                       xml2::read_html(x) %>% 
+                         rvest::html_node("table") %>% 
+                         rvest::html_table() %>% 
+                         t() %>% 
+                         `colnames<-`(.[1,]) %>% 
+                         .[2,]
+                     }) %>% 
+                     dplyr::bind_rows()) %>% 
+  dplyr::rename_all(tolower) %>% 
+  dplyr::rename(plan_area = pln_area_n,
+                pop = total) %>% 
+  dplyr::mutate(plan_area = tools::toTitleCase(tolower(plan_area)),
+                dplyr::across(pop:others, as.numeric),
+                area_km2 = units::set_units(sf::st_area(.), km^2)) %>% 
+  dplyr::select(-name, -description, -inc_crc, -fmel_upd_d) %>% 
+  # Input aggregated meteorological data
+  dplyr::bind_cols(Reduce(function(polys, points) {
+    # Calculate inverse distance weighted (IDW) averages
+    M = polys %>% 
+      sf::st_centroid() %>% 
+      sf::st_distance(weather_points) %>% 
+      # units::set_units(km) %>% 
+      # The power is a hyperparameter
+      # A very high power would result in proximity (Thiessen) interpolation
+      { 1 / (. ^ 2) }
+    
+    weather_data = points %>% 
+      as.data.frame() %>%
+      dplyr::select(-Station, -geometry) %>% 
+      as.matrix()
+    
+    (M %*% weather_data / rowSums(M)) %>% 
+      tibble::as_tibble()
+  }, list(., points$weather)))
 
 # Transform ----
 npts_in_polys <- function(points, polygons, colname) {
@@ -140,24 +149,25 @@ npts_in_polys <- function(points, polygons, colname) {
 }
 
 joined_table <- list(
-  npts_in_polys(dengue_case_points, planning_areas, "ncases"),
-  npts_in_polys(aedes_hab_points, planning_areas, "nhabs"),
-  npts_in_polys(clinic_points, planning_areas, "nclinics"),
+  npts_in_polys(points$dengue_cases, planning_areas, "ncases"),
+  npts_in_polys(points$aedes_habs, planning_areas, "nhabs"),
+  npts_in_polys(points$clinics, planning_areas, "nclinics"),
   planning_areas
-) %>% 
-  Reduce(function(x, y) dplyr::left_join(x, y, by = "plan_area"), .) %>% 
+) %>%
+  Reduce(function(x, y) dplyr::left_join(x, y, by = "plan_area"), .) %>%
   dplyr::mutate(popden = pop / area_km2,
                 caseden = as.numeric(ncases / area_km2),
-                label = htmltools::HTML(paste0(plan_area,
-                                               "<br/>Cases: ",
-                                               ncases,
-                                               "<br/>CHAS Clinics: ",
-                                               nclinics,
-                                               "<br/>Population: ",
-                                               pop,
-                                               "<br/>Area: ",
-                                               round(area_km2, 2)))) %>% 
+                label = htmltools::HTML(
+                  paste0(plan_area,
+                         "<br/>Area: ", round(area_km2, 2),
+                         "<br/>Cases: ", ncases,
+                         "<br/>Clinics: ", nclinics,
+                         "<br/>Population: ", pop)
+                )) %>%
   sf::st_as_sf()
+
+joined_table %>% 
+  class()
 
 # Visualize ----
 
@@ -189,7 +199,7 @@ leaflet::leaflet(height = 700, width = "100%") %>%
   #                      fillOpacity = 0.8,
   #                      fillColor = ~cases_pal(ncases),
   #                      label = ~as.character(ncases)) %>%
-  leaflet::addCircleMarkers(data = dengue_case_points,
+  leaflet::addCircleMarkers(data = points$dengue_cases,
                             radius = 5,
                             color = "red",
                             fillOpacity = 0.5,
@@ -207,13 +217,12 @@ leaflet::leaflet(height = 700, width = "100%") %>%
                                  style = list(
                                    "color" = "blue"
                                  )
-                               ))
-  # leaflet::addMarkers(data = climate_stations,
-  #                     popup = ~Station,
-  #                     label = ~Station) %>%
+                               )) %>%
   {.}
 
 # Model ----
+
+dplyr::glimpse(joined_table)
 
 joined_table %>% 
   dplyr::group_by(stn) %>% 

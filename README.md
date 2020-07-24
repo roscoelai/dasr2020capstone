@@ -8,6 +8,14 @@
 
 ## Meeting (27 Jul 2020) <- ?
 ### Agenda
+
+#### Reorganize
+- [x] Split analyses into time and space
+  - [x] [analyze_time.R](https://github.com/roscoelai/dasr2020capstone/blob/master/src/analyze_time.R)
+  - [x] [analyze_space.R](https://github.com/roscoelai/dasr2020capstone/blob/master/src/analyze_space.R)
+- [x] Purify (remove non-data-collection-related code from) the import-* scripts
+- [ ] What to do with get_geocodes.R?
+
 #### Temporal
 - [ ] How to aggreagate overall/island-wide meteorological data?
   - [ ] Choose 1 climate station (e.g. Changi)
@@ -82,8 +90,8 @@
 
 ## Data
 - [Weekly Infectious Disease Bulletin, Ministry of Health (MOH)](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
-  - [Manual download (2012-W01 to 2020-W28) as of 17 Jul 2020](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020f3b1838244614d8a812f10e1febd31b1.xlsx)
-  - [Tidied subset (2012-W01 to 2020-W28) as of 17 Jul 2020](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh_weekly_bulletin_s_2012_2020_tidy_20200717.csv)
+  - [Manual download (2012-W01 to 2020-W29) as of 24 Jul 2020](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx)
+  - [Tidied dataset (2012-W01 to 2020-W29) as of 24 Jul 2020](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh_weekly_bulletin_20200724.csv)
 - [Historical Daily Records, Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
   - Daily rainfall
   - Daily temperature and wind speed measurements for some climate stations

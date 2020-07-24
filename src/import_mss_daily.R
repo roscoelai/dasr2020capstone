@@ -126,7 +126,7 @@ import_mss_daily <- function(years, stations = NULL) {
     sort() %>%  # Flatten and arrange in alphabetical order
     paste0(url_base, ., ".csv")  # Prefix with base URL, suffix with ".csv"
   
-  # TODO: tidyverse-way
+  # Tidyverse-way
   # urls = station_nums %>% 
   #   tidyr::crossing(years, sprintf("%02d", 1:12)) %>% 
   #   tidyr::unite("station_year_month", sep = "") %>% 
@@ -163,7 +163,7 @@ import_mss_daily <- function(years, stations = NULL) {
                         "Mean_Wind_Speed_kmh",
                         "Max_Wind_Speed_kmh")) %>% 
           dplyr::mutate_at(dplyr::vars(-Station), as.numeric),
-        error = function(e) { NA })
+        error = function(e) NA)
     })
   
   # Some of the URLs might point to files that do not exist. The list would 
@@ -180,108 +180,41 @@ import_mss_daily <- function(years, stations = NULL) {
     dplyr::arrange(Station, Year, Month, Day)
 }
 
-# import_mss_daily(years = 2012:2020) %>% 
-#   readr::write_csv("../data/mss_daily_2012_2020_19stations_20200714.csv")
+weather_data <- import_mss_daily(years = 2012:2020)
 
-# Check completeness ----
-weather <- readr::read_csv("../data/mss_daily_2012_2020_19stations_20200714.csv")
+weather_data %>%
+  readr::write_csv("../data/mss_daily_2012_2020_19stations_20200714.csv")
 
-# From 2012 to 2019, find the climate stations with at least 52 weeks of data 
-#   per year for 6 variables.
-# Step 1: Find the stations with 52 weeks of data per year
-# Step 2: Check if any of the candidates has less than 6 variables
-wks_per_stn_yr_var <- weather %>% 
-  dplyr::filter(Epiyear < 2020) %>% 
-  dplyr::select(-matches("Highest")) %>% 
-  tidyr::pivot_longer(cols = Daily_Rainfall_Total_mm:Max_Wind_Speed_kmh,
-                      names_to = "Variable",
-                      values_to = "Values") %>% 
-  tidyr::drop_na() %>% 
-  dplyr::group_by(Station, Epiyear, Epiweek, Variable) %>% 
-  dplyr::count(name = "days") %>% 
-  dplyr::group_by(Station, Epiyear, Variable) %>% 
-  dplyr::count(name = "weeks")
+# Import END ----
 
-c_stns <- setdiff(unique(weather$Station),
-                  wks_per_stn_yr_var %>% 
-                    # dplyr::filter(weeks < 52) %>%
-                    dplyr::filter(weeks < 37) %>%
-                    .$Station %>% 
-                    unique())
+# Subset 2020 ----
+weather <- "../data/mss_daily_2012_2020_19stations_20200714.csv" %>% 
+  readr::read_csv()
 
-wks_per_stn_yr_var %>% 
-  dplyr::filter(Station %in% c_stns) %>% 
-  dplyr::group_by(Station, Epiyear) %>% 
-  dplyr::count(name = "vars") %>% 
-  dplyr::filter(vars < 6)
-
-# Nothing is good!
-
-weather2 <- weather %>% 
-  dplyr::filter(Station %in% c_stns) %>% 
+weather_2020 <- weather %>% 
+  dplyr::filter(Epiyear == 2020) %>% 
   dplyr::select(-matches("Highest"))
 
-# weather2 <- import_mss_daily(years = 2012:2020,
-#                          stations = c("Ang Mo Kio",
-#                                       "Changi",
-#                                       "Pasir Panjang",
-#                                       "Tai Seng"))
-# 
-# weather2 %>%
-#   dplyr::select(-matches("Highest")) %>%
-#   readr::write_csv("../data/mss_daily_2012_2020_4stations_20200714.csv")
-
-dplyr::glimpse(weather2)
-
-bulletin <- "../data/moh_weekly_bulletin_s_2012_2020_tidy_20200717.csv" %>% 
-  readr::read_csv() %>% 
-  dplyr::select(Epiyear:Dengue)
-
-weather_wks <- weather2 %>% 
+good_stations <- weather_2020 %>% 
+  tidyr::pivot_longer(cols = Daily_Rainfall_Total_mm:Max_Wind_Speed_kmh) %>% 
+  tidyr::drop_na() %>%
+  # No more requirements on number of days (tidyr::drop_na() would ensure > 0)
+  dplyr::group_by(Station, Epiyear, Epiweek, name) %>% 
+  dplyr::count(name = "ndays") %>% 
+  # Must have 6 variables each week
   dplyr::group_by(Station, Epiyear, Epiweek) %>% 
-  dplyr::summarise(mean_rainfall_mm = mean(Daily_Rainfall_Total_mm),
-                   med_rainfall_mm = median(Daily_Rainfall_Total_mm),
-                   mean_temp_degc = mean(Mean_Temperature_degC),
-                   med_temp_degc = median(Mean_Temperature_degC),
-                   min_temp_degc = min(Minimum_Temperature_degC),
-                   max_temp_degc = max(Maximum_Temperature_degC),
-                   temp_rng = max_temp_degc - min_temp_degc,
-                   mean_wind_kmh = mean(Mean_Wind_Speed_kmh),
-                   med_wind_kmh = median(Mean_Wind_Speed_kmh)) %>% 
-  dplyr::filter(!Station %in% c("Admiralty",
-                                "Jurong Island",
-                                "Khatib",
-                                "Marina Barrage",
-                                "Tuas South")) %>% 
-  dplyr::filter(Station %in% c("Ang Mo Kio",
-                               "Changi",
-                               "Pasir Panjang",
-                               "Tai Seng")) %>% 
-  dplyr::filter(Station == "Changi") %>% 
-  dplyr::left_join(bulletin, by = c("Epiyear", "Epiweek"))
+  dplyr::count(name = "nvars") %>% 
+  dplyr::filter(nvars >= 6) %>% 
+  # Must have 27 weeks
+  dplyr::group_by(Station, Epiyear) %>% 
+  dplyr::count(name = "nweeks") %>% 
+  dplyr::filter(nweeks >= 27) %>% 
+  .$Station
 
-dplyr::glimpse(weather_wks)
+weather_s <- weather_2020 %>% 
+  dplyr::filter(Station %in% good_stations)
 
-library(ggplot2)
+weather_s %>%
+  readr::write_csv("../data/mss_daily_2020_13stations_20200722.csv")
 
-weather_wks %>% 
-  dplyr::mutate(Epiyear = as.factor(Epiyear)) %>% 
-  ggplot(aes(x = Start, y = temp_rng, color = Epiyear)) + 
-  geom_line() +
-  geom_point(alpha = 0.25) + 
-  facet_grid(Station ~ .)
-
-weather_wks %>% 
-  dplyr::transmute(start_date = paste(Epiyear, Epiweek, "Sun", sep = "-") %>% 
-                     lubridate::parse_date_time("Y-W-a"))
-
-weather_wks %>% 
-  dplyr::mutate(Dengue = dplyr::lag(Dengue, 1)) %>% 
-  ggplot(aes(x = mean_temp_degc, y = Dengue)) + 
-  geom_point(color = "deepskyblue4", alpha = 0.5) + 
-  geom_smooth(method = "lm", formula = y ~ x)
-
-weather_wks %>% 
-  dplyr::mutate(Dengue = dplyr::lag(Dengue, 1)) %>% 
-  lm(Dengue ~ mean_temp_degc, data = .) %>% 
-  summary()
+# Subset 2020 END ----
