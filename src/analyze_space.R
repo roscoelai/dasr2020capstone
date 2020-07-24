@@ -2,52 +2,27 @@
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
+library(ggplot2)
 library(magrittr)
+
+# There are (at least) 2 approaches to handling .kml data:
+# 1. sp - rgdal::readOGR()
+# 2. sf - sf::st_read()
+#
+# The sp approach was quickly abandoned as their objects were rather complex 
+#   and did not facilitate method chaining. It seems to be the older approach.
+#
+# The sf approach produced objects that look like data.frames, which allowed 
+#   for method chaining, but had their own peculiarities:
+#   - Dimension: set to XY using sf::st_zm()
+#   - Geographic CRS: use sf::`st_crs<-`("WGS84") World Geodetic Survey 1984
 
 # Import ----
 
-# Some background story:
-# - There are 2 general approaches for reading spatial data:
-#   - sp-way -> rgdal::readOGR()
-#   - sf-way -> sf::st_read()
-# - The sp approach was used at first, but was abandoned chiefly because the sp 
-#     classes (e.g. SpatialPolygonsDataFrame) had rather complex structures 
-#     that impeded method chaining.
-# - The objects being handled in the sf approach more closely resemble 
-#     data.frames (at least superficially), making it easier to add or modify 
-#     features. It also seems that sf is more modern.
-#   - There are some attributes that have to be taken care of:
-#     - Dimension: set to XY using sf::st_zm()
-#     - Geographic CRS: set to World Geodetic Survey for 1984 (WGS84) using 
-#         sf::`st_crs<-`("WGS84")
-
-# - Polygons of cases
-#   - Points of cases (centroids of polygons)
-# - Planning areas
-#   - Comes with populations
-#   - Comes with breakdown by dwelling type
-#   - Calculate areas
-#   - Add cases in planning areas
-#   - Add clinics in planning areas
-#   - Determine climate station for planning areas
-#   - (?) Weather data
-#     - (?) For the past... month? fortnight?
-
 # Reading from URLs is too slow - download the files and read from disk
 
-# The polygons are (200 m) x (200 m) squares
-
-# read_200x200_polys_to_points <- function(filepaths) {
-#   filepaths %>% 
-#     lapply(sf::st_read) %>% 
-#     dplyr::bind_rows() %>% 
-#     dplyr::mutate(n = as.numeric(sub(".*: (\\d+).*", "\\1", Description))) %>%
-#     sf::st_centroid() %>%
-#     .[rep(1:nrow(.), .$n),] %>%
-#     dplyr::select(-Name, -Description, -n)
-# }
-
 points <- list(
+  # The polygons are (200 m) x (200 m) squares
   "dengue_cases" = c(
     "../data/data_gov/20200717/denguecase-central-area.kml",
     "../data/data_gov/20200717/denguecase-northeast-area.kml",
@@ -171,10 +146,9 @@ joined_table <- list(
 
 # set.seed(336483)
 
-# area_pal <- colors() %>% 
-#   .[grep("gr(a|e)y", ., invert = T)] %>% 
-#   # sample(nrow(planning_areas)) %>% 
-#   sample(nrow(climate_stations)) %>% 
+# area_pal <- colors() %>%
+#   .[grep("gr(a|e)y", ., invert = T)] %>%
+#   sample(nrow(planning_areas)) %>%
 #   leaflet::colorFactor(NULL)
 
 caseden_pal <- leaflet::colorNumeric("Reds", joined_table$caseden)
@@ -187,16 +161,9 @@ leaflet::leaflet(height = 700, width = "100%") %>%
                        smoothFactor = 0.5,
                        fillOpacity = 0.6,
                        # fillColor = ~area_pal(plan_area),
-                       # fillColor = ~area_pal(stn),
                        fillColor = ~caseden_pal(caseden),
                        label = ~label,
                        popup = ~label) %>%
-  # leaflet::addPolygons(data = dengue_polys,
-  #                      weight = 0.3,
-  #                      opacity = 0.5,
-  #                      fillOpacity = 0.8,
-  #                      fillColor = ~cases_pal(ncases),
-  #                      label = ~as.character(ncases)) %>%
   leaflet::addCircleMarkers(data = points$dengue_cases,
                             radius = 5,
                             color = "red",
@@ -220,18 +187,42 @@ leaflet::leaflet(height = 700, width = "100%") %>%
 
 # Model ----
 
+# Modifiable areal unit problem (MAUP)
+# - Must be careful in how you frame the results
+# Ecological fallacy
+# - Do not extend conclusions for one level of aggregation to another
+
 dplyr::glimpse(joined_table)
 
 joined_table %>% 
-  dplyr::group_by(stn) %>% 
-  dplyr::summarize(ncases = sum(ncases)) %>% 
-  leaflet::leaflet() %>% 
-  leaflet::addTiles() %>% 
-  leaflet::addPolygons(label = ~stn)
+  tibble::as_tibble() %>% 
+  dplyr::select(matches("^(n|med|pop$|area)")) %>% 
+  as.matrix() %>% 
+  Hmisc::rcorr() %>% 
+  broom::tidy() %>% 
+  dplyr::filter(p.value < 0.05) %>%
+  dplyr::arrange(estimate)
 
-# Modifiable areal unit problem (MAUP)
-# Must be careful in how you frame the results
-# Ecological fallacy
-# Do not extend conclusions for one level of aggregation to another
+m1 <- lm(ncases ~ nhabs + med_temp + pop + med_temp_rng, data = joined_table)
+m1 <- lm(ncases ~ nhabs + med_temp + pop + nclinics, data = joined_table)
+gvlma::gvlma(m1)
+summary(m1)
+car::vif(m1)
 
+joined_table %>% 
+  tibble::as_tibble() %>% 
+  dplyr::select(matches("^(n|med_t|pop$)")) %>% 
+  tidyr::pivot_longer(everything()) %>% 
+  ggplot(aes(x = value, color = name)) + 
+  geom_density() + 
+  facet_wrap(name ~ ., scales = "free")
+
+joined_table %>% 
+  tibble::as_tibble() %>% 
+  dplyr::select(matches("^(n|med_t|pop$)")) %>% 
+  tidyr::pivot_longer(nhabs:med_temp_rng) %>% 
+  ggplot(aes(x = value, y = ncases, color = name)) + 
+  geom_point(alpha = 0.6) + 
+  geom_smooth(method = "lm", formula = y ~ x, size = 0.5) + 
+  facet_wrap(name ~ ., scales = "free")
 
