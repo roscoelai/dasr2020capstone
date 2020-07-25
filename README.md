@@ -15,10 +15,10 @@
   - [x] [analyze_space.R](https://github.com/roscoelai/dasr2020capstone/blob/master/src/analyze_space.R)
 - [x] Purify (remove non-data-collection-related code from) the import-* scripts
 - [ ] Create import_kmls.R
-- [ ] Organize and upload raw data files
-  - [ ] MOH bulletin
-  - [ ] Station positions
-- [ ] Create and test online option for import_moh_weekly()
+- [x] Organize and upload raw data files
+  - [x] MOH bulletin
+  - [x] MSS station positions
+- [x] Create and test online option for import_moh_weekly()
 - [ ] What to do with get_geocodes.R?
 
 #### Temporal
