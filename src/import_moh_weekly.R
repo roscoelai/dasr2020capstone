@@ -9,13 +9,15 @@ import_moh_weekly <- function(url_or_path) {
   #' 
   #' @description
   #' Weekly infectious diseases bulletin from the Ministry of Health (MOH). 
-  #' Data from 2012-W01 to 2020-W29 (as of 24 July 2020). Relevant links to MOH 
-  #' are given under details.
+  #' Data from 2012-W01 to 2020-W29 (as of 24 July 2020). Relevant links are 
+  #' given under details.
   #' 
   #' @details
   #' \href{https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin}{MOH Weekly Infectious Disease Bulletin}
   #'
   #' \href{https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx}{Latest data as of 24 July 2020 (2012-W01 to 2020-W29)}
+  #' 
+  #' \href{https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx}{Backup copy as of 24 July 2020 (2012-W01 to 2020-W29)}
   #' 
   #' @param url_or_path The URL or file path of the .xlsx file.
   #' @return Weekly infectious diseases bulletin (2012-W01 to 2020-W29).

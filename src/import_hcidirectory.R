@@ -5,23 +5,22 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 library(magrittr)
 
 import_hcidirectory <- function() {
-  #' Import Healthcare Institutions Directory Records
+  #' Healthcare Institutions Directory
   #' 
   #' @description
-  #' The Healthcare Institutions Directory website is rather fancy, it cannot 
-  #' be webscraped using naive methods. Time for RSelenium.
+  #' The \href{http://hcidirectory.sg/hcidirectory/}{Healthcare Institutions 
+  #' (HCI) Directory}, an initiative by the Ministry of Health (MOH), is a 
+  #' platform for all HCIs licensed under the Private Hospitals and Medical 
+  #' Clinics (PHMC) Act to provide information about their services and 
+  #' operations to the public.
   #' 
-  #' Variables:
-  #' \enumerate{
-  #'   \item name: Name of clinic
-  #'   \item add: Address of clinic
-  #' }
+  #' This function is custom-made to consolidate the names and addresses of 
+  #' HCIs which are medical clinics that offer general medical services.
   #' 
-  #' @details
-  #' \href{http://hcidirectory.sg/hcidirectory/}{Healthcare Institutions Directory}
+  #' The HCI Directory is a dynamic web page, so using RSelenium might be 
+  #' required.
   #' 
-  #' @return A table containing names and addresses of clinics registered in 
-  #' the Healthcare Institutions Directory.
+  #' @return The names and addresses of selected HCIs.
   
   # Run a Selenium Server using `RSelenium::rsDriver()`. The parameters e.g. 
   #   `browser`, `chromever` (or `geckover` if using Firefox, or other drivers 
@@ -63,9 +62,9 @@ import_hcidirectory <- function() {
     rvest::html_attr("value") %>% 
     as.numeric()
   
-  # We'll use this "append-to-empty-tibble" approach, for now
+  # Create an empty tibble to append results
   df = tibble::tibble(
-    no = character(),
+    id = character(),
     name = character(),
     add = character()
   )
@@ -73,41 +72,47 @@ import_hcidirectory <- function() {
   i = 1
   while (T) {
     results = remDr$findElement("#results", using = "css")
-    
     html = results$getElementAttribute("innerHTML")[[1]] %>% 
       xml2::read_html()
     
+    # Determine the index numbers of the (up to 10) results on the page
     idx = html %>% 
+      # Find the element that says "SHOWING 1 - 10 OF 1,761 RESULTS"
       rvest::html_nodes(".col1") %>% 
       .[1] %>% 
-      rvest::html_text() %>%
-      gsub("\\s+", " ", .) %>% 
+      rvest::html_text() %>% 
+      # Commas have to be eliminated for numbers > 999
       gsub(",", "", .) %>% 
-      sub(".*Showing (\\d+) - (\\d+) of .*", "\\1,\\2", .) %>% 
-      strsplit(split = ",") %>% 
+      # Find the smallest and largest numbers and apply the colon operator
+      sub(".*Showing\\s+(.*)\\s+of.*", "\\1", .) %>% 
+      strsplit(split = " - ") %>% 
       unlist() %>% 
       as.numeric() %>% 
       { .[1]:.[2] }
     
-    # This would ensure only unique indices get added to the table
-    if (!any(idx %in% df$no)) {
-      next_10 = html %>%
-        rvest::html_nodes(".name,.add") %>%
-        rvest::html_text() %>%
-        gsub("\\s+", " ", .) %>%
-        trimws() %>%
-        { cbind(idx, .[c(TRUE,FALSE)], .[!c(TRUE,FALSE)]) } %>%
-        tibble::as_tibble() %>% 
-        setNames(c("no", "name", "add"))
-      
+    # Only append results if IDs are not in the table
+    if (!any(idx %in% df$id)) {
       df = df %>% 
-        dplyr::bind_rows(next_10)
+        dplyr::bind_rows(
+          html %>%
+            # Find both the name and address nodes
+            rvest::html_nodes(".name,.add") %>% 
+            rvest::html_text() %>% 
+            # Tidy whitespace
+            gsub("\\s+", " ", .) %>% 
+            trimws() %>% 
+            # Concatenate IDs, odd rows (names), and even rows (addresses)
+            { cbind(idx, .[c(TRUE,FALSE)], .[!c(TRUE,FALSE)]) } %>% 
+            tibble::as_tibble() %>% 
+            setNames(c("id", "name", "add"))
+        )
       
+      # Announce progress and increment page counter
       message(i, " of ", npages, " done (", round(i / npages * 100, 2), "%)")
-      
       i = i + 1
     }
     
+    # Natural exit point
     if (i > npages) break
     
     # Navigate to the next page (if available, else stop)
@@ -116,11 +121,11 @@ import_hcidirectory <- function() {
       nextpage$clickElement()
       F
     }, error = function(e) {
-      # Should not reach here under normal conditions
       print(paste("There are no more pages after", i))
       T
     })
     
+    # Unnatural exit point
     if (the_end) break
   }
   
@@ -129,31 +134,26 @@ import_hcidirectory <- function() {
   rD[["server"]]$stop()
   rm(rD, remDr)
   gc()
+  
   # Kill Java instance(s) inside RStudio
   # docs.microsoft.com/en-us/windows-server/administration/windows-commands/taskkill
   system("taskkill /im java.exe /f", intern = F, ignore.stdout = F)
   
-  df
+  # Clean up:
+  # - Franchises may have the same name with different addresses
+  # - Different practices may have the same zipcodes and even buildings
+  # - We will consider each full address unique, and a single practice
+  
+  # Clean up duplicate addresses
+  df %>% 
+    .[!duplicated(tolower(.$add), fromLast = T),]
 }
 
-hci <- import_hcidirectory()
+# Import START ----
 
-# Save
-hci %>%
-  readr::write_csv("../results/scrape_hci_20200721.csv")
+hcid_s <- import_hcidirectory()
 
-# Load
-hci <- readr::read_csv("../results/scrape_hci_20200721.csv")
+hcid_s %>%
+  readr::write_csv("../data/hci_scrape_raw_20200725.csv")
 
-# Check
-hci %>% 
-  .[duplicated(.$add) | duplicated(.$add, fromLast = T),] %>% 
-  dplyr::arrange(add)
-
-# Clean duplicate addresses
-hci_nodup <- hci %>% 
-  .[!duplicated(.$add, fromLast = T),]
-
-# Save
-hci_nodup %>%
-  readr::write_csv("../results/scrape_hci_nodup_20200721.csv")
+# Import END ----
