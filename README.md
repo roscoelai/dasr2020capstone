@@ -21,8 +21,9 @@
   - [x] HCI data with geocodes
 - [x] Create and test online option for import_moh_weekly()
 - [x] Rename get_geocodes.R to zipcodes_to_geocodes.R and smooth out workflow
+- [x] Do we need to subset the meteorological data? Perhaps not
+- [x] Delete intermediate data
 - [ ] Create import_kmls.R
-- [ ] (Optional) Delete tidied MOH bulletin data
 
 #### Temporal
 - [ ] How to aggreagate overall/island-wide meteorological data?

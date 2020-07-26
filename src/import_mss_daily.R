@@ -9,66 +9,26 @@ import_mss_daily <- function(years, stations = NULL) {
   #' 
   #' @description
   #' Daily weather records from the Meteorological Service Singapore (MSS). 
-  #' Data from January 1980 to June 2020 potentially available. This function 
-  #' will combine data from a range of years, from a list of climate stations 
-  #' (refer to the list below for recognized stations). Epidemiological years 
-  #' and weeks will be calculated using available date information.
+  #' Available data ranges from January 1980 to June 2020. Only 19 of the 63 
+  #' climate stations are recognized by this function, because these contain 
+  #' more than just rainfall data. Relevant links are given under details.
   #' 
-  #' Recognized climate stations:
-  #' \enumerate{
-  #'   \item Admiralty
-  #'   \item Ang Mo Kio
-  #'   \item Changi
-  #'   \item Choa Chu Kang (South)
-  #'   \item Clementi
-  #'   \item East Coast Parkway
-  #'   \item Jurong (West)
-  #'   \item Jurong Island
-  #'   \item Khatib
-  #'   \item Marina Barrage
-  #'   \item Newton
-  #'   \item Pasir Panjang
-  #'   \item Pulau Ubin
-  #'   \item Seletar
-  #'   \item Sembawang
-  #'   \item Sentosa Island
-  #'   \item Tai Seng
-  #'   \item Tengah
-  #'   \item Tuas South
-  #' }
-  #' 
-  #' Variables:
-  #' \enumerate{
-  #'   \item Daily_Rainfall_Total_mm
-  #'   \item Highest_30_Min_Rainfall_mm
-  #'   \item Highest_60_Min_Rainfall_mm
-  #'   \item Highest_120_Min_Rainfall_mm
-  #'   \item Mean_Temperature_degC
-  #'   \item Maximum_Temperature_degC
-  #'   \item Minimum_Temperature_degC
-  #'   \item Mean_Wind_Speed_kmh
-  #'   \item Max_Wind_Speed_kmh
-  #' }
+  #' MSS is nice enough to have their data in .csv files, with a systematic 
+  #' naming scheme. Data compilation becomes as simple as generating the 
+  #' appropriate list of URLs.
   #' 
   #' @details
   #' \href{http://www.weather.gov.sg/climate-historical-daily/}{MSS Daily Records}
   #' 
   #' \href{http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf}{List of stations, weather parameters and periods of records}
   #' 
-  #' @param years A vector of years of interest.
-  #' @param stations A vector of climate station names.
-  #' @return A table containing the combined daily records.
+  #' @param years A vector of the years of interest.
+  #' @param stations A vector of the climate station names.
+  #' @return Combined daily weather records.
   #' @examples
   #' import_mss_daily(2012:2020, "Changi")
   #' import_mss_daily(2012:2020, c("Changi", "Clementi", "Khatib", "Newton"))
   
-  # MSS is nice enough to have their data accessible as .csv files, and they 
-  #   have a systematic naming scheme! That greatly simplifies collection of 
-  #   data. From the list of stations, weather parameters and periods of 
-  #   records, the following climate stations have been indicated to have 
-  #   captured temperature and wind speed data, in addition to rainfall data 
-  #   which was common to all stations. Their names are associated with their 
-  #   numbers in the following vector.
   stations_lookup = c(
     "Admiralty" = "104_",
     "Ang Mo Kio" = "109_",
@@ -108,173 +68,138 @@ import_mss_daily <- function(years, stations = NULL) {
     station_nums = stations_lookup[stations]
   }
   
-  # The full URL to each .csv file follows a certain convention:
-  # - The base URL is: "http://www.weather.gov.sg/files/dailydata/DAILYDATA_S"
-  # - Format: "<base URL><station number>_<YYYY><MM>.csv"
-  # - We need to enumerate all <station number>-<year>-<month> combinations
+  # The URL to each .csv file has the following format:
+  # - "<url_base><station number>_<YYYY><MM>.csv"
+  # - Notice the station numbers given above contain the "_" suffix
   url_base = "http://www.weather.gov.sg/files/dailydata/DAILYDATA_S"
   
-  # We take the Cartesian product of the station numbers (derived from the 
-  #   user-input station names), the user-input years, and the 12 months ("01" 
-  #   to "12"), flatten the result into a vector, then prefix with the base URL 
-  #   and suffix with ".csv" to get the URLs of the desired files.
+  # To enumerate all the URLs, take the Cartesian product of:
+  # - station numbers
+  # - years
+  # - months (we'll always attempt to find all 12 months)
+  #
+  # Flatten the result into a vector, then prefix and suffix with `url_base` 
+  #   and ".csv", respectively.
   
   # Base R
   urls = station_nums %>% 
     outer(years, FUN = paste0) %>% 
     outer(sprintf("%02d", 1:12), FUN = paste0) %>% 
     sort() %>%  # Flatten and arrange in alphabetical order
-    paste0(url_base, ., ".csv")  # Prefix with base URL, suffix with ".csv"
+    paste0(url_base, ., ".csv")
   
-  # Tidyverse-way
+  # Equivalent tidyverse approach (for reference)
   # urls = station_nums %>% 
   #   tidyr::crossing(years, sprintf("%02d", 1:12)) %>% 
   #   tidyr::unite("station_year_month", sep = "") %>% 
   #   dplyr::pull() %>% 
-  #   paste0(url_base, ., ".csv")  # Prefix with base URL, suffix with ".csv"
+  #   paste0(url_base, ., ".csv")
   
-  # Now we (attempt to) read data from each URL into a list of tables:
-  # It was noted that in some of the column headers, a variant of the "degree 
-  #   sign" was used (for the unit degrees Celsius). These were recognized as 
-  #   invalid multibyte characters, and somehow made the table contents 
-  #   inaccessible. Furthermore, the column headers had slightly different 
-  #   wordings after April 2020. Thus, it was decided that the columns names 
-  #   would be manually set as each table was read in order to address the 
-  #   problems as well as facilitate dplyr::bind_rows() downstream.
-  # It was also found that the table might contain the "em dash" (long dash) 
-  #   character, also recognized as an invalid multibyte character, to denote 
-  #   missing values or empty cells. These would be converted to NA upon type 
-  #   coercion using as.numeric().
+  # We have a list of URLs, but some of them may not exist (some stations do 
+  #   not have data for some months). Use tryCatch() to return a table for the 
+  #   URLs that exist, and a NA for those that don't.
+  #
+  # Problems with multibyte characters and countermeasures:
+  # - Some colnames contained the "degree sign" symbol which somehow made the 
+  #   table contents inaccessible. Tables after April 2020 had slightly 
+  #   different colnames.
+  #   - Manually set the colnames for each table.
+  # - Some tables contained the "em dash" symbol to indicate missing values.
+  #   - They will be coerced to NA when the columns are type cast to numeric.
+  #   - There will be warning messages.
   dfs = urls %>% 
     lapply(function(url) {
-      tryCatch(
-        readr::read_csv(url) %>% 
-          setNames(., c("Station",
-                        "Year",
-                        "Month",
-                        "Day",
-                        "Daily_Rainfall_Total_mm",
-                        "Highest_30_Min_Rainfall_mm",
-                        "Highest_60_Min_Rainfall_mm",
-                        "Highest_120_Min_Rainfall_mm",
-                        "Mean_Temperature_degC",
-                        "Maximum_Temperature_degC",
-                        "Minimum_Temperature_degC",
-                        "Mean_Wind_Speed_kmh",
-                        "Max_Wind_Speed_kmh")) %>% 
-          dplyr::mutate_at(dplyr::vars(-Station), as.numeric),
-        error = function(e) NA)
+      tryCatch({
+        df = readr::read_csv(url,
+                             skip = 1,
+                             col_names = c(
+                               "Station",
+                               "Year",
+                               "Month",
+                               "Day",
+                               "Rainfall",
+                               "Highest_30_min_rainfall",
+                               "Highest_60_min_rainfall",
+                               "Highest_120_min_rainfall",
+                               "Mean_temp",
+                               "Max_temp",
+                               "Min_temp",
+                               "Mean_wind",
+                               "Max_wind"
+                             ),
+                             col_types = readr::cols_only(
+                               "Station" = "c",
+                               "Year" = "n",
+                               "Month" = "n",
+                               "Day" = "n",
+                               "Rainfall" = "n",
+                               "Mean_temp" = "n",
+                               "Max_temp" = "n",
+                               "Min_temp" = "n"
+                             ))
+        
+        # Announce progress (UI is important! We can tolerate lower efficiency)
+        message(paste(df[1, 1:3], collapse = "_"))
+        
+        df
+      }, error = function(e) {
+        NA
+      })
     })
   
-  # Some of the URLs might point to files that do not exist. The list would 
-  #   contain a NA for those positions. These have to be deselected before 
-  #   applying dplyr::bind_rows().
-  # The dates, epidemiological years, and epidemiological weeks are calculated 
-  #   from the year, month, and day given for each row.
   dfs[!is.na(dfs)] %>% 
     dplyr::bind_rows() %>% 
-    dplyr::mutate(Date = lubridate::ymd(paste(Year, Month, Day, sep = "-")),
-                  Epiyear = lubridate::epiyear(Date),
-                  Epiweek = lubridate::epiweek(Date)) %>% 
-    dplyr::select(Station, Epiyear, Epiweek, everything(), -Date) %>% 
     dplyr::arrange(Station, Year, Month, Day)
 }
 
 # Import START ----
 
-weather_data <- import_mss_daily(years = 2012:2020)
+mss_19stations <- import_mss_daily(years = 2012:2020)
 
-weather_data %>%
-  readr::write_csv("../data/mss_daily_2012_2020_19stations_20200714.csv")
+mss_19stations %>%
+  readr::write_csv("../data/mss/mss_daily_2012_2020_19stations_20200726.csv")
 
 # Import END ----
 
 
 
-# Subset 2012-2020 START ----
-weather <- "../data/mss_daily_2012_2020_19stations_20200714.csv" %>% 
-  readr::read_csv()
+# How to use START ----
 
-weather_2012_2020 <- weather %>% 
-  dplyr::select(-matches("Highest"))
+mss_19stations <- "../data/mss/mss_daily_2012_2020_19stations_20200726.csv" %>% 
+  readr::read_csv() %>% 
+  dplyr::mutate(
+    # Calculate daily temperature range
+    Temp_range = Max_temp - Min_temp,
+    # Calculate epidemiological years and weeks
+    Date = lubridate::ymd(paste(Year, Month, Day, sep = "-")),
+    Epiyear = lubridate::epiyear(Date),
+    Epiweek = lubridate::epiweek(Date),
+    .keep = "unused"
+  )
 
-good_stations <- weather_2012_2020 %>% 
-  # Exclude 2020 as it surely has < 52 weeks, at the moment
-  dplyr::filter(Epiyear < 2020) %>% 
-  tidyr::pivot_longer(cols = Daily_Rainfall_Total_mm:Max_Wind_Speed_kmh) %>% 
-  tidyr::drop_na() %>% 
-  # No additional requirements for number of days
-  dplyr::group_by(Station, Epiyear, Epiweek, name) %>% 
-  dplyr::count(name = "ndays") %>% 
-  # Must have 6 variables
-  dplyr::group_by(Station, Epiyear, Epiweek) %>% 
-  dplyr::count(name = "nvars") %>% 
-  dplyr::filter(nvars >= 6) %>% 
-  # Must have 52 or more weeks
-  dplyr::group_by(Station, Epiyear) %>% 
-  dplyr::count(name = "nweeks") %>% 
-  dplyr::filter(nweeks >= 52) %>% 
-  # Must have 8 or more years
+# Aggregate all stations, from 2012-2020, by (year-)weeks
+mss_time <- mss_19stations %>% 
+  dplyr::group_by(Epiyear, Epiweek) %>% 
+  dplyr::summarise(mean_rainfall = mean(Rainfall, na.rm = T),
+                   med_rainfall = median(Rainfall, na.rm = T),
+                   mean_temp = mean(Mean_temp, na.rm = T),
+                   med_temp = median(Mean_temp, na.rm = T),
+                   mean_temp_rng = mean(Temp_range, na.rm = T),
+                   med_temp_rng = median(Temp_range, na.rm = T))
+
+# Aggregate most recent fortnight, by stations
+mss_space <- mss_19stations %>% 
+  dplyr::filter(Epiyear == 2020) %>% 
+  # Filter for the last 2 weeks
+  dplyr::filter(Epiweek > max(Epiweek) - 2) %>% 
   dplyr::group_by(Station) %>% 
-  dplyr::count(name = "nyears") %>% 
-  dplyr::filter(nyears >= 8) %>% 
-  .$Station
+  dplyr::summarise(mean_rainfall = mean(Rainfall, na.rm = T),
+                   med_rainfall = median(Rainfall, na.rm = T),
+                   mean_temp = mean(Mean_temp, na.rm = T),
+                   med_temp = median(Mean_temp, na.rm = T),
+                   mean_temp_rng = mean(Temp_range, na.rm = T),
+                   med_temp_rng = median(Temp_range, na.rm = T))
 
-# Check 2020
-weather_2012_2020 %>% 
-  dplyr::filter(Epiyear == 2020) %>% 
-  dplyr::filter(Station %in% good_stations) %>% 
-  tidyr::pivot_longer(cols = Daily_Rainfall_Total_mm:Max_Wind_Speed_kmh) %>% 
-  tidyr::drop_na() %>% 
-  # No additional requirements for number of days
-  dplyr::group_by(Station, Epiyear, Epiweek, name) %>% 
-  dplyr::count(name = "ndays") %>% 
-  # Must have 6 variables
-  dplyr::group_by(Station, Epiyear, Epiweek) %>% 
-  dplyr::count(name = "nvars") %>% 
-  dplyr::filter(nvars >= 6) %>% 
-  # Must have 52 or more weeks
-  dplyr::group_by(Station, Epiyear) %>% 
-  dplyr::count(name = "nweeks")
+# `mss_space` will be used for inverse-distance-weighted interpolation
 
-weather_s <- weather_2012_2020 %>% 
-  dplyr::filter(Station %in% good_stations)
-
-weather_s %>%
-  readr::write_csv("../data/mss_daily_2012_2020_4stations_20200714.csv")
-
-# Subset 2012-2020 END ----
-
-
-
-# Subset 2020 START ----
-weather <- "../data/mss_daily_2012_2020_19stations_20200714.csv" %>% 
-  readr::read_csv()
-
-weather_2020 <- weather %>% 
-  dplyr::filter(Epiyear == 2020) %>% 
-  dplyr::select(-matches("Highest"))
-
-good_stations <- weather_2020 %>% 
-  tidyr::pivot_longer(cols = Daily_Rainfall_Total_mm:Max_Wind_Speed_kmh) %>% 
-  tidyr::drop_na() %>%
-  # No more requirements on number of days (tidyr::drop_na() would ensure > 0)
-  dplyr::group_by(Station, Epiyear, Epiweek, name) %>% 
-  dplyr::count(name = "ndays") %>% 
-  # Must have 6 variables each week
-  dplyr::group_by(Station, Epiyear, Epiweek) %>% 
-  dplyr::count(name = "nvars") %>% 
-  dplyr::filter(nvars >= 6) %>% 
-  # Must have 27 weeks
-  dplyr::group_by(Station, Epiyear) %>% 
-  dplyr::count(name = "nweeks") %>% 
-  dplyr::filter(nweeks >= 27) %>% 
-  .$Station
-
-weather_s <- weather_2020 %>% 
-  dplyr::filter(Station %in% good_stations)
-
-weather_s %>%
-  readr::write_csv("../data/mss_daily_2020_13stations_20200722.csv")
-
-# Subset 2020 END ----
+# How to use END ----
