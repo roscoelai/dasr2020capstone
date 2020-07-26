@@ -23,7 +23,11 @@
 - [x] Rename get_geocodes.R to zipcodes_to_geocodes.R and smooth out workflow
 - [x] Do we need to subset the meteorological data? Perhaps not
 - [x] Delete intermediate data
-- [ ] Create import_kmls.R
+- [x] Create read_kmls()
+- [x] Edit document up to before Model section
+  - [x] analyze_time.R is now obsolete...
+- [ ] Bring choropleth into document
+  - [ ] analyze_space.R obsolete
 
 #### Temporal
 - [ ] How to aggreagate overall/island-wide meteorological data?
@@ -37,10 +41,10 @@
   - [ ] Time displacement (1 week? 2 weeks?)
 
 #### Spatial
-- [ ] How to aggregate recent weather data (13 stations with data for 2020)?
-  - [ ] Past 1 month?
-  - [ ] Past 0.5 month?
-  - [ ] Daily -> Weekly aggregation protocol (mean, median)
+- [ ] How to aggregate recent weather data?
+  - [ ] Latest 1 month?
+  - [ ] Latest 3 weeks?
+  - [ ] Latest 2 weeks?
 - [x] Combine locality data with:
   - [x] Area
   - [x] Population

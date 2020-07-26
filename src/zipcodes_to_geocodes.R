@@ -58,7 +58,7 @@ zipcodes_to_geocodes <- function(zipcodes) {
 
 # Process START ----
 
-hcid_s <- readr::read_csv("../data/hci_scrape_raw_20200725.csv") %>% 
+hcid_s <- readr::read_csv("../data/hcid/hci_scrape_raw_20200725.csv") %>% 
   dplyr::mutate(zip = sub(".*((?i)singapore\\s+\\d+).*", "\\1", add))
 
 hcid_s2 <- hcid_s %>% 
@@ -67,6 +67,6 @@ hcid_s2 <- hcid_s %>%
 hcid_s2 %>% 
   dplyr::select(-id, -zip, -address) %>% 
   tidyr::drop_na() %>% 
-  readr::write_csv("../data/hci_clinics_20200725.csv")
+  readr::write_csv("../data/hcid/hci_clinics_20200725.csv")
 
 # Process END ----

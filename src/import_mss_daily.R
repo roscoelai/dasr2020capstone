@@ -138,7 +138,7 @@ import_mss_daily <- function(years, stations = NULL) {
                                "Min_temp" = "n"
                              ))
         
-        # Announce progress (UI is important! We can tolerate lower efficiency)
+        # Announce progress (UX is important! We can tolerate lower efficiency)
         message(paste(df[1, 1:3], collapse = "_"))
         
         df

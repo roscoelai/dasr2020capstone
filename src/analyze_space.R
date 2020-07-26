@@ -21,6 +21,21 @@ library(magrittr)
 
 # Reading from URLs is too slow - download the files and read from disk
 
+read_kmls <- function(url_or_path) {
+  kml_files = tryCatch({
+    temp = tempfile(fileext = rep(".kml", length(dsns)))
+    Map(function(u, d) download.file(u, d, mode="wb"), url_or_path, temp)
+    temp
+  }, error = function(e) {
+    url_or_path
+  })
+  
+  kml_files %>% 
+    lapply(sf::st_read, quiet = T) %>% 
+    dplyr::bind_rows() %>% 
+    sf::st_zm()
+}
+
 points <- list(
   # The polygons are (200 m) x (200 m) squares
   "dengue_cases" = c(

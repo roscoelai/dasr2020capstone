@@ -154,6 +154,6 @@ import_hcidirectory <- function() {
 hcid_s <- import_hcidirectory()
 
 hcid_s %>%
-  readr::write_csv("../data/hci_scrape_raw_20200725.csv")
+  readr::write_csv("../data/hcid/hci_scrape_raw_20200725.csv")
 
 # Import END ----
