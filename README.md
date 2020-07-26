@@ -27,8 +27,9 @@
 
 #### Temporal
 - [ ] How to aggreagate overall/island-wide meteorological data?
-  - [ ] Choose 1 climate station (e.g. Changi)
-  - [x] Average climate stations with sufficient data (4 stations)
+  - [ ] <s>Choose 1 climate station (e.g. Changi)</s>
+  - [ ] <s>Aggregate climate stations with sufficient data (~4 stations)</s>
+  - [x] **ALL** OF IT!
 - [ ] Transform meteorological data
   - [ ] Daily -> Weekly aggregation protocol (mean, median)
 - [ ] Combine meteorological and epidemiological data
@@ -37,9 +38,9 @@
 
 #### Spatial
 - [ ] How to aggregate recent weather data (13 stations with data for 2020)?
-  - [x] Past 1 month?
+  - [ ] Past 1 month?
   - [ ] Past 0.5 month?
-  - [ ] Daily -> Weekly aggregation protocol (mean, median, max-min, etc.)
+  - [ ] Daily -> Weekly aggregation protocol (mean, median)
 - [x] Combine locality data with:
   - [x] Area
   - [x] Population
@@ -47,7 +48,7 @@
   - [x] Number of cases
   - [x] Number of clinics
   - [x] Meteorological data
-    - [x] Inverse distance weighted (IDW) from 13 stations
+    - [x] Inverse distance weighted (IDW) interpolation from 19 stations
 - [ ] Transform number of cases to a fairer indicator (n/area, n/pop, etc.)
   - [ ] Standard choropleth weaknesses:
     - [ ] Modifiable areal unit problem (MAUP)
@@ -97,7 +98,6 @@
   - [x] Population
   - [x] Type of housing
   - [x] Number of clinics
-  - [x] Weather (for 2020, 13 stations)
 
 ### Others
 - Q6: Find intervention data (optional)
@@ -106,18 +106,17 @@
 
 ## Data
 - [Weekly Infectious Disease Bulletin, Ministry of Health (MOH)](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
-  - [Manual download (2012-W01 to 2020-W29) as of 24 Jul 2020](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx)
-  - Script for [tidying](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_moh_weekly.R)
-  - [Tidied dataset (2012-W01 to 2020-W29) as of 24 Jul 2020](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh_weekly_bulletin_20200724.csv)
+  - [Latest data as of 24 July 2020 (2012-W01 to 2020-W29)](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx)
+  - [Backup copy as of 24 July 2020 (2012-W01 to 2020-W29)](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx)
+  - [R script](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_moh_weekly.R)
 - [Historical Daily Records, Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
-  - Daily rainfall
-  - Daily temperature and wind speed measurements for some climate stations
-  - Script for [webscraping](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_mss_daily.R)
-  - [Tidied subset (2012-2020)](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss_daily_2012_2020_4stations_20200714.csv)
-  - [Tidied subset (2020)](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss_daily_2020_13stations_20200722.csv)
+  - [Backup copy as of 26 July 2020 (2012-01 to 2020-06, 19 stations) ](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss/mss_daily_2012_2020_19stations_20200726.csv)
+  - [R script](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_mss_daily.R)
+  - [List of stations, weather parameters and periods of records](http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf)
 - [Listing of Licensed Healthcare Institutions, Ministry of Health (MOH)](http://hcidirectory.sg/hcidirectory/)
-  - Name and address of HCI
-  - Scripts for [webscraping](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_hcidirectory.R) and [deriving coordinates](https://github.com/roscoelai/dasr2020capstone/blob/master/src/get_geocodes.R)
+  - [Backup copy as of 25 July 2020](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/hcid/hci_clinics_20200725.csv)
+  - [R script (part 1)](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_hcidirectory.R)
+  - [R script (part 2)](https://github.com/roscoelai/dasr2020capstone/blob/master/src/zipcodes_to_geocodes.R)
 - [Approximate geocoordinates of dengue cases](https://data.gov.sg/search?q=denguecases), Data.gov.sg
 
 | Date       | Central     | North East  | South East  | South West  |
@@ -184,14 +183,6 @@ Date       | Central     | North East  | North West  | South East  | South West
 - [Master Plan 2014 Planning Area Boundary (No Sea)](https://data.gov.sg/dataset/master-plan-2014-planning-area-boundary-no-sea), Data.gov.sg
   - Names and sizes of planning areas
   - [.zip file](https://geo.data.gov.sg/mp14-plng-area-no-sea-pl/2016/05/11/kml/mp14-plng-area-no-sea-pl.zip)
-- [Resident Population by Planning Area/Subzone and Type of Dwelling, 2015](https://data.gov.sg/dataset/resident-population-by-planning-area-subzone-and-type-of-dwelling-2015), Data.gov.sg
-  - Populations of planning areas
-  - Breakdown by type of dwelling
-  - [.csv file](https://storage.data.gov.sg/resident-population-by-planning-area-subzone-and-type-of-dwelling-2015/resources/resident-population-by-planning-area-and-type-of-dwelling-2020-07-15T06-05-58Z.csv)
-- [Resident Population by Planning Area/Subzone, Age Group and Sex, 2015](https://data.gov.sg/dataset/resident-population-by-planning-area-subzone-age-group-and-sex-2015), Data.gov.sg
-  - Populations of planning areas
-  - Breakdown by age groups
-  - [.csv file](https://storage.data.gov.sg/resident-population-by-planning-area-subzone-age-group-and-sex-2015/resources/resident-population-by-planning-area-age-group-and-sex-2019-07-30T03-02-18Z.csv)
 - [CHAS Clinics](https://data.gov.sg/dataset/chas-clinics), Data.gov.sg
   - Geocoordinates of CHAS clinics
   - [.kml file](https://geo.data.gov.sg/moh-chas-clinics/2020/07/05/kml/moh-chas-clinics.kml)
