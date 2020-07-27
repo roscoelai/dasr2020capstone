@@ -897,7 +897,7 @@ data_time %>%
   theme(legend.position = "none")
 ```
 
-```{r sxplore-space-1}
+```{r explore-space-1}
 data_space %>% 
   leaflet::leaflet(width = "100%") %>%
   leaflet::addTiles() %>%
@@ -923,6 +923,67 @@ data_space %>%
                                  direction = "center",
                                  style = list("color" = "blue")
                                ))
+```
+
+```{r}
+names(data_space)
+```
+
+#### Absolute numbers
+
+```{r explore-space-2, fig.height=10, fig.width=9}
+data_space %>% 
+  dplyr::select(ncases:pop, mean_rainfall:med_temp_rng, geometry) %>% 
+  gridExtra::grid.arrange(grobs = lapply(list(
+    ggplot(aes(fill = ncases), data = .),
+    ggplot(aes(fill = nhabs), data = .),
+    ggplot(aes(fill = nclinics), data = .),
+    ggplot(aes(fill = pop), data = .),
+    ggplot(aes(fill = mean_rainfall), data = .),
+    ggplot(aes(fill = med_rainfall), data = .),
+    ggplot(aes(fill = mean_temp), data = .),
+    ggplot(aes(fill = med_temp), data = .),
+    ggplot(aes(fill = mean_temp_rng), data = .),
+    ggplot(aes(fill = med_temp_rng), data = .)
+  ), function(x) {
+    x + 
+      geom_sf() + 
+      scale_fill_viridis_c(guide = guide_colourbar(
+        title.position = "top",
+        title.hjust = .5,
+        barwidth = 10,
+        barheight = .5
+      )) + 
+      theme_void() + 
+      theme(legend.position = "bottom")
+  }), ncol = 2)
+```
+
+#### Densities (by area)
+
+```{r explore-space-3, fig.height=6, fig.width=9}
+data_space %>% 
+  dplyr::select(ncases:pop, area_km2, geometry) %>% 
+  dplyr::mutate_at(dplyr::vars(-geometry), ~(. / area_km2)) %>% 
+  dplyr::select(-area_km2) %>% 
+  dplyr::mutate_at(dplyr::vars(-geometry), as.numeric) %>% 
+  gridExtra::grid.arrange(grobs = lapply(list(
+    ggplot(aes(fill = ncases), data = .),
+    ggplot(aes(fill = nhabs), data = .),
+    ggplot(aes(fill = nclinics), data = .),
+    ggplot(aes(fill = pop), data = .)
+  ), function(x) {
+    x + 
+      geom_sf() + 
+      scale_fill_viridis_c(guide = guide_colourbar(
+        title.position = "top",
+        title.hjust = .5,
+        barwidth = 10,
+        barheight = .5
+      )) + 
+      theme_void() + 
+      theme(legend.position = "bottom")
+  }), ncol = 2)
 ```
 
 
