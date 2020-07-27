@@ -194,7 +194,7 @@ Date       | Central      | North East   | North West   | South East   | South W
 ![](./imgs/ncases_2012_2020.png)
 
 ## Overview
-Dengue fever is a vector-borne infectious disease that are endemic in the tropical world. Singapore is one of several countries with high disease burden of dengue. In 2020, Singapore saw 1,158 dengue cases in a week of June - the highest number of weekly dengue cases ever recorded since 2014. Why is there a sudden spike in dengue cases this year?
+Dengue fever is a vector-borne infectious disease that is endemic in the tropical world. Singapore is one of several countries with high disease burden of dengue. In 2020, Singapore saw 1,158 dengue cases in a week of June - the highest number of weekly dengue cases ever recorded since 2014. Why is there a sudden spike in dengue cases this year?
 
 ### Questions
   - Does atmospheric variables influence the incidence of dengue cases?
