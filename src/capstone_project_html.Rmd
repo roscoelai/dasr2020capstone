@@ -67,6 +67,8 @@ We work towards 2 seperate datasets: `data_time` for temporal analysis, and `dat
 
 We start with 7 raw datasets. The full details of their providence are given below.
 
+### [MOH Weekly Infectious Disease Bulletin](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
+
 ```{r import-moh-bulletin}
 import_moh_weekly <- function(url_or_path) {
   #' Weekly Infectious Diseases Bulletin
@@ -135,6 +137,8 @@ import_moh_weekly <- function(url_or_path) {
     dplyr::arrange(Start)
 }
 ```
+
+### [MSS Historical Daily Weather Records](http://www.weather.gov.sg/climate-historical-daily/)
 
 ```{r import-mss-19stations}
 import_mss_daily <- function(years, stations = NULL) {
@@ -285,6 +289,8 @@ import_mss_daily <- function(years, stations = NULL) {
     dplyr::arrange(Station, Year, Month, Day)
 }
 ```
+
+### [MOH Healthcare Institutions Directory](http://hcidirectory.sg/hcidirectory/)
 
 ```{r import-hci-clinics}
 import_hcidirectory <- function() {
@@ -486,6 +492,18 @@ zipcodes_to_geocodes <- function(zipcodes) {
 
 ```{r read-kmls}
 read_kmls <- function(url_or_path) {
+  # There are (at least) 2 approaches to handling .kml data:
+  # 1. sp - rgdal::readOGR()
+  # 2. sf - sf::st_read()
+  #
+  # The sp approach was quickly abandoned as their objects were rather complex 
+  #   and did not facilitate method chaining.
+  #
+  # The sf approach produced objects that look like data.frames, which aided 
+  #   method chaining, but had their own peculiarities:
+  #   - Dimension: set to XY using sf::st_zm()
+  #   - Geographic CRS: use sf::`st_crs<-`("WGS84") World Geodetic Survey 1984
+  
   # Check if the given paths are URLs by trying to download to temp files. If 
   #   successful, return the temp files. If not, return the original paths.
   kml_files = tryCatch({
@@ -505,6 +523,8 @@ read_kmls <- function(url_or_path) {
 }
 ```
 
+### Import data _de novo_ (where available)
+
 ```{r grand-import-de-novo, eval=FALSE}
 # De novo (this might take a while, and requires a Google Map API key)
 raw_data <- list(
@@ -516,9 +536,12 @@ raw_data <- list(
   
   "mss_19stations" = import_mss_daily(years = 2012:2020),
   
-  "hci_clinics" = import_hcidirectory() %>%
+  "hci_clinics" = import_hcidirectory() %>% 
+    dplyr::mutate(zip = sub(".*((?i)singapore\\s+\\d+).*", "\\1", add)) %>% 
     # Requires Google Map API key
-    dplyr::left_join(zipcodes_to_geocodes(.$zip), by = "zip"),
+    dplyr::left_join(zipcodes_to_geocodes(.$zip), by = "zip") %>% 
+    dplyr::select(-id, -zip, -address) %>% 
+    tidyr::drop_na(),
   
   "planning_areas" = read_kmls(paste0(
     "https://geo.data.gov.sg/plan-bdy-dwelling-type-2017/2017/09/27/kml/",
@@ -552,6 +575,8 @@ raw_data <- list(
   ))
 )
 ```
+
+### Import data from online repository
 
 ```{r grand-import-repo, eval=FALSE}
 # Use the backup copies on GitHub (remember to maintain links!)
@@ -591,7 +616,9 @@ raw_data <- list(
 )
 ```
 
-To speed things up, we will load them from pre-saved files in the local system.
+### Import data locally
+
+> To speed things up, we'll do it this way.
 
 ```{r grand-import-local, results='hide', message=FALSE}
 # Read from local files (check that the "../data/ folder exists)
@@ -637,7 +664,7 @@ raw_data <- list(
 )
 ```
 
-A quick and dirty overview of the data available.
+### A quick and dirty overview of the data available.
 
 ```{r mass-glimpse}
 names(raw_data)
@@ -646,11 +673,11 @@ raw_data %>%
   purrr::walk(dplyr::glimpse)
 ```
 
+
+
 ## Tidy & Transform
 
-It is relatively straightforward to get `data_time`.
-
-On the other hand, `data_space` requires a lot more wrangling.
+### It is relatively straightforward to get `data_time`.
 
 ```{r tidy-time, results='hide', message=FALSE}
 # TODO: Can we avoid reassignment?
@@ -692,6 +719,8 @@ data_time <- raw_data$moh_bulletin %>%
     by = c("Epiyear", "Epiweek")
   )
 ```
+
+### On the other hand, `data_space` requires **a lot** more wrangling.
 
 ```{r tidy-space, results='hide', message=FALSE}
 data <- list(
@@ -799,6 +828,19 @@ data_space <- data %>%
     )
   } %>%
   Reduce(function(x, y) dplyr::left_join(x, y, by = "plan_area"), .) %>% 
+  dplyr::mutate(
+    popden = pop / area_km2,
+    caseden = as.numeric(ncases / area_km2),
+    label = paste0(
+      "<p><b>", plan_area,
+      "</b><br/>Area: ", round(area_km2, 2),
+      "<br/>Cases: ", ncases,
+      "<br/>Clinics: ", nclinics,
+      "<br/>Population: ", pop,
+      "<br/><i>Aedes</i> habitats: ", nhabs,
+      "</p>"
+    )
+  ) %>% 
   tibble::as_tibble() %>% 
   sf::st_as_sf()
 ```
@@ -806,6 +848,8 @@ data_space <- data %>%
 `data_time` contains ...
 
 `data_space` contains ...
+
+### Explore
 
 ```{r explore-time-1, fig.height=12, fig.width=9}
 data_time %>% 
@@ -852,6 +896,36 @@ data_time %>%
        caption = "Sources: moh.gov.sg, weather.gov.sg") + 
   theme(legend.position = "none")
 ```
+
+```{r sxplore-space-1}
+data_space %>% 
+  leaflet::leaflet(width = "100%") %>%
+  leaflet::addTiles() %>%
+  leaflet::addPolygons(weight = 1,
+                       opacity = 1,
+                       fillOpacity = 0.6,
+                       smoothFactor = 0.5,
+                       fillColor = ~leaflet::colorNumeric(
+                         "Reds", caseden
+                       )(caseden),
+                       label = ~lapply(label, htmltools::HTML),
+                       popup = ~lapply(label, htmltools::HTML)) %>%
+  leaflet::addCircleMarkers(data = data$dengue_points,
+                            color = "red",
+                            radius = 5,
+                            fillOpacity = 0.5,
+                            clusterOptions = leaflet::markerClusterOptions()) %>% 
+  leaflet::addLabelOnlyMarkers(data = sf::st_centroid(data_space),
+                               label =  ~plan_area,
+                               labelOptions = leaflet::labelOptions(
+                                 noHide = T,
+                                 textOnly = T,
+                                 direction = "center",
+                                 style = list("color" = "blue")
+                               ))
+```
+
+
 
 ## Model
 
@@ -910,6 +984,34 @@ lm(sqrt(Dengue) ~ Med_temp + Med_temp_rng,
 
 ```
 
+```{r, fig.height=5, fig.width=12}
+data_time %>% 
+  dplyr::select(Epiyear, Dengue, Mean_rainfall, Med_temp, Med_temp_rng) %>% 
+  dplyr::mutate(Dengue_w1 = Dengue,
+                Dengue = dplyr::lag(Dengue, 1),
+                Epiyear = as.factor(Epiyear)) %>% 
+  
+  # dplyr::select(-Epiyear) %>% 
+  # as.matrix() %>% 
+  # Hmisc::rcorr() %>% 
+  # broom::tidy() %>% 
+  # dplyr::filter(p.value < 0.05) %>% 
+  # dplyr::arrange(estimate)
+  
+  # dplyr::select(matches("Epi|Dengue")) %>%
+  # tidyr::pivot_longer(Dengue_w1) %>%
+  # ggplot(aes(x = value, y = Dengue, color = name)) +
+  # geom_point(alpha = 0.4) +
+  # geom_smooth(method = "lm", formula = y ~ x) +
+  # facet_grid(name ~ Epiyear, scales = "free") + 
+  # theme(legend.position = "none")
+  
+  lm(Dengue ~ Dengue_w1 * (Med_temp + Med_temp_rng), .) %>% 
+  # gvlma::gvlma()
+  autoplot()
+  # summary()
+
+```
 
 
 ---

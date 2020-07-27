@@ -26,7 +26,8 @@
 - [x] Create read_kmls()
 - [x] Edit document up to before Model section
   - [x] analyze_time.R is now obsolete...
-- [ ] Bring choropleth into document
+- [ ] Backup .kml files
+- [x] Bring choropleth into document
   - [ ] analyze_space.R obsolete
 
 #### Temporal
