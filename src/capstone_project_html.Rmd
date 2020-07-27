@@ -13,8 +13,6 @@ output:
 knitr::opts_chunk$set(
   comment = "",
   echo = T,
-  # fig.height = 6,
-  # fig.width = 6,
   warning = F
 )
 
@@ -50,7 +48,7 @@ For our data science project, we activated the following packages, using the `Ti
 
 pacman::p_load(
   # ggmap,
-  ggfortify,
+  # ggfortify,
   ggplot2,
   magrittr
   # tidyverse
@@ -523,7 +521,111 @@ read_kmls <- function(url_or_path) {
 }
 ```
 
+### Import data locally
+
+> This is the preferred method as it's the fastest, but requires the files to be locally available.
+
+```{r grand-import-local, results='hide', message=FALSE}
+# Read from local files (check that the "../data/ folder exists)
+assertthat::assert_that(dir.exists("../data/"),
+                        msg = 'Unable to locate "../data/" directory.')
+
+raw_data <- list(
+  "moh_bulletin" = import_moh_weekly(paste0(
+    "../data/moh/weekly-infectious-disease-bulletin-year-2020",
+    "71e221d63d4b4be0aa2b03e9c5e78ac2.xlsx"
+  )),
+  
+  "mss_19stations" = readr::read_csv(
+    "../data/mss/mss_daily_2012_2020_19stations_20200726.csv"
+  ),
+  
+  "hci_clinics" = readr::read_csv(
+    "../data/hcid/hci_clinics_20200725.csv"
+  ),
+  
+  "planning_areas" = read_kmls(
+    "../data/data_gov/plan-bdy-dwelling-type-2017.kml"
+  ),
+  
+  "dengue_polys" = read_kmls(c(
+    "../data/kmls/denguecase-central-area.kml",
+    "../data/kmls/denguecase-northeast-area.kml",
+    "../data/kmls/denguecase-southeast-area.kml",
+    "../data/kmls/denguecase-southwest-area.kml"
+  )),
+  
+  "aedes_polys" = read_kmls(c(
+    "../data/kmls/breedinghabitat-central-area.kml",
+    "../data/kmls/breedinghabitat-northeast-area.kml",
+    "../data/kmls/breedinghabitat-northwest-area.kml",
+    "../data/kmls/breedinghabitat-southeast-area.kml",
+    "../data/kmls/breedinghabitat-southwest-area.kml"
+  )),
+  
+  "mss_63station_pos" = readr::read_csv(
+    "../data/mss/Station_Records.csv"
+  )
+)
+```
+
+### Import data from online repository
+
+> Use this if you do not have a local copy of the files.
+
+```{r grand-import-repo, eval=FALSE}
+# Use the backup copies on GitHub (remember to maintain links!)
+raw_data <- list(
+  "moh_bulletin" = import_moh_weekly(paste0(
+    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
+    "data/moh/weekly-infectious-disease-bulletin-year-2020",
+    "71e221d63d4b4be0aa2b03e9c5e78ac2.xlsx"
+  )),
+  
+  "mss_19stations" = readr::read_csv(paste0(
+    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
+    "data/mss/mss_daily_2012_2020_19stations_20200726.csv"
+  )),
+  
+  "hci_clinics" = readr::read_csv(paste0(
+    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
+    "data/hcid/hci_clinics_20200725.csv"
+  )),
+  
+  "planning_areas" = read_kmls(paste0(
+    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
+    "data/kmls/plan-bdy-dwelling-type-2017.kml"
+  )),
+  
+  "dengue_polys" = read_kmls(c(
+    "central",
+    "northeast",
+    "southeast",
+    "southwest"
+  ) %>% 
+    paste0("https://raw.githubusercontent.com/roscoelai/dasr2020capstone/",
+           "master/data/kmls/denguecase-", ., "-area.kml")),
+  
+  "aedes_polys" = read_kmls(c(
+    "central",
+    "northeast",
+    "northwest",
+    "southeast",
+    "southwest"
+  ) %>% 
+    paste0("https://raw.githubusercontent.com/roscoelai/dasr2020capstone/",
+           "master/data/kmls/breedinghabitat-", ., "-area.kml")),
+  
+  "mss_63station_pos" = readr::read_csv(paste0(
+    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
+    "data/mss/Station_Records.csv"
+  ))
+)
+```
+
 ### Import data _de novo_ (where available)
+
+> Use this if you have too much time.
 
 ```{r grand-import-de-novo, eval=FALSE}
 # De novo (this might take a while, and requires a Google Map API key)
@@ -559,108 +661,27 @@ raw_data <- list(
            "-area.kml")),
   
   "aedes_polys" = read_kmls(c(
-    "central",
-    "northeast",
-    "northwest",
-    "southeast",
-    "southwest"
-  ) %>% 
-    paste0("https://geo.data.gov.sg/breedinghabitat-", .,
-           "-area/2020/07/17/kml/breedinghabitat-", .,
-           "-area.kml")),
+    c(
+      "central",
+      "northeast",
+      "northwest"
+    ) %>% 
+      paste0("https://geo.data.gov.sg/breedinghabitat-", .,
+             "-area/2020/07/17/kml/breedinghabitat-", .,
+             "-area.kml"),
+    c(
+      "southeast",
+      "southwest"
+    ) %>% 
+      paste0("https://geo.data.gov.sg/breedinghabitat-", .,
+             "-area/2020/07/23/kml/breedinghabitat-", .,
+             "-area.kml")
+  )),
   
   "mss_63station_pos" = readr::read_csv(paste0(
     "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
       "data/mss/Station_Records.csv"
   ))
-)
-```
-
-### Import data from online repository
-
-```{r grand-import-repo, eval=FALSE}
-# Use the backup copies on GitHub (remember to maintain links!)
-raw_data <- list(
-  "moh_bulletin" = import_moh_weekly(paste0(
-    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
-    "data/moh/weekly-infectious-disease-bulletin-year-2020",
-    "71e221d63d4b4be0aa2b03e9c5e78ac2.xlsx"
-  )),
-  
-  "mss_19stations" = readr::read_csv(paste0(
-    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
-    "data/mss/mss_daily_2012_2020_19stations_20200726.csv"
-  )),
-  
-  "hci_clinics" = readr::read_csv(paste0(
-    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
-    "data/hcid/hci_clinics_20200725.csv"
-  )),
-  
-  "planning_areas" = read_kmls(
-    # TODO
-  ),
-  
-  "dengue_polys" = read_kmls(c(
-    # TODO
-  )),
-  
-  "aedes_polys" = read_kmls(c(
-    # TODO
-  )),
-  
-  "mss_63station_pos" = readr::read_csv(paste0(
-    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
-    "data/mss/Station_Records.csv"
-  ))
-)
-```
-
-### Import data locally
-
-> To speed things up, we'll do it this way.
-
-```{r grand-import-local, results='hide', message=FALSE}
-# Read from local files (check that the "../data/ folder exists)
-assertthat::assert_that(dir.exists("../data/"),
-                        msg = 'Unable to locate "../data/" directory.')
-
-raw_data <- list(
-  "moh_bulletin" = import_moh_weekly(paste0(
-    "../data/moh/weekly-infectious-disease-bulletin-year-2020",
-    "71e221d63d4b4be0aa2b03e9c5e78ac2.xlsx"
-  )),
-  
-  "mss_19stations" = readr::read_csv(
-    "../data/mss/mss_daily_2012_2020_19stations_20200726.csv"
-  ),
-  
-  "hci_clinics" = readr::read_csv(
-    "../data/hcid/hci_clinics_20200725.csv"
-  ),
-  
-  "planning_areas" = read_kmls(
-    "../data/data_gov/plan-bdy-dwelling-type-2017.kml"
-  ),
-  
-  "dengue_polys" = read_kmls(c(
-    "../data/data_gov/20200717/denguecase-central-area.kml",
-    "../data/data_gov/20200717/denguecase-northeast-area.kml",
-    "../data/data_gov/20200717/denguecase-southeast-area.kml",
-    "../data/data_gov/20200717/denguecase-southwest-area.kml"
-  )),
-  
-  "aedes_polys" = read_kmls(c(
-    "../data/data_gov/20200717/breedinghabitat-central-area.kml",
-    "../data/data_gov/20200717/breedinghabitat-northeast-area.kml",
-    "../data/data_gov/20200717/breedinghabitat-northwest-area.kml",
-    "../data/data_gov/20200717/breedinghabitat-southeast-area.kml",
-    "../data/data_gov/20200717/breedinghabitat-southwest-area.kml"
-  )),
-  
-  "mss_63station_pos" = readr::read_csv(
-    "../data/mss/Station_Records.csv"
-  )
 )
 ```
 
@@ -694,10 +715,7 @@ raw_data$mss_19stations <- raw_data$mss_19stations %>%
 
 # Minimize size of datasets, choose "easier" column names
 data_time <- raw_data$moh_bulletin %>% 
-  dplyr::select(Epiyear,
-                Epiweek,
-                Start,
-                End,
+  dplyr::select(Epiyear:End,
                 Dengue,
                 HFMD,
                 `Acute Upper Respiratory Tract infections`,
@@ -901,28 +919,31 @@ data_time %>%
 data_space %>% 
   leaflet::leaflet(width = "100%") %>%
   leaflet::addTiles() %>%
-  leaflet::addPolygons(weight = 1,
-                       opacity = 1,
-                       fillOpacity = 0.6,
-                       smoothFactor = 0.5,
-                       fillColor = ~leaflet::colorNumeric(
-                         "Reds", caseden
-                       )(caseden),
-                       label = ~lapply(label, htmltools::HTML),
-                       popup = ~lapply(label, htmltools::HTML)) %>%
-  leaflet::addCircleMarkers(data = data$dengue_points,
-                            color = "red",
-                            radius = 5,
-                            fillOpacity = 0.5,
-                            clusterOptions = leaflet::markerClusterOptions()) %>% 
-  leaflet::addLabelOnlyMarkers(data = sf::st_centroid(data_space),
-                               label =  ~plan_area,
-                               labelOptions = leaflet::labelOptions(
-                                 noHide = T,
-                                 textOnly = T,
-                                 direction = "center",
-                                 style = list("color" = "blue")
-                               ))
+  leaflet::addPolygons(
+    weight = 1,
+    opacity = 1,
+    fillOpacity = 0.6,
+    smoothFactor = 0.5,
+    fillColor = ~leaflet::colorNumeric("Reds", caseden)(caseden),
+    label = ~lapply(label, htmltools::HTML),
+    popup = ~lapply(label, htmltools::HTML)
+  ) %>%
+  leaflet::addCircleMarkers(
+    data = data$dengue_points,
+    color = "red",
+    radius = 5,
+    fillOpacity = 0.5,
+    clusterOptions = leaflet::markerClusterOptions()
+  ) %>% 
+  leaflet::addLabelOnlyMarkers(
+    data = sf::st_centroid(data_space),
+    label =  ~plan_area,
+    labelOptions = leaflet::labelOptions(
+      noHide = T,
+      textOnly = T,
+      direction = "center",
+      style = list("color" = "blue"))
+  )
 ```
 
 ```{r}

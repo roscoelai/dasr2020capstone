@@ -4,44 +4,44 @@
 
 [Preview Current Version of Leaflet Map](https://roscoelai.github.io/dasr2020capstone/src/capstone_leaflet_html.html)
 
+[Data](https://github.com/roscoelai/dasr2020capstone#data)
+
 ---
 
-## Meeting (27 Jul 2020) <- ?
-### Agenda
+## Meeting (28 July 2020) <- ?
 
-#### Reorganize
+### Admin
 - [x] Split analyses into time and space
   - [x] [analyze_time.R](https://github.com/roscoelai/dasr2020capstone/blob/master/src/analyze_time.R)
   - [x] [analyze_space.R](https://github.com/roscoelai/dasr2020capstone/blob/master/src/analyze_space.R)
-- [x] Purify (remove non-data-collection-related code from) the import-* scripts
-- [x] Organize and upload raw data files
+- [x] Complete set of backup data on GitHub
+  - [x] HCI Directory (clinics)
+  - [x] .kml files
   - [x] MOH bulletin
+  - [x] MSS data
   - [x] MSS station positions
-  - [x] HCI webscraping data
-  - [x] HCI data with geocodes
-- [x] Create and test online option for import_moh_weekly()
-- [x] Rename get_geocodes.R to zipcodes_to_geocodes.R and smooth out workflow
-- [x] Do we need to subset the meteorological data? Perhaps not
-- [x] Delete intermediate data
-- [x] Create read_kmls()
-- [x] Edit document up to before Model section
-  - [x] analyze_time.R is now obsolete...
-- [ ] Backup .kml files
-- [x] Bring choropleth into document
-  - [ ] analyze_space.R obsolete
+- [ ] Document has substance up to just before "Model" section
+- [ ] Need a candidate model for temporal analysis
+- [x] Might have a plausible candidate for spatial analysis
 
-#### Temporal
-- [ ] How to aggreagate overall/island-wide meteorological data?
+### Temporal
+- [x] How to aggreagate overall/island-wide meteorological data?
   - [ ] <s>Choose 1 climate station (e.g. Changi)</s>
   - [ ] <s>Aggregate climate stations with sufficient data (~4 stations)</s>
   - [x] **ALL** OF IT!
+    - Unit of analysis is epidemiological week
+    - Aggregate values from every station that has data for that week
 - [ ] Transform meteorological data
-  - [ ] Daily -> Weekly aggregation protocol (mean, median)
-- [ ] Combine meteorological and epidemiological data
-- [ ] Model meteorological variables vs. number of cases
-  - [ ] Time displacement (1 week? 2 weeks?)
+  - [x] Mean and median rainfall
+  - [x] Mean and median temperature
+  - [x] Mean and median temperature range
+  - [ ] Anything else?
+- [x] Combine meteorological and epidemiological data (join by Epiyear and Epiweek)
+- [ ] Account for time lag
+  - [ ] Shift case numbers (Y) up by 1 row?
+  - [ ] Shift predictors (X) down by 1 row?
 
-#### Spatial
+### Spatial (main focus is visualization)
 - [ ] How to aggregate recent weather data?
   - [ ] Latest 1 month?
   - [ ] Latest 3 weeks?
@@ -55,22 +55,15 @@
   - [x] Meteorological data
     - [x] Inverse distance weighted (IDW) interpolation from 19 stations
 - [ ] Transform number of cases to a fairer indicator (n/area, n/pop, etc.)
-  - [ ] Standard choropleth weaknesses:
-    - [ ] Modifiable areal unit problem (MAUP)
-    - [ ] Ecological fallacy
-- [ ] Model everything (?) vs. indicator
+  - [ ] Population-weighted
+  - [ ] Area-weighted
+  - Standard choropleth weaknesses:
+    - Modifiable areal unit problem (MAUP)
+    - Ecological fallacy
 
 ---
 
-![](./imgs/diseases4_weather3_2012_2020.png)
-
-![](./imgs/densities_2012_2020.png)
-
-![](./imgs/dengue_weather3_2012_2020.png)
-
----
-
-## Meeting (08 Jul 2020)
+## Meeting (08 July 2020)
 #### S
 - Q1: Case numbers for different diseases across 2012-2020
   - Plot weekly by months for each year - line/bar graph and heat map
@@ -103,9 +96,6 @@
   - [x] Population
   - [x] Type of housing
   - [x] Number of clinics
-
-### Others
-- Q6: Find intervention data (optional)
 
 ---
 
@@ -155,10 +145,11 @@
 
 - [Approximate geocoordinates of _Aedes_ mosquito breeding habitats](https://data.gov.sg/search?q=aedes+habitats), Data.gov.sg
 
-Date       | Central     | North East  | North West  | South East  | South West 
-:--------: | :---------: | :---------: | :---------: | :---------: | :---------:
-2020-07-14 | [.kml][h1]  | [.kml][h2]  | [.kml][h3]  | [.kml][h4]  | [.kml][h5] 
-2020-07-17 | [.kml][h6]  | [.kml][h7]  | [.kml][h8]  | [.kml][h9]  | [.kml][h10]
+Date       | Central      | North East   | North West   | South East   | South West 
+:--------: | :----------: | :----------: | :----------: | :----------: | :---------:
+2020-07-14 | [.kml][h1]   | [.kml][h2]   | [.kml][h3]   | [.kml][h4]   | [.kml][h5] 
+2020-07-17 | [.kml][h6]   | [.kml][h7]   | [.kml][h8]   | [.kml][h9]   | [.kml][h10]
+2020-07-23 |              |              |              | [.kml][h14]  | [.kml][h15]
 
 [h1]: https://geo.data.gov.sg/breedinghabitat-central-area/2020/07/14/kml/breedinghabitat-central-area.kml
 [h2]: https://geo.data.gov.sg/breedinghabitat-northeast-area/2020/07/14/kml/breedinghabitat-northeast-area.kml
@@ -170,6 +161,8 @@ Date       | Central     | North East  | North West  | South East  | South West
 [h8]: https://geo.data.gov.sg/breedinghabitat-northwest-area/2020/07/17/kml/breedinghabitat-northwest-area.kml
 [h9]: https://geo.data.gov.sg/breedinghabitat-southeast-area/2020/07/17/kml/breedinghabitat-southeast-area.kml
 [h10]: https://geo.data.gov.sg/breedinghabitat-southwest-area/2020/07/17/kml/breedinghabitat-southwest-area.kml
+[h14]: https://geo.data.gov.sg/breedinghabitat-southeast-area/2020/07/23/kml/breedinghabitat-southeast-area.kml
+[h15]: https://geo.data.gov.sg/breedinghabitat-southwest-area/2020/07/23/kml/breedinghabitat-southwest-area.kml
 
 - [Singapore Residents by Planning Area and Type of Dwelling, Jun 2017](https://data.gov.sg/dataset/singapore-residents-by-planning-area-and-type-of-dwelling-jun-2017), Data.gov.sg
   - Planning areas (URA MP14)
@@ -210,12 +203,8 @@ Dengue fever is a vector-borne infectious disease that are endemic in the tropic
   - Does the number of dengue cases increase with the number of COVID-19 cases?
   - Explain the different number of cases in different regions of Singapore
 
-
-
 ## <s>Data</s>
 (Moved)
-
-
 
 ## Analysis Plan
 - Transform dengue cases data
