@@ -102,7 +102,7 @@
 ## Data
 - [Weekly Infectious Disease Bulletin, Ministry of Health (MOH)](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
   - [Latest data as of 24 July 2020 (2012-W01 to 2020-W29)](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx)
-  - [Backup copy as of 24 July 2020 (2012-W01 to 2020-W29)](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx)
+  - [Backup copy as of 24 July 2020 (2012-W01 to 2020-W29)](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh/weekly-infectious-disease-bulletin-year-2020.xlsx)
   - [R script](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_moh_weekly.R)
 - [Historical Daily Records, Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
   - [Backup copy as of 26 July 2020 (2012-01 to 2020-06, 19 stations) ](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss/mss_daily_2012_2020_19stations_20200726.csv)

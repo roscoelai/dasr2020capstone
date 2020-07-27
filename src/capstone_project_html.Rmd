@@ -35,11 +35,9 @@ In our Capstone Project, we ask two questions about potential factors affecting 
 For our data science project, we activated the following packages, using the `Tidyverse` approach.
 
 ```{r load-packages}
-# For educational purposes
-#
 # Rule for activating packages in development mode:
-# - Only activate ggmap, ggplot2 and magrittr
-# - Full specifications for everything else
+# - Only activate ggfortify, ggmap, ggplot2 (notice a pattern?) and magrittr
+# - Full specifications for everything else, for now
 #
 # For deployment mode, activate every package that is referenced more than once
 # - Add package name here, then use find-and-replace to remove "<package>::"
@@ -47,27 +45,39 @@ For our data science project, we activated the following packages, using the `Ti
 #   - Remember what are the 8 packages?
 
 pacman::p_load(
+  ggfortify,
   # ggmap,
-  # ggfortify,
   ggplot2,
   magrittr
   # tidyverse
 )
 ```
 
+---
+
 ## Import
 
 Then, we imported our dataset.
 
-> This might take a while. [Click here](https://github.com/roscoelai/dasr2020capstone#data) for a summary list of the primary data sources.
+> The most time-consuming component of data science? This might take a while.
 
-We work towards 2 seperate datasets: `data_time` for temporal analysis, and `data_space` for spatial analysis. They will only be fully available after the tidy and transform process since there's quite a bit of aggregating and joining involved.
+We work towards 2 separate datasets: `data_time` for temporal analysis, and `data_space` for spatial analysis. They will only be fully available after the tidy and transform process since there's quite a bit of aggregating and joining involved.
 
-We start with 7 raw datasets. The full details of their providence are given below.
+We start with 7 raw datasets.
 
-### [MOH Weekly Infectious Disease Bulletin](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
+The main sources are:  
+1. [Data.gov.sg](https://data.gov.sg/)  
+2. [MOH Weekly Infectious Disease Bulletin](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)  
+3. [MOH Healthcare Institutions Directory](http://hcidirectory.sg/hcidirectory/)  
+4. [MSS Historical Daily Weather Records](http://www.weather.gov.sg/climate-historical-daily/)
 
-```{r import-moh-bulletin}
+[Click here](https://github.com/roscoelai/dasr2020capstone#data) for a summary page.
+
+The full glorious details of their providence are given below. Unfortunately, the source code has been arranged with functional considerations in mind, and may not be in chronological order.
+
+```{r import-helper-functions}
+# These functions are mandatory (for importing raw data)
+
 import_moh_weekly <- function(url_or_path) {
   #' Weekly Infectious Diseases Bulletin
   #' 
@@ -134,11 +144,104 @@ import_moh_weekly <- function(url_or_path) {
     dplyr::select(Epiyear, everything()) %>% 
     dplyr::arrange(Start)
 }
+
+read_kmls <- function(url_or_path) {
+  # There are (at least) 2 approaches to handling .kml data:
+  # 1. sp - rgdal::readOGR()
+  # 2. sf - sf::st_read()
+  #
+  # The sp approach was quickly abandoned as their objects were rather complex 
+  #   and did not facilitate method chaining.
+  #
+  # The sf approach produced objects that look like data.frames, which aided 
+  #   method chaining, but had their own peculiarities:
+  #   - Dimension: set to XY using sf::st_zm()
+  #   - Geographic CRS: use sf::`st_crs<-`("WGS84") World Geodetic Survey 1984
+  
+  # Check if the given paths are URLs by trying to download to temp files. If 
+  #   successful, return the temp files. If not, return the original paths.
+  kml_files = tryCatch({
+    temp = tempfile(fileext = rep(".kml", length(url_or_path)))
+    Map(function(x, y) download.file(x, y, mode = "wb"), url_or_path, temp)
+    temp
+  }, error = function(e) {
+    url_or_path
+  })
+  
+  kml_files %>% 
+    lapply(sf::st_read, quiet = T) %>% 
+    dplyr::bind_rows() %>% 
+    tibble::as_tibble() %>% 
+    sf::st_as_sf() %>% 
+    sf::st_zm()
+}
 ```
 
-### [MSS Historical Daily Weather Records](http://www.weather.gov.sg/climate-historical-daily/)
+### Load raw data into memory (the easy)
 
-```{r import-mss-19stations}
+> If the data files are available locally, set `online_repo = F` for faster loading. Otherwise, the function will read .csv files directly from the URLs while other file formats will be downloaded to a temporary folder.
+
+```{r grand-import-no-webscraping, results='hide', message=FALSE}
+grand_import_no_webscraping <- function(online_repo = TRUE) {
+  # Allow user to choose whether to import raw data from an online repository 
+  #   or from local files.
+  
+  if (online_repo) {
+    fld = paste0("https://raw.githubusercontent.com/roscoelai/",
+                 "dasr2020capstone/master/data/")
+  } else {
+    # Check that the "../data/ folder exists
+    assertthat::assert_that(dir.exists("../data/"),
+                            msg = 'Unable to locate "../data/" directory.')
+    fld = "../data/"
+  }
+  
+  list(
+    "moh_bulletin" = import_moh_weekly(paste0(
+      fld, "moh/weekly-infectious-disease-bulletin-year-2020.xlsx"
+    )),
+    
+    "mss_19stations" = readr::read_csv(paste0(
+      fld, "mss/mss_daily_2012_2020_19stations_20200726.csv"
+    )),
+    
+    "hci_clinics" = readr::read_csv(paste0(
+      fld, "hcid/hci_clinics_20200725.csv"
+    )),
+    
+    "planning_areas" = read_kmls(paste0(
+      fld, "kmls/plan-bdy-dwelling-type-2017.kml"
+    )),
+    
+    "dengue_polys" = read_kmls(paste0(
+      fld, "kmls/denguecase-", c("central",
+                                 "northeast",
+                                 "southeast",
+                                 "southwest"), "-area.kml"
+    )),
+    
+    "aedes_polys" = read_kmls(paste0(
+      fld, "kmls/breedinghabitat-", c("central",
+                                      "northeast",
+                                      "northwest",
+                                      "southeast",
+                                      "southwest"), "-area.kml"
+    )),
+    
+    "mss_63station_pos" = readr::read_csv(paste0(
+      fld, "mss/Station_Records.csv"
+    ))
+  )
+}
+
+raw_data <- grand_import_no_webscraping(online_repo = F)
+```
+
+### Import data _de novo_ (where available)
+
+> Use this if you have too much time. The following code chunk is disabled, but is provided here to show how the data can be derived from the primary sources (where available). The non-essential functions have been dumped here. Using this code chunk would require a valid Google Maps Platform API key.
+
+```{r grand-import-de-novo, eval=FALSE}
 import_mss_daily <- function(years, stations = NULL) {
   #' Historical Daily Weather Records
   #' 
@@ -286,11 +389,7 @@ import_mss_daily <- function(years, stations = NULL) {
     dplyr::bind_rows() %>% 
     dplyr::arrange(Station, Year, Month, Day)
 }
-```
 
-### [MOH Healthcare Institutions Directory](http://hcidirectory.sg/hcidirectory/)
-
-```{r import-hci-clinics}
 import_hcidirectory <- function() {
   #' Healthcare Institutions Directory
   #' 
@@ -486,206 +585,57 @@ zipcodes_to_geocodes <- function(zipcodes) {
   
   res
 }
-```
 
-```{r read-kmls}
-read_kmls <- function(url_or_path) {
-  # There are (at least) 2 approaches to handling .kml data:
-  # 1. sp - rgdal::readOGR()
-  # 2. sf - sf::st_read()
-  #
-  # The sp approach was quickly abandoned as their objects were rather complex 
-  #   and did not facilitate method chaining.
-  #
-  # The sf approach produced objects that look like data.frames, which aided 
-  #   method chaining, but had their own peculiarities:
-  #   - Dimension: set to XY using sf::st_zm()
-  #   - Geographic CRS: use sf::`st_crs<-`("WGS84") World Geodetic Survey 1984
+grand_import_de_novo <- function() {
+  # This might take a while, and requires a Google Maps Platform API key
   
-  # Check if the given paths are URLs by trying to download to temp files. If 
-  #   successful, return the temp files. If not, return the original paths.
-  kml_files = tryCatch({
-    temp = tempfile(fileext = rep(".kml", length(url_or_path)))
-    Map(function(x, y) download.file(x, y, mode = "wb"), url_or_path, temp)
-    temp
-  }, error = function(e) {
-    url_or_path
-  })
-  
-  kml_files %>% 
-    lapply(sf::st_read, quiet = T) %>% 
-    dplyr::bind_rows() %>% 
-    tibble::as_tibble() %>% 
-    sf::st_as_sf() %>% 
-    sf::st_zm()
-}
-```
-
-### Import data locally
-
-> This is the preferred method as it's the fastest, but requires the files to be locally available.
-
-```{r grand-import-local, results='hide', message=FALSE}
-# Read from local files (check that the "../data/ folder exists)
-assertthat::assert_that(dir.exists("../data/"),
-                        msg = 'Unable to locate "../data/" directory.')
-
-raw_data <- list(
-  "moh_bulletin" = import_moh_weekly(paste0(
-    "../data/moh/weekly-infectious-disease-bulletin-year-2020",
-    "71e221d63d4b4be0aa2b03e9c5e78ac2.xlsx"
-  )),
-  
-  "mss_19stations" = readr::read_csv(
-    "../data/mss/mss_daily_2012_2020_19stations_20200726.csv"
-  ),
-  
-  "hci_clinics" = readr::read_csv(
-    "../data/hcid/hci_clinics_20200725.csv"
-  ),
-  
-  "planning_areas" = read_kmls(
-    "../data/data_gov/plan-bdy-dwelling-type-2017.kml"
-  ),
-  
-  "dengue_polys" = read_kmls(c(
-    "../data/kmls/denguecase-central-area.kml",
-    "../data/kmls/denguecase-northeast-area.kml",
-    "../data/kmls/denguecase-southeast-area.kml",
-    "../data/kmls/denguecase-southwest-area.kml"
-  )),
-  
-  "aedes_polys" = read_kmls(c(
-    "../data/kmls/breedinghabitat-central-area.kml",
-    "../data/kmls/breedinghabitat-northeast-area.kml",
-    "../data/kmls/breedinghabitat-northwest-area.kml",
-    "../data/kmls/breedinghabitat-southeast-area.kml",
-    "../data/kmls/breedinghabitat-southwest-area.kml"
-  )),
-  
-  "mss_63station_pos" = readr::read_csv(
-    "../data/mss/Station_Records.csv"
+  list(
+    "moh_bulletin" = import_moh_weekly(paste0(
+      "https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/",
+      "weekly-infectious-disease-bulletin-year-2020",
+      "71e221d63d4b4be0aa2b03e9c5e78ac2.xlsx"
+    )),
+    
+    "mss_19stations" = import_mss_daily(years = 2012:2020),
+    
+    "hci_clinics" = import_hcidirectory() %>% 
+      dplyr::mutate(zip = sub(".*((?i)singapore\\s+\\d+).*", "\\1", add)) %>% 
+      # Requires Google Maps Platform API key
+      dplyr::left_join(zipcodes_to_geocodes(.$zip), by = "zip") %>% 
+      dplyr::select(-id, -zip, -address) %>% 
+      tidyr::drop_na(),
+    
+    "planning_areas" = read_kmls(paste0(
+      "https://geo.data.gov.sg/plan-bdy-dwelling-type-2017/2017/09/27/kml/",
+      "plan-bdy-dwelling-type-2017.kml"
+    )),
+    
+    "dengue_polys" = read_kmls(
+      c("central", "northeast", "southeast", "southwest") %>% 
+        paste0("https://geo.data.gov.sg/denguecase-", .,
+               "-area/2020/07/17/kml/denguecase-", ., "-area.kml")
+    ),
+    
+    "aedes_polys" = read_kmls(c(
+      c("central", "northeast", "northwest") %>% 
+        paste0("https://geo.data.gov.sg/breedinghabitat-", .,
+               "-area/2020/07/17/kml/breedinghabitat-", ., "-area.kml"),
+      c("southeast", "southwest") %>% 
+        paste0("https://geo.data.gov.sg/breedinghabitat-", .,
+               "-area/2020/07/23/kml/breedinghabitat-", ., "-area.kml")
+    )),
+    
+    "mss_63station_pos" = readr::read_csv(paste0(
+      "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
+        "data/mss/Station_Records.csv"
+    ))
   )
-)
+}
+
+# raw_data <- grand_import_de_novo()
 ```
 
-### Import data from online repository
-
-> Use this if you do not have a local copy of the files.
-
-```{r grand-import-repo, eval=FALSE}
-# Use the backup copies on GitHub (remember to maintain links!)
-raw_data <- list(
-  "moh_bulletin" = import_moh_weekly(paste0(
-    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
-    "data/moh/weekly-infectious-disease-bulletin-year-2020",
-    "71e221d63d4b4be0aa2b03e9c5e78ac2.xlsx"
-  )),
-  
-  "mss_19stations" = readr::read_csv(paste0(
-    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
-    "data/mss/mss_daily_2012_2020_19stations_20200726.csv"
-  )),
-  
-  "hci_clinics" = readr::read_csv(paste0(
-    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
-    "data/hcid/hci_clinics_20200725.csv"
-  )),
-  
-  "planning_areas" = read_kmls(paste0(
-    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
-    "data/kmls/plan-bdy-dwelling-type-2017.kml"
-  )),
-  
-  "dengue_polys" = read_kmls(c(
-    "central",
-    "northeast",
-    "southeast",
-    "southwest"
-  ) %>% 
-    paste0("https://raw.githubusercontent.com/roscoelai/dasr2020capstone/",
-           "master/data/kmls/denguecase-", ., "-area.kml")),
-  
-  "aedes_polys" = read_kmls(c(
-    "central",
-    "northeast",
-    "northwest",
-    "southeast",
-    "southwest"
-  ) %>% 
-    paste0("https://raw.githubusercontent.com/roscoelai/dasr2020capstone/",
-           "master/data/kmls/breedinghabitat-", ., "-area.kml")),
-  
-  "mss_63station_pos" = readr::read_csv(paste0(
-    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
-    "data/mss/Station_Records.csv"
-  ))
-)
-```
-
-### Import data _de novo_ (where available)
-
-> Use this if you have too much time.
-
-```{r grand-import-de-novo, eval=FALSE}
-# De novo (this might take a while, and requires a Google Map API key)
-raw_data <- list(
-  "moh_bulletin" = import_moh_weekly(paste0(
-    "https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/",
-    "weekly-infectious-disease-bulletin-year-2020",
-    "71e221d63d4b4be0aa2b03e9c5e78ac2.xlsx"
-  )),
-  
-  "mss_19stations" = import_mss_daily(years = 2012:2020),
-  
-  "hci_clinics" = import_hcidirectory() %>% 
-    dplyr::mutate(zip = sub(".*((?i)singapore\\s+\\d+).*", "\\1", add)) %>% 
-    # Requires Google Map API key
-    dplyr::left_join(zipcodes_to_geocodes(.$zip), by = "zip") %>% 
-    dplyr::select(-id, -zip, -address) %>% 
-    tidyr::drop_na(),
-  
-  "planning_areas" = read_kmls(paste0(
-    "https://geo.data.gov.sg/plan-bdy-dwelling-type-2017/2017/09/27/kml/",
-    "plan-bdy-dwelling-type-2017.kml"
-  )),
-  
-  "dengue_polys" = read_kmls(c(
-    "central",
-    "northeast",
-    "southeast",
-    "southwest"
-  ) %>% 
-    paste0("https://geo.data.gov.sg/denguecase-", .,
-           "-area/2020/07/17/kml/denguecase-", .,
-           "-area.kml")),
-  
-  "aedes_polys" = read_kmls(c(
-    c(
-      "central",
-      "northeast",
-      "northwest"
-    ) %>% 
-      paste0("https://geo.data.gov.sg/breedinghabitat-", .,
-             "-area/2020/07/17/kml/breedinghabitat-", .,
-             "-area.kml"),
-    c(
-      "southeast",
-      "southwest"
-    ) %>% 
-      paste0("https://geo.data.gov.sg/breedinghabitat-", .,
-             "-area/2020/07/23/kml/breedinghabitat-", .,
-             "-area.kml")
-  )),
-  
-  "mss_63station_pos" = readr::read_csv(paste0(
-    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
-      "data/mss/Station_Records.csv"
-  ))
-)
-```
-
-### A quick and dirty overview of the data available.
+### A quick and dirty overview of the raw data
 
 ```{r mass-glimpse}
 names(raw_data)
@@ -694,14 +644,19 @@ raw_data %>%
   purrr::walk(dplyr::glimpse)
 ```
 
-
+---
 
 ## Tidy & Transform
+
+> The tidying process can (ironically) be tidied. It takes too long to get to `data_space`. Relook the flow of logic. And too many reassignments!
 
 ### It is relatively straightforward to get `data_time`.
 
 ```{r tidy-time, results='hide', message=FALSE}
 # TODO: Can we avoid reassignment?
+# There are 2 options:
+# 1. Incorporate into webscraping process
+# 2. Incorporate into import (there will be 2 duplicates)
 raw_data$mss_19stations <- raw_data$mss_19stations %>% 
   dplyr::mutate(
     # Calculate daily temperature range
@@ -863,9 +818,11 @@ data_space <- data %>%
   sf::st_as_sf()
 ```
 
-`data_time` contains ...
+We've finally got `data_time` and `data_space`!
 
-`data_space` contains ...
+`data_time` contains number of cases per epidemiological week (Y) for dengue and a few other diseases from 2012-W01 to 2020-W29, as well as the aggregated weekly mean and median rainfall, temperature, and temperature range (X) from 2012-W01 to 2020-W27. We have 2 weeks of missing values :sob:
+
+`data_space` contains various information for each planning area (URA MP14), limited to the planning areas with any data on dengue case numbers. Notably, the north-west region is missing as no data were available. Information includes: dengue cases (Y), number of _Aedes_ habitats, number of clinics, population, area, meteorological variables, numbers of each dwelling type, etc.
 
 ### Explore
 
@@ -1007,7 +964,7 @@ data_space %>%
   }), ncol = 2)
 ```
 
-
+---
 
 ## Model
 
@@ -1099,6 +1056,7 @@ data_time %>%
 ---
 
 # Edit until here
+## The rest is yet to be
 
 ---
 
