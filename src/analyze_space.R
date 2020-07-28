@@ -1,10 +1,14 @@
 # analyze_space.R
 
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-
-library(ggfortify)
-library(ggplot2)
-library(magrittr)
+{
+  setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+  
+  pacman::p_load(
+    ggfortify,
+    ggplot2,
+    magrittr
+  )
+}
 
 read_kmls <- function(url_or_path) {
   # There are (at least) 2 approaches to handling .kml data:
@@ -39,21 +43,82 @@ read_kmls <- function(url_or_path) {
 
 # Import ----
 
-# Reading from URLs is too slow - download the files and read from disk
-
-# Read from local files (check that the "../data/ folder exists)
-assertthat::assert_that(dir.exists("../data/"),
-                        msg = 'Unable to locate "../data/" directory.')
-
-raw_data <- list(
-  # "moh_bulletin" = import_moh_weekly(paste0(
-  #   "../data/moh/weekly-infectious-disease-bulletin-year-2020",
-  #   "71e221d63d4b4be0aa2b03e9c5e78ac2.xlsx"
-  # )),
+grand_import_no_webscraping <- function(from_online_repo = TRUE) {
+  # Allow user to choose whether to import raw data from an online repository 
+  #   or from local files.
   
-  "mss_19stations" = readr::read_csv(
-    "../data/mss/mss_daily_2012_2020_19stations_20200726.csv"
+  if (from_online_repo) {
+    fld = paste0("https://raw.githubusercontent.com/roscoelai/",
+                 "dasr2020capstone/master/data/")
+  } else {
+    # Check that the "../data/ folder exists
+    assertthat::assert_that(dir.exists("../data/"),
+                            msg = 'Unable to locate "../data/" directory.')
+    fld = "../data/"
+  }
+  
+  list(
+    # "moh_bulletin" = import_moh_weekly(paste0(
+    #   fld, "moh/weekly-infectious-disease-bulletin-year-2020.xlsx"
+    # )),
+    
+    "mss_19stations" = readr::read_csv(paste0(
+      fld, "mss/mss_daily_2012_2020_19stations_20200726.csv"
+    )),
+    
+    "hci_clinics" = readr::read_csv(paste0(
+      fld, "hcid/hci_clinics_20200725.csv"
+    )),
+    
+    "planning_areas" = read_kmls(paste0(
+      fld, "kmls/plan-bdy-dwelling-type-2017.kml"
+    )),
+    
+    "dengue_polys" = read_kmls(paste0(
+      fld, "kmls/denguecase-", c("central",
+                                 "northeast",
+                                 "southeast",
+                                 "southwest"), "-area.kml"
+    )),
+    
+    "aedes_polys" = read_kmls(paste0(
+      fld, "kmls/breedinghabitat-", c("central",
+                                      "northeast",
+                                      "northwest",
+                                      "southeast",
+                                      "southwest"), "-area.kml"
+    )),
+    
+    "mss_63station_pos" = readr::read_csv(paste0(
+      fld, "mss/Station_Records.csv"
+    ))
+  )
+}
+
+raw_data <- grand_import_no_webscraping(from_online_repo = F)
+
+# Transform ----
+
+grand_transform_space <- function(raw_data) {
+  
+  # It's ugly, but we have to do the transformations 1-by-1...
+  
+  data = list(
+    "dengue_points" = raw_data$dengue_polys,
+    "aedes_points" = raw_data$aedes_polys
   ) %>% 
+    lapply(function(df) {
+      df %>% 
+        dplyr::transmute(n = sub(".*: (\\d+).*", "\\1", Description)) %>% 
+        sf::st_centroid() %>% 
+        .[rep(1:nrow(.), as.numeric(.$n)),]
+    })
+  
+  data[["clinic_points"]] = raw_data$hci_clinics %>% 
+    sf::st_as_sf(coords = c("lon", "lat")) %>% 
+    sf::`st_crs<-`("WGS84")
+  
+  data[["weather_points"]] = raw_data$mss_19stations %>% 
     dplyr::mutate(
       # Calculate daily temperature range
       Temp_range = Max_temp - Min_temp,
@@ -62,58 +127,7 @@ raw_data <- list(
       Epiyear = lubridate::epiyear(Date),
       Epiweek = lubridate::epiweek(Date),
       .keep = "unused"
-    ),
-  
-  "hci_clinics" = readr::read_csv(
-    "../data/hcid/hci_clinics_20200725.csv"
-  ),
-  
-  "planning_areas" = read_kmls(
-    "../data/data_gov/plan-bdy-dwelling-type-2017.kml"
-  ),
-  
-  # The polygons are (200 m) x (200 m) squares
-  "dengue_polys" = read_kmls(c(
-    "../data/kmls/denguecase-central-area.kml",
-    "../data/kmls/denguecase-northeast-area.kml",
-    "../data/kmls/denguecase-southeast-area.kml",
-    "../data/kmls/denguecase-southwest-area.kml"
-  )),
-  
-  # The polygons are (200 m) x (200 m) squares
-  "aedes_polys" = read_kmls(c(
-    "../data/kmls/breedinghabitat-central-area.kml",
-    "../data/kmls/breedinghabitat-northeast-area.kml",
-    "../data/kmls/breedinghabitat-northwest-area.kml",
-    "../data/kmls/breedinghabitat-southeast-area.kml",
-    "../data/kmls/breedinghabitat-southwest-area.kml"
-  )),
-  
-  "mss_63station_pos" = readr::read_csv(
-    "../data/mss/Station_Records.csv"
-  )
-)
-
-# Transform ----
-
-data <- list(
-  "dengue_points" = raw_data$dengue_polys %>% 
-    dplyr::mutate(n = as.numeric(sub(".*: (\\d+).*", "\\1", Description))) %>% 
-    sf::st_centroid() %>% 
-    .[rep(1:nrow(.), .$n),] %>% 
-    dplyr::select(-Name, -Description, -n),
-  
-  "aedes_points" = raw_data$aedes_polys %>% 
-    dplyr::mutate(n = as.numeric(sub(".*: (\\d+).*", "\\1", Description))) %>% 
-    sf::st_centroid() %>% 
-    .[rep(1:nrow(.), .$n),] %>% 
-    dplyr::select(-Name, -Description, -n),
-  
-  "clinic_points" = raw_data$hci_clinics %>% 
-    sf::st_as_sf(coords = c("lon", "lat")) %>% 
-    sf::`st_crs<-`("WGS84"),
-  
-  "weather_points" = raw_data$mss_19stations %>% 
+    ) %>% 
     dplyr::filter(Epiyear == 2020) %>% 
     # Filter for the last 3 weeks
     dplyr::filter(Epiweek > max(Epiweek) - 3) %>% 
@@ -134,9 +148,31 @@ data <- list(
         dplyr::select(Station),
       by = "Station"
     ) %>% 
-    sf::st_as_sf(),
+    sf::st_as_sf()
   
-  "planning_areas" = raw_data$planning_areas %>% 
+  # Because we have weather_points, we can define IDW interpolation and 
+  #   immediately join with planning_areas.
+  
+  idw_interpolation <- function(points, polys, ordinal = 2) {
+    # Inverse-distance-weighted interpolation
+    weights = polys %>% 
+      sf::st_centroid() %>% 
+      sf::st_distance(points) %>% 
+      # Small ordinal: Unweighted average
+      # Large ordinal: Proximity (Thiessen) interpolation
+      { 1 / (. ^ ordinal) }
+    
+    values = points %>% 
+      as.data.frame() %>% 
+      dplyr::select(-Station, -geometry) %>% 
+      as.matrix()
+    
+    (weights %*% values / rowSums(weights)) %>% 
+      tibble::as_tibble() %>% 
+      dplyr::mutate(plan_area = polys$plan_area)
+  }
+  
+  data[["planning_areas"]] = raw_data$planning_areas %>% 
     dplyr::bind_cols(
       # Extract data from HTML in the Description column (dwelling types)
       .$Description %>% 
@@ -157,52 +193,36 @@ data <- list(
     dplyr::mutate(plan_area = tools::toTitleCase(tolower(plan_area)),
                   dplyr::across(pop:others, as.numeric)) %>% 
     tibble::as_tibble() %>% 
-    sf::st_as_sf()
-)
-
-idw_interpolation <- function(points, polys, ordinal = 2) {
-  # Inverse-distance-weighted interpolation
-  weights = polys %>% 
-    sf::st_centroid() %>% 
-    sf::st_distance(points) %>% 
-    # Small ordinal: Unweighted average
-    # Large ordinal: Proximity (Thiessen) interpolation
-    { 1 / (. ^ ordinal) }
-  
-  values = points %>% 
-    as.data.frame() %>% 
-    dplyr::select(-Station, -geometry) %>% 
-    as.matrix()
-  
-  (weights %*% values / rowSums(weights)) %>% 
-    tibble::as_tibble()
-}
-
-# # TODO: Can we avoid reassignment?
-# data$planning_areas <- data$planning_areas %>% 
-#   dplyr::bind_cols(idw_interpolation(data$weather_points, .)) %>% 
-#   tibble::as_tibble() %>% 
-#   sf::st_as_sf()
-
-npts_in_polys <- function(points, polys, colname = "n") {
-  sf::st_intersects(points, polys) %>% 
-    tibble::as_tibble() %>% 
-    dplyr::mutate(plan_area = polys$plan_area[col.id]) %>% 
-    dplyr::count(plan_area, name = colname)
-}
-
-data_space <- data %>% 
-  {
-    list(
-      npts_in_polys(.$dengue_points, .$planning_areas, "ncases"),
-      npts_in_polys(.$aedes_points, .$planning_areas, "nhabs"),
-      npts_in_polys(.$clinic_points, .$planning_areas, "nclinics"),
-      .$planning_areas %>% 
-        dplyr::bind_cols(idw_interpolation(data$weather_points, .))
+    sf::st_as_sf() %>% 
+    # Add meteorological data
+    dplyr::left_join(
+      idw_interpolation(data$weather_points, ., ordinal = 2),
+      by = "plan_area"
     )
-  } %>%
+  
+  data
+}
+
+data <- grand_transform_space(raw_data)
+
+data_space <- list(
+  ncases = data$dengue_points,
+  nhabs = data$aedes_points,
+  nclinics = data$clinic_points
+) %>% 
+  {
+    # Count the number of points in each polygon
+    lapply(names(.), function(name) {
+      .[[name]] %>% 
+        sf::st_intersects(data$planning_areas) %>%
+        tibble::as_tibble() %>%
+        dplyr::mutate(plan_area = data$planning_areas$plan_area[col.id]) %>%
+        dplyr::count(plan_area, name = name)
+    })
+  } %>% 
+  # Join everything
   Reduce(function(x, y) dplyr::left_join(x, y, by = "plan_area"), .) %>% 
-  tibble::as_tibble() %>% 
+  dplyr::left_join(data$planning_areas, by = "plan_area") %>% 
   sf::st_as_sf() %>% 
   dplyr::mutate(
     area_km2 = units::set_units(sf::st_area(.), km^2),
@@ -217,6 +237,8 @@ data_space <- data %>%
       "<br/><i>Aedes</i> habitats: ", nhabs
     )
   )
+
+data_space
 
 # Visualize ----
 

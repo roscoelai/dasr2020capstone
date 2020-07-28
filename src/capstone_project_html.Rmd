@@ -1,7 +1,7 @@
 ---
 title: "Analysing Dengue Cases in Singapore"
 author: "Shayne, Roscoe, Anu"
-date: "26 July 2020"
+date: "28 July 2020"
 output:
   html_document:
     theme: flatly
@@ -36,8 +36,12 @@ For our data science project, we activated the following packages, using the `Ti
 
 ```{r load-packages}
 # Rule for activating packages in development mode:
-# - Only activate ggfortify, ggmap, ggplot2 (notice a pattern?) and magrittr
-# - Full specifications for everything else, for now
+# - Specify everything fully
+# - Exceptions:
+#   - ggfortify - to overload `ggplot2::autoplot()`
+#   - ggmap - has to be activated for `ggmap::register_google()` to work
+#   - ggplot2 - some function arguments require `ggplot2::`, it's crazy
+#   - magrittr - `%>%`
 #
 # For deployment mode, activate every package that is referenced more than once
 # - Add package name here, then use find-and-replace to remove "<package>::"
@@ -59,7 +63,7 @@ pacman::p_load(
 
 Then, we imported our dataset.
 
-> The most time-consuming component of data science? This might take a while.
+> The most time-consuming component of data science? This might take a while...
 
 We work towards 2 separate datasets: `data_time` for temporal analysis, and `data_space` for spatial analysis. They will only be fully available after the tidy and transform process since there's quite a bit of aggregating and joining involved.
 
@@ -73,175 +77,13 @@ The main sources are:
 
 [Click here](https://github.com/roscoelai/dasr2020capstone#data) for a summary page.
 
-The full glorious details of their providence are given below. Unfortunately, the source code has been arranged with functional considerations in mind, and may not be in chronological order.
+The full glorious details of their providence are given below.
 
-```{r import-helper-functions}
-# These functions are mandatory (for importing raw data)
+### Webscraping functions
 
-import_moh_weekly <- function(url_or_path) {
-  #' Weekly Infectious Diseases Bulletin
-  #' 
-  #' @description
-  #' Weekly infectious diseases bulletin from the Ministry of Health (MOH). 
-  #' Data from 2012-W01 to 2020-W29 (as of 24 July 2020). Relevant links are 
-  #' given under details.
-  #' 
-  #' @details
-  #' \href{https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin}{MOH Weekly Infectious Disease Bulletin}
-  #'
-  #' \href{https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx}{Latest data as of 24 July 2020 (2012-W01 to 2020-W29)}
-  #' 
-  #' \href{https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx}{Backup copy as of 24 July 2020 (2012-W01 to 2020-W29)}
-  #' 
-  #' @param url_or_path The URL or file path of the .xlsx file.
-  #' @return Weekly infectious diseases bulletin (2012-W01 to 2020-W29).
-  
-  # Columns will be renamed to follow 2020
-  colnames_2020 = c(
-    "Campylobacter enterosis" = "Campylobacter enteritis",
-    "Campylobacterenterosis" = "Campylobacter enteritis",
-    "Campylobacteriosis" = "Campylobacter enteritis",
-    "Chikungunya Fever" = "Chikungunya",
-    "Dengue Haemorrhagic Fever" = "DHF",
-    "Dengue Fever" = "Dengue",
-    "Hand, Foot and Mouth Disease" = "HFMD",
-    "Hand, Foot Mouth Disease" = "HFMD",
-    "Nipah virus infection" = "Nipah",
-    "Viral Hepatitis A" = "Acute Viral Hepatitis A",
-    "Viral Hepatitis E" = "Acute Viral Hepatitis E",
-    "Zika Virus Infection" = "Zika",
-    "Zika virus infection" = "Zika"
-  )
-  
-  # Check if the given path is a URL by trying to download to a temp file. If 
-  #   successful, return the temp file. If not, return the original path.
-  xlsx_file = tryCatch({
-    temp = tempfile(fileext = ".xlsx")
-    download.file(url_or_path, destfile = temp, mode = "wb")
-    temp
-  }, error = function(e) {
-    url_or_path
-  })
-  
-  xlsx_file %>%
-    readxl::excel_sheets() %>% 
-    lapply(function(sheetname) {
-      df = readxl::read_xlsx(xlsx_file, sheetname, skip = 1)
-      
-      # Date formats are different for 2020
-      if (sheetname == "2020") {
-        df$Start = lubridate::dmy(df$Start)
-        df$End = lubridate::dmy(df$End)
-      }
-      
-      # Find and rename columns that need to be renamed
-      mapper = na.omit(colnames_2020[names(df)])
-      dplyr::rename_with(df, ~mapper, names(mapper))
-    }) %>% 
-    dplyr::bind_rows() %>% 
-    dplyr::rename(Epiweek = `Epidemiology Wk`) %>% 
-    dplyr::mutate(Epiyear = lubridate::epiyear(Start)) %>% 
-    dplyr::select(Epiyear, everything()) %>% 
-    dplyr::arrange(Start)
-}
+> The following code chunk has been disabled, but is provided here to show the details behind the webscraping processes.
 
-read_kmls <- function(url_or_path) {
-  # There are (at least) 2 approaches to handling .kml data:
-  # 1. sp - rgdal::readOGR()
-  # 2. sf - sf::st_read()
-  #
-  # The sp approach was quickly abandoned as their objects were rather complex 
-  #   and did not facilitate method chaining.
-  #
-  # The sf approach produced objects that look like data.frames, which aided 
-  #   method chaining, but had their own peculiarities:
-  #   - Dimension: set to XY using sf::st_zm()
-  #   - Geographic CRS: use sf::`st_crs<-`("WGS84") World Geodetic Survey 1984
-  
-  # Check if the given paths are URLs by trying to download to temp files. If 
-  #   successful, return the temp files. If not, return the original paths.
-  kml_files = tryCatch({
-    temp = tempfile(fileext = rep(".kml", length(url_or_path)))
-    Map(function(x, y) download.file(x, y, mode = "wb"), url_or_path, temp)
-    temp
-  }, error = function(e) {
-    url_or_path
-  })
-  
-  kml_files %>% 
-    lapply(sf::st_read, quiet = T) %>% 
-    dplyr::bind_rows() %>% 
-    tibble::as_tibble() %>% 
-    sf::st_as_sf() %>% 
-    sf::st_zm()
-}
-```
-
-### Load raw data into memory (the easy)
-
-> If the data files are available locally, set `online_repo = F` for faster loading. Otherwise, the function will read .csv files directly from the URLs while other file formats will be downloaded to a temporary folder.
-
-```{r grand-import-no-webscraping, results='hide', message=FALSE}
-grand_import_no_webscraping <- function(online_repo = TRUE) {
-  # Allow user to choose whether to import raw data from an online repository 
-  #   or from local files.
-  
-  if (online_repo) {
-    fld = paste0("https://raw.githubusercontent.com/roscoelai/",
-                 "dasr2020capstone/master/data/")
-  } else {
-    # Check that the "../data/ folder exists
-    assertthat::assert_that(dir.exists("../data/"),
-                            msg = 'Unable to locate "../data/" directory.')
-    fld = "../data/"
-  }
-  
-  list(
-    "moh_bulletin" = import_moh_weekly(paste0(
-      fld, "moh/weekly-infectious-disease-bulletin-year-2020.xlsx"
-    )),
-    
-    "mss_19stations" = readr::read_csv(paste0(
-      fld, "mss/mss_daily_2012_2020_19stations_20200726.csv"
-    )),
-    
-    "hci_clinics" = readr::read_csv(paste0(
-      fld, "hcid/hci_clinics_20200725.csv"
-    )),
-    
-    "planning_areas" = read_kmls(paste0(
-      fld, "kmls/plan-bdy-dwelling-type-2017.kml"
-    )),
-    
-    "dengue_polys" = read_kmls(paste0(
-      fld, "kmls/denguecase-", c("central",
-                                 "northeast",
-                                 "southeast",
-                                 "southwest"), "-area.kml"
-    )),
-    
-    "aedes_polys" = read_kmls(paste0(
-      fld, "kmls/breedinghabitat-", c("central",
-                                      "northeast",
-                                      "northwest",
-                                      "southeast",
-                                      "southwest"), "-area.kml"
-    )),
-    
-    "mss_63station_pos" = readr::read_csv(paste0(
-      fld, "mss/Station_Records.csv"
-    ))
-  )
-}
-
-raw_data <- grand_import_no_webscraping(online_repo = F)
-```
-
-### Import data _de novo_ (where available)
-
-> Use this if you have too much time. The following code chunk is disabled, but is provided here to show how the data can be derived from the primary sources (where available). The non-essential functions have been dumped here. Using this code chunk would require a valid Google Maps Platform API key.
-
-```{r grand-import-de-novo, eval=FALSE}
+```{r import-webscraping, eval=FALSE}
 import_mss_daily <- function(years, stations = NULL) {
   #' Historical Daily Weather Records
   #' 
@@ -387,7 +229,16 @@ import_mss_daily <- function(years, stations = NULL) {
   
   dfs[!is.na(dfs)] %>% 
     dplyr::bind_rows() %>% 
-    dplyr::arrange(Station, Year, Month, Day)
+    # Calculate daily temperature range
+    dplyr::mutate(Temp_range = Max_temp - Min_temp,
+                  .keep = "unused") %>% 
+    # Calculate epidemiological years and weeks
+    dplyr::mutate(Date = lubridate::ymd(paste(Year, Month, Day, sep = "-")),
+                  Epiyear = lubridate::epiyear(Date),
+                  Epiweek = lubridate::epiweek(Date),
+                  .keep = "unused",
+                  .after = Station) %>% 
+    dplyr::arrange(Station, Date)
 }
 
 import_hcidirectory <- function() {
@@ -585,7 +436,117 @@ zipcodes_to_geocodes <- function(zipcodes) {
   
   res
 }
+```
 
+### Read helpers
+
+> The following functions must be activated.
+
+```{r import-helper-functions}
+import_moh_weekly <- function(url_or_path) {
+  #' Weekly Infectious Diseases Bulletin
+  #' 
+  #' @description
+  #' Weekly infectious diseases bulletin from the Ministry of Health (MOH). 
+  #' Data from 2012-W01 to 2020-W29 (as of 24 July 2020). Relevant links are 
+  #' given under details.
+  #' 
+  #' @details
+  #' \href{https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin}{MOH Weekly Infectious Disease Bulletin}
+  #'
+  #' \href{https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx}{Latest data as of 24 July 2020 (2012-W01 to 2020-W29)}
+  #' 
+  #' \href{https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx}{Backup copy as of 24 July 2020 (2012-W01 to 2020-W29)}
+  #' 
+  #' @param url_or_path The URL or file path of the .xlsx file.
+  #' @return Weekly infectious diseases bulletin (2012-W01 to 2020-W29).
+  
+  # Columns will be renamed to follow 2020
+  colnames_2020 = c(
+    "Campylobacter enterosis" = "Campylobacter enteritis",
+    "Campylobacterenterosis" = "Campylobacter enteritis",
+    "Campylobacteriosis" = "Campylobacter enteritis",
+    "Chikungunya Fever" = "Chikungunya",
+    "Dengue Haemorrhagic Fever" = "DHF",
+    "Dengue Fever" = "Dengue",
+    "Hand, Foot and Mouth Disease" = "HFMD",
+    "Hand, Foot Mouth Disease" = "HFMD",
+    "Nipah virus infection" = "Nipah",
+    "Viral Hepatitis A" = "Acute Viral Hepatitis A",
+    "Viral Hepatitis E" = "Acute Viral Hepatitis E",
+    "Zika Virus Infection" = "Zika",
+    "Zika virus infection" = "Zika"
+  )
+  
+  # Check if the given path is a URL by trying to download to a temp file. If 
+  #   successful, return the temp file. If not, return the original path.
+  xlsx_file = tryCatch({
+    temp = tempfile(fileext = ".xlsx")
+    download.file(url_or_path, destfile = temp, mode = "wb")
+    temp
+  }, error = function(e) {
+    url_or_path
+  })
+  
+  xlsx_file %>%
+    readxl::excel_sheets() %>% 
+    lapply(function(sheetname) {
+      df = readxl::read_xlsx(xlsx_file, sheetname, skip = 1)
+      
+      # Date formats are different for 2020
+      if (sheetname == "2020") {
+        df$Start = lubridate::dmy(df$Start)
+        df$End = lubridate::dmy(df$End)
+      }
+      
+      # Find and rename columns that need to be renamed
+      mapper = na.omit(colnames_2020[names(df)])
+      dplyr::rename_with(df, ~mapper, names(mapper))
+    }) %>% 
+    dplyr::bind_rows() %>% 
+    dplyr::rename(Epiweek = `Epidemiology Wk`) %>% 
+    dplyr::mutate(Epiyear = lubridate::epiyear(Start)) %>% 
+    dplyr::select(Epiyear, everything()) %>% 
+    dplyr::arrange(Start)
+}
+
+read_kmls <- function(url_or_path) {
+  # There are (at least) 2 approaches to handling .kml data:
+  # 1. sp - rgdal::readOGR()
+  # 2. sf - sf::st_read()
+  #
+  # The sp approach was quickly abandoned as their objects were rather complex 
+  #   and did not facilitate method chaining.
+  #
+  # The sf approach produced objects that look like data.frames, which aided 
+  #   method chaining, but had their own peculiarities:
+  #   - Dimension: set to XY using sf::st_zm()
+  #   - Geographic CRS: use sf::`st_crs<-`("WGS84") World Geodetic Survey 1984
+  
+  # Check if the given paths are URLs by trying to download to temp files. If 
+  #   successful, return the temp files. If not, return the original paths.
+  kml_files = tryCatch({
+    temp = tempfile(fileext = rep(".kml", length(url_or_path)))
+    Map(function(x, y) download.file(x, y, mode = "wb"), url_or_path, temp)
+    temp
+  }, error = function(e) {
+    url_or_path
+  })
+  
+  kml_files %>% 
+    lapply(sf::st_read, quiet = T) %>% 
+    dplyr::bind_rows() %>% 
+    tibble::as_tibble() %>% 
+    sf::st_as_sf() %>% 
+    sf::st_zm()
+}
+```
+
+### Import data _de novo_ (where available)
+
+> The following code chunk has been disabled, but is provided here to show how the data may be obtain from primary sources (except for 1). Using this code chunk would require a valid Google Maps Platform API key.
+
+```{r grand-import-de-novo, eval=FALSE}
 grand_import_de_novo <- function() {
   # This might take a while, and requires a Google Maps Platform API key
   
@@ -635,13 +596,74 @@ grand_import_de_novo <- function() {
 # raw_data <- grand_import_de_novo()
 ```
 
+### Load raw data into memory (the easy way)
+
+> If the data files are available locally, set `from_online_repo = F` for faster loading. Otherwise, the file will be obtained from an online repository. The .csv files will be read directly while the other file formats will be downloaded to a temporary folder and read locally.
+
+```{r grand-import-no-webscraping, results='hide', message=FALSE}
+grand_import_no_webscraping <- function(from_online_repo = TRUE) {
+  # Allow user to choose whether to import raw data from an online repository 
+  #   or from local files.
+  
+  if (from_online_repo) {
+    fld = paste0("https://raw.githubusercontent.com/roscoelai/",
+                 "dasr2020capstone/master/data/")
+  } else {
+    # Check that the "../data/ folder exists
+    assertthat::assert_that(dir.exists("../data/"),
+                            msg = 'Unable to locate "../data/" directory.')
+    fld = "../data/"
+  }
+  
+  list(
+    "moh_bulletin" = import_moh_weekly(paste0(
+      fld, "moh/weekly-infectious-disease-bulletin-year-2020.xlsx"
+    )),
+    
+    "mss_19stations" = readr::read_csv(paste0(
+      fld, "mss/mss_daily_2012_2020_19stations_20200728.csv"
+    )),
+    
+    "hci_clinics" = readr::read_csv(paste0(
+      fld, "hcid/hci_clinics_20200725.csv"
+    )),
+    
+    "planning_areas" = read_kmls(paste0(
+      fld, "kmls/plan-bdy-dwelling-type-2017.kml"
+    )),
+    
+    "dengue_polys" = read_kmls(paste0(
+      fld, "kmls/denguecase-", c("central",
+                                 "northeast",
+                                 "southeast",
+                                 "southwest"), "-area.kml"
+    )),
+    
+    "aedes_polys" = read_kmls(paste0(
+      fld, "kmls/breedinghabitat-", c("central",
+                                      "northeast",
+                                      "northwest",
+                                      "southeast",
+                                      "southwest"), "-area.kml"
+    )),
+    
+    "mss_63station_pos" = readr::read_csv(paste0(
+      fld, "mss/Station_Records.csv"
+    ))
+  )
+}
+
+raw_data <- grand_import_no_webscraping(from_online_repo = F)
+```
+
 ### A quick and dirty overview of the raw data
 
 ```{r mass-glimpse}
 names(raw_data)
 
-raw_data %>% 
-  purrr::walk(dplyr::glimpse)
+# Too verbose
+# raw_data %>% 
+#   purrr::walk(dplyr::glimpse)
 ```
 
 ---
@@ -653,21 +675,6 @@ raw_data %>%
 ### It is relatively straightforward to get `data_time`.
 
 ```{r tidy-time, results='hide', message=FALSE}
-# TODO: Can we avoid reassignment?
-# There are 2 options:
-# 1. Incorporate into webscraping process
-# 2. Incorporate into import (there will be 2 duplicates)
-raw_data$mss_19stations <- raw_data$mss_19stations %>% 
-  dplyr::mutate(
-    # Calculate daily temperature range
-    Temp_range = Max_temp - Min_temp,
-    # Calculate epidemiological years and weeks
-    Date = lubridate::ymd(paste(Year, Month, Day, sep = "-")),
-    Epiyear = lubridate::epiyear(Date),
-    Epiweek = lubridate::epiweek(Date),
-    .keep = "unused"
-  )
-
 # Minimize size of datasets, choose "easier" column names
 data_time <- raw_data$moh_bulletin %>% 
   dplyr::select(Epiyear:End,
@@ -698,16 +705,14 @@ data_time <- raw_data$moh_bulletin %>%
 ```{r tidy-space, results='hide', message=FALSE}
 data <- list(
   "dengue_points" = raw_data$dengue_polys %>% 
-    dplyr::mutate(n = as.numeric(sub(".*: (\\d+).*", "\\1", Description))) %>% 
+    dplyr::transmute(n = sub(".*: (\\d+).*", "\\1", Description)) %>% 
     sf::st_centroid() %>% 
-    .[rep(1:nrow(.), .$n),] %>% 
-    dplyr::select(-Name, -Description, -n),
+    .[rep(1:nrow(.), as.numeric(.$n)),],
   
   "aedes_points" = raw_data$aedes_polys %>% 
-    dplyr::mutate(n = as.numeric(sub(".*: (\\d+).*", "\\1", Description))) %>% 
+    dplyr::transmute(n = sub(".*: (\\d+).*", "\\1", Description)) %>% 
     sf::st_centroid() %>% 
-    .[rep(1:nrow(.), .$n),] %>% 
-    dplyr::select(-Name, -Description, -n),
+    .[rep(1:nrow(.), as.numeric(.$n)),],
   
   "clinic_points" = raw_data$hci_clinics %>% 
     sf::st_as_sf(coords = c("lon", "lat")) %>% 
@@ -724,7 +729,8 @@ data <- list(
                      mean_temp = mean(Mean_temp, na.rm = T),
                      med_temp = median(Mean_temp, na.rm = T),
                      mean_temp_rng = mean(Temp_range, na.rm = T),
-                     med_temp_rng = median(Temp_range, na.rm = T)) %>% 
+                     med_temp_rng = median(Temp_range, na.rm = T),
+                     .groups = "drop") %>% 
     tidyr::drop_na() %>% 
     dplyr::left_join(
       raw_data$mss_63station_pos %>% 
@@ -846,6 +852,7 @@ data_time %>%
 data_time %>% 
   dplyr::select(-matches("Epi|End|Start")) %>% 
   # Try some transformations
+  # dplyr::mutate(Dengue = Dengue - mean(Dengue)) %>% 
   dplyr::mutate(Dengue_sqrt = sqrt(Dengue),
                 Dengue_log = log10(Dengue)) %>% 
   tidyr::pivot_longer(everything()) %>% 
@@ -870,6 +877,21 @@ data_time %>%
   labs(x = "",
        caption = "Sources: moh.gov.sg, weather.gov.sg") + 
   theme(legend.position = "none")
+```
+
+#### Decompose everything!
+
+```{r, fig.width=9}
+data_time %>% 
+  dplyr::select(-Epiyear:-End) %>% 
+  names() %>% 
+  lapply(function(x) {
+    data_time[[x]] %>% 
+      ts(start = 2012, frequency = 52) %>% 
+      decompose(type = "additive") %>% 
+      autoplot() + 
+      labs(title = x)
+  })
 ```
 
 ```{r explore-space-1}

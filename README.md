@@ -105,7 +105,7 @@
   - [Backup copy as of 24 July 2020 (2012-W01 to 2020-W29)](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh/weekly-infectious-disease-bulletin-year-2020.xlsx)
   - [R script](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_moh_weekly.R)
 - [Historical Daily Records, Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
-  - [Backup copy as of 26 July 2020 (2012-01 to 2020-06, 19 stations) ](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss/mss_daily_2012_2020_19stations_20200726.csv)
+  - [Backup copy as of 28 July 2020 (2012-01 to 2020-06, 19 stations) ](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss/mss_daily_2012_2020_19stations_20200728.csv)
   - [R script](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_mss_daily.R)
   - [List of stations, weather parameters and periods of records](http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf)
 - [Listing of Licensed Healthcare Institutions, Ministry of Health (MOH)](http://hcidirectory.sg/hcidirectory/)

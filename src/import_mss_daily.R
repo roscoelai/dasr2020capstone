@@ -149,7 +149,16 @@ import_mss_daily <- function(years, stations = NULL) {
   
   dfs[!is.na(dfs)] %>% 
     dplyr::bind_rows() %>% 
-    dplyr::arrange(Station, Year, Month, Day)
+    # Calculate daily temperature range
+    dplyr::mutate(Temp_range = Max_temp - Min_temp,
+                  .keep = "unused") %>% 
+    # Calculate epidemiological years and weeks
+    dplyr::mutate(Date = lubridate::ymd(paste(Year, Month, Day, sep = "-")),
+                  Epiyear = lubridate::epiyear(Date),
+                  Epiweek = lubridate::epiweek(Date),
+                  .keep = "unused",
+                  .after = Station) %>% 
+    dplyr::arrange(Station, Date)
 }
 
 # Import START ----
@@ -165,30 +174,50 @@ mss_19stations %>%
 
 # How to use START ----
 
-mss_19stations <- "../data/mss/mss_daily_2012_2020_19stations_20200726.csv" %>% 
-  readr::read_csv() %>% 
-  dplyr::mutate(
-    # Calculate daily temperature range
-    Temp_range = Max_temp - Min_temp,
-    # Calculate epidemiological years and weeks
-    Date = lubridate::ymd(paste(Year, Month, Day, sep = "-")),
-    Epiyear = lubridate::epiyear(Date),
-    Epiweek = lubridate::epiweek(Date),
-    .keep = "unused"
-  )
+mss_19stations <- readr::read_csv(
+  "../data/mss/mss_daily_2012_2020_19stations_20200728.csv"
+)
 
-# Aggregate all stations, from 2012-2020, by (year-)weeks
-mss_time <- mss_19stations %>% 
+# Temporal: Aggregate all stations, from 2012-2020, by (year-)weeks
+# - What (how many) values are being aggregating?
+mss_19stations %>% 
+  tidyr::pivot_longer(Rainfall:Temp_range) %>% 
+  tidyr::drop_na() %>% 
+  dplyr::count(Epiyear, Epiweek, name) %>% 
+  dplyr::select(name, n) %T>% 
+  { print(table(.)) } %>% 
+  ggplot(aes(x = n, color = name)) +
+  geom_histogram() +
+  facet_grid(name ~ ., scales = "free")
+
+# - Results
+mss_19stations %>% 
   dplyr::group_by(Epiyear, Epiweek) %>% 
-  dplyr::summarise(mean_rainfall = mean(Rainfall, na.rm = T),
-                   med_rainfall = median(Rainfall, na.rm = T),
-                   mean_temp = mean(Mean_temp, na.rm = T),
-                   med_temp = median(Mean_temp, na.rm = T),
-                   mean_temp_rng = mean(Temp_range, na.rm = T),
-                   med_temp_rng = median(Temp_range, na.rm = T))
+  dplyr::summarise(Mean_rainfall = mean(Rainfall, na.rm = T),
+                   Med_rainfall = median(Rainfall, na.rm = T),
+                   Mean_temp = mean(Mean_temp, na.rm = T),
+                   Med_temp = median(Mean_temp, na.rm = T),
+                   Mean_temp_rng = mean(Temp_range, na.rm = T),
+                   Med_temp_rng = median(Temp_range, na.rm = T),
+                   .groups = "drop")
 
-# Aggregate most recent fortnight, by stations
-mss_space <- mss_19stations %>% 
+# Spatial: Aggregate most recent fortnight, by stations
+# - What (how many) values are being aggregating?
+mss_19stations %>% 
+  dplyr::filter(Epiyear == 2020) %>% 
+  # Filter for the last 2 weeks
+  dplyr::filter(Epiweek > max(Epiweek) - 2) %>% 
+  tidyr::pivot_longer(Rainfall:Temp_range) %>% 
+  tidyr::drop_na() %>% 
+  dplyr::count(Station, name) %>% 
+  dplyr::select(name, n) %T>% 
+  { print(table(.)) } %>% 
+  ggplot(aes(x = n, color = name)) +
+  geom_histogram() +
+  facet_grid(name ~ ., scales = "free")
+
+# - Results
+mss_19stations %>% 
   dplyr::filter(Epiyear == 2020) %>% 
   # Filter for the last 2 weeks
   dplyr::filter(Epiweek > max(Epiweek) - 2) %>% 
@@ -198,8 +227,8 @@ mss_space <- mss_19stations %>%
                    mean_temp = mean(Mean_temp, na.rm = T),
                    med_temp = median(Mean_temp, na.rm = T),
                    mean_temp_rng = mean(Temp_range, na.rm = T),
-                   med_temp_rng = median(Temp_range, na.rm = T))
-
-# `mss_space` will be used for inverse-distance-weighted interpolation
+                   med_temp_rng = median(Temp_range, na.rm = T),
+                   .groups = "drop") %>% 
+  tidyr::drop_na()
 
 # How to use END ----
