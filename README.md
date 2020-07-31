@@ -14,26 +14,32 @@
 - [ ] Account for time lag
   - [ ] Shift case numbers (Y) up by 1 row?
   - [ ] Shift predictors (X) down by 1 row?
+- [ ] 4 models
 
-### Spatial (main focus is visualization)
+### Spatial
 - [ ] How to aggregate recent weather data?
   - [ ] Latest 1 month?
   - [ ] Latest 3 weeks?
   - [ ] Latest 2 weeks?
-- [x] Combine locality data with:
+- [x] Planning area data:
   - [x] Area
-  - [x] Population
-  - [x] Dwelling type
+  - [x] Population (past data - 2017)
+  - [x] Dwelling type (past data - 2017)
   - [x] Number of cases
   - [x] Number of clinics
   - [x] Meteorological data
     - [x] Inverse distance weighted (IDW) interpolation from 19 stations
-- [ ] Transform number of cases to a fairer indicator (n/area, n/pop, etc.)
-  - [ ] Population-weighted
-  - [ ] Area-weighted
-  - Standard choropleth weaknesses:
-    - Modifiable areal unit problem (MAUP)
-    - Ecological fallacy
+    - [ ] Choice of ordinal (how much weight the inverse-distance has)
+- Visualization(s)
+  - [ ] Choropleth(s)
+- Standard choropleth weaknesses:
+  - Modifiable areal unit problem (MAUP)
+  - Ecological fallacy
+- [ ] Invent **fair** indicator variables
+  - [ ] Weight by area
+  - [x] Weight by population
+- Model
+  - [ ] Number of cases vs. landed property, population density, ...
 
 ---
 
@@ -50,7 +56,7 @@
   - [Backup copy as of 25 July 2020](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/hcid/hci_clinics_20200725.csv)
   - [R script (part 1)](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_hcidirectory.R)
   - [R script (part 2)](https://github.com/roscoelai/dasr2020capstone/blob/master/src/zipcodes_to_geocodes.R)
-- [Approximate geocoordinates of dengue cases](https://data.gov.sg/search?q=denguecases), Data.gov.sg
+- [Locations of dengue cases](https://data.gov.sg/search?q=denguecases), Data.gov.sg
 
 | Date       | Central     | North East  | South East  | South West  |
 | :--------: | :---------: | :---------: | :---------: | :---------: |
@@ -86,14 +92,14 @@
 [c23]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/28/kml/denguecase-southeast-area.kml
 [c24]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/28/kml/denguecase-southwest-area.kml
 
-- [Approximate geocoordinates of _Aedes_ mosquito breeding habitats](https://data.gov.sg/search?q=aedes+habitats), Data.gov.sg
+- [Locations of _Aedes_ mosquito breeding habitats](https://data.gov.sg/search?q=aedes+habitats), Data.gov.sg
 
-Date       | Central      | North East   | North West   | South East   | South West 
-:--------: | :----------: | :----------: | :----------: | :----------: | :---------:
-2020-07-14 | [.kml][h1]   | [.kml][h2]   | [.kml][h3]   | [.kml][h4]   | [.kml][h5] 
-2020-07-17 | [.kml][h6]   | [.kml][h7]   | [.kml][h8]   | [.kml][h9]   | [.kml][h10]
-2020-07-23 |              |              |              | [.kml][h14]  | [.kml][h15]
-2020-07-28 | [.kml][[h16] | [.kml][[h17] | [.kml][[h18] | [.kml][h19]  | [.kml][h20]
+Date       | Central     | North East  | North West  | South East  | South West 
+:--------: | :---------: | :---------: | :---------: | :---------: | :---------:
+2020-07-14 | [.kml][h1]  | [.kml][h2]  | [.kml][h3]  | [.kml][h4]  | [.kml][h5] 
+2020-07-17 | [.kml][h6]  | [.kml][h7]  | [.kml][h8]  | [.kml][h9]  | [.kml][h10]
+2020-07-23 |             |             |             | [.kml][h14] | [.kml][h15]
+2020-07-28 | [.kml][h16] | [.kml][h17] | [.kml][h18] | [.kml][h19] | [.kml][h20]
 
 [h1]: https://geo.data.gov.sg/breedinghabitat-central-area/2020/07/14/kml/breedinghabitat-central-area.kml
 [h2]: https://geo.data.gov.sg/breedinghabitat-northeast-area/2020/07/14/kml/breedinghabitat-northeast-area.kml

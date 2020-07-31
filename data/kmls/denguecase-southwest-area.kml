@@ -28,33 +28,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>2</td>
+<td>4</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 4</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 4</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>1C20B62F241E010C</td>
+<td>87BF54C0BA691B93</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">2</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="INC_CRC">1C20B62F241E010C</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="JOIN_COUNT">4</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 4</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 4</SimpleData>
+<SimpleData name="INC_CRC">87BF54C0BA691B93</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.744122802318,1.36367650504626,0.0 103.744122735681,1.3654852314929,0.0 103.745919871025,1.36548529792742,0.0 103.745919936319,1.36367657139274,0.0 103.744122802318,1.36367650504626,0.0</coordinates>
+<coordinates>103.754906073449,1.34920706631016,0.0 103.754906015489,1.35101579347539,0.0 103.756703140637,1.35101585118008,0.0 103.756703197269,1.34920712393757,0.0 103.754906073449,1.34920706631016,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -73,24 +73,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>9767E7A25C779095</td>
+<td>354C899F181F210B</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">9767E7A25C779095</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="INC_CRC">354C899F181F210B</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.706384046231,1.34377883207036,0.0 103.706383952789,1.34558755655272,0.0 103.708181071234,1.34558764999547,0.0 103.708181163353,1.34377892538746,0.0 103.706384046231,1.34377883207036,0.0</coordinates>
+<coordinates>103.749514578491,1.35282433923136,0.0 103.74951451638,1.3546330660999,0.0 103.751311643951,1.35463312798269,0.0 103.75131170473,1.35282440103149,0.0 103.749514578491,1.35282433923136,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -109,24 +109,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>82B2E92F31A8C2A6</td>
+<td>354C899F181F210B</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">82B2E92F31A8C2A6</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="INC_CRC">354C899F181F210B</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.767486087318,1.34378125848246,0.0 103.76748603885,1.34558998623192,0.0 103.769283160513,1.34559003437919,0.0 103.769283207658,1.34378130656499,0.0 103.767486087318,1.34378125848246,0.0</coordinates>
+<coordinates>103.749514578491,1.35282433923136,0.0 103.74951451638,1.3546330660999,0.0 103.751311643951,1.35463312798269,0.0 103.75131170473,1.35282440103149,0.0 103.749514578491,1.35282433923136,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -136,33 +136,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>1</td>
+<td>2</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>354C899F181F210B</td>
+<td>BE57991B82DA29FF</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">354C899F181F210B</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="JOIN_COUNT">2</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="INC_CRC">BE57991B82DA29FF</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.749514578491,1.35282433923136,0.0 103.74951451638,1.3546330660999,0.0 103.751311643951,1.35463312798269,0.0 103.75131170473,1.35282440103149,0.0 103.749514578491,1.35282433923136,0.0</coordinates>
+<coordinates>103.75131170473,1.35282440103149,0.0 103.751311643951,1.35463312798269,0.0 103.753108771603,1.3546331885243,0.0 103.753108831051,1.35282446149224,0.0 103.75131170473,1.35282440103149,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -181,24 +181,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>F44CBD75013F29DD</td>
+<td>B3EBE4F4D2301414</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">F44CBD75013F29DD</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="INC_CRC">B3EBE4F4D2301414</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.749514391909,1.35825051975562,0.0 103.74951432955,1.36005924654274,0.0 103.751311461126,1.3600593086735,0.0 103.751311522149,1.35825058180372,0.0 103.749514391909,1.35825051975562,0.0</coordinates>
+<coordinates>103.751311643951,1.35463312798269,0.0 103.751311583091,1.35644185490678,0.0 103.753108712076,1.35644191552925,0.0 103.753108771603,1.3546331885243,0.0 103.751311643951,1.35463312798269,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -208,33 +208,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>2</td>
+<td>1</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>D4C3051D5C519975</td>
+<td>6402A3011F06A76D</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">2</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="INC_CRC">D4C3051D5C519975</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="JOIN_COUNT">1</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="INC_CRC">6402A3011F06A76D</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.760297174531,1.35825087187279,0.0 103.760297120194,1.36005959912898,0.0 103.762094252231,1.36005965318041,0.0 103.762094305232,1.35825092585231,0.0 103.760297174531,1.35825087187279,0.0</coordinates>
+<coordinates>103.762094305232,1.35825092585231,0.0 103.762094252231,1.36005965318041,0.0 103.76389138434,1.36005970588528,0.0 103.763891436003,1.35825097848707,0.0 103.762094305232,1.35825092585231,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -253,24 +253,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>C9737AECB37D26AF</td>
+<td>CCE9F7FB3B56EF89</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">C9737AECB37D26AF</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="INC_CRC">CCE9F7FB3B56EF89</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.812414695116,1.27324161640908,0.0 103.812414680526,1.27505034626139,0.0 103.814211752973,1.27505036032466,0.0 103.814211766309,1.27324163045241,0.0 103.812414695116,1.27324161640908,0.0</coordinates>
+<coordinates>103.740527907382,1.37995490370316,0.0 103.740527837233,1.38176362972117,0.0 103.74232498456,1.38176369968407,0.0 103.74232505335,1.37995497357445,0.0 103.740527907382,1.37995490370316,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -289,24 +289,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>998B4960EB76C800</td>
+<td>F519A360814A1AD6</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">998B4960EB76C800</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="INC_CRC">F519A360814A1AD6</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.699196070688,1.33473482528583,0.0 103.69919597262,1.33654354938178,0.0 103.700993083955,1.33654364748931,0.0 103.70099318071,1.33473492326054,0.0 103.699196070688,1.33473482528583,0.0</coordinates>
+<coordinates>103.767487042966,1.30760669789519,0.0 103.767486995803,1.30941542617551,0.0 103.769284091349,1.30941547302796,0.0 103.769284137224,1.3076067446829,0.0 103.767487042966,1.30760669789519,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -325,24 +325,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>ACB760250B11144C</td>
+<td>BF2BC836138DA38D</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">ACB760250B11144C</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="INC_CRC">BF2BC836138DA38D</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.744123725942,1.33835433194465,0.0 103.744123660543,1.34016305877,0.0 103.745920777256,1.34016312397209,0.0 103.745920841337,1.3383543970587,0.0 103.744123725942,1.33835433194465,0.0</coordinates>
+<coordinates>103.702790195422,1.33654374427358,0.0 103.702790099852,1.33835246860662,0.0 103.704587212763,1.33835256419687,0.0 103.704587307018,1.3365438397346,0.0 103.702790195422,1.33654374427358,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -361,24 +361,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>B0CFDFD1C9DE59F5</td>
+<td>0776FDBA3D63569E</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">B0CFDFD1C9DE59F5</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="INC_CRC">0776FDBA3D63569E</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.718963700152,1.34739690797283,0.0 103.718963615743,1.34920563324323,0.0 103.72076073767,1.34920571758669,0.0 103.720760820753,1.34739699220318,0.0 103.718963700152,1.34739690797283,0.0</coordinates>
+<coordinates>103.684818869271,1.34016016274203,0.0 103.68481876025,1.34196888563063,0.0 103.686615874424,1.34196899476562,0.0 103.686615982126,1.34016027172988,0.0 103.684818869271,1.34016016274203,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -397,24 +397,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>17BCCB108C72A89F</td>
+<td>9767E7A25C779095</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">17BCCB108C72A89F</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="INC_CRC">9767E7A25C779095</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.722557777842,1.35101452606219,0.0 103.722557695866,1.35282325150298,0.0 103.724354820672,1.3528233333939,0.0 103.724354901319,1.35101460784358,0.0 103.722557777842,1.35101452606219,0.0</coordinates>
+<coordinates>103.706384046231,1.34377883207036,0.0 103.706383952789,1.34558755655272,0.0 103.708181071234,1.34558764999547,0.0 103.708181163353,1.34377892538746,0.0 103.706384046231,1.34377883207036,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -433,24 +433,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>C8804CA1C3EE7EFB</td>
+<td>4D2778F1DCA9D3D6</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">C8804CA1C3EE7EFB</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="INC_CRC">4D2778F1DCA9D3D6</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.767487371277,1.29494559920243,0.0 103.767487324571,1.29675432766513,0.0 103.769284411144,1.2967543740644,0.0 103.769284456575,1.29494564553696,0.0 103.767487371277,1.29494559920243,0.0</coordinates>
+<coordinates>103.713572250649,1.34920537219804,0.0 103.713572162142,1.35101409709136,0.0 103.715369285052,1.35101418556071,0.0 103.715369372231,1.3492054605489,0.0 103.713572250649,1.34920537219804,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -469,24 +469,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>658B9ED73F6541FB</td>
+<td>A7EAEAE4A4597717</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">658B9ED73F6541FB</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="INC_CRC">A7EAEAE4A4597717</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.769283301757,1.34016385085596,0.0 103.76928325474,1.3419725787239,0.0 103.771080373822,1.34197262541304,0.0 103.771080419521,1.34016389748215,0.0 103.769283301757,1.34016385085596,0.0</coordinates>
+<coordinates>103.738730975464,1.37452865452628,0.0 103.738730904238,1.37633738053361,0.0 103.740528047403,1.37633745158434,0.0 103.740528117276,1.3745287254836,0.0 103.738730975464,1.37452865452628,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -505,24 +505,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>82B2E92F31A8C2A6</td>
+<td>D08D2A0DC33616FC</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">82B2E92F31A8C2A6</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="INC_CRC">D08D2A0DC33616FC</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.767486087318,1.34378125848246,0.0 103.76748603885,1.34558998623192,0.0 103.769283160513,1.34559003437919,0.0 103.769283207658,1.34378130656499,0.0 103.767486087318,1.34378125848246,0.0</coordinates>
+<coordinates>103.74232525918,1.37452879508004,0.0 103.74232519066,1.37633752127239,0.0 103.744122334008,1.37633758959777,0.0 103.744122401174,1.3745288633156,0.0 103.74232525918,1.37452879508004,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -541,24 +541,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>99F1C38698BAD106</td>
+<td>A38DD2B6132AA5D1</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">99F1C38698BAD106</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="INC_CRC">A38DD2B6132AA5D1</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.722558023112,1.34558834957774,0.0 103.722557941465,1.34739707509953,0.0 103.724355062287,1.34739715666187,0.0 103.72435514261,1.34558843103055,0.0 103.722558023112,1.34558834957774,0.0</coordinates>
+<coordinates>103.753107991553,1.37814663746141,0.0 103.753107930993,1.37995536411072,0.0 103.754905077555,1.37995542441819,0.0 103.754905136759,1.37814669768981,0.0 103.753107991553,1.37814663746141,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -577,24 +577,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>6402A3011F06A76D</td>
+<td>4430ACC421DBD54E</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200717162358</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">6402A3011F06A76D</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200717162358</SimpleData>
+<SimpleData name="INC_CRC">4430ACC421DBD54E</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.762094305232,1.35825092585231,0.0 103.762094252231,1.36005965318041,0.0 103.76389138434,1.36005970588528,0.0 103.763891436003,1.35825097848707,0.0 103.762094305232,1.35825092585231,0.0</coordinates>
+<coordinates>103.765690333957,1.29313682316375,0.0 103.765690286044,1.29494555158583,0.0 103.767487371277,1.29494559920243,0.0 103.767487417917,1.29313687071382,0.0 103.765690333957,1.29313682316375,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -613,24 +613,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>232317F20055C986</td>
+<td>7650EF5DA4F560DF</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">232317F20055C986</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">7650EF5DA4F560DF</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.744122334008,1.37633758959777,0.0 103.744122266753,1.37814631585241,0.0 103.745919411543,1.37814638290315,0.0 103.745919477443,1.37633765656048,0.0 103.744122334008,1.37633758959777,0.0</coordinates>
+<coordinates>103.738731892869,1.35101521394138,0.0 103.738731822862,1.35282394030342,0.0 103.740528948576,1.35282401013988,0.0 103.740529017253,1.35101528368443,0.0 103.738731892869,1.35101521394138,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -640,33 +640,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>2</td>
+<td>1</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>0D76CC2A80EDCD53</td>
+<td>78C74AE626E10099</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200709145915</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">2</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="INC_CRC">0D76CC2A80EDCD53</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200709145915</SimpleData>
+<SimpleData name="JOIN_COUNT">1</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="INC_CRC">78C74AE626E10099</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.756702913349,1.35825075987946,0.0 103.756702856337,1.36005948698645,0.0 103.758499988228,1.36005954373099,0.0 103.758500043903,1.35825081654851,0.0 103.756702913349,1.35825075987946,0.0</coordinates>
+<coordinates>103.695601041654,1.34920441522063,0.0 103.695600939866,1.35101313883059,0.0 103.697398061508,1.3510132406758,0.0 103.697398161969,1.34920451692945,0.0 103.695601041654,1.34920441522063,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -685,24 +685,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>D2209CAE645442F1</td>
+<td>CC76F8C01E0471AF</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200709145915</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">D2209CAE645442F1</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200709145915</SimpleData>
+<SimpleData name="INC_CRC">CC76F8C01E0471AF</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.760298771007,1.30398904171295,0.0 103.760298718841,1.30579776976869,0.0 103.762095811542,1.30579782166292,0.0 103.762095862425,1.30398909353528,0.0 103.760298771007,1.30398904171295,0.0</coordinates>
+<coordinates>103.756703083929,1.35282457839556,0.0 103.756703027145,1.35463330558398,0.0 103.75850015503,1.35463336210204,0.0 103.758500210482,1.35282463483814,0.0 103.756703083929,1.35282457839556,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -721,24 +721,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>FC1359C86A5034E6</td>
+<td>2CF3A6C9F40D4F2C</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200709145915</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">FC1359C86A5034E6</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200709145915</SimpleData>
+<SimpleData name="INC_CRC">2CF3A6C9F40D4F2C</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.756702282043,1.37814675655374,0.0 103.756702224196,1.3799554833594,0.0 103.758499370912,1.37995554093435,0.0 103.758499427402,1.37814681405319,0.0 103.756702282043,1.37814675655374,0.0</coordinates>
+<coordinates>103.740529359259,1.3419716510024,0.0 103.740529291042,1.34378037759265,0.0 103.742326410216,1.34378044563166,0.0 103.742326477113,1.34197171894979,0.0 103.740529359259,1.3419716510024,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -748,33 +748,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>1</td>
+<td>2</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>678ADCDB9C6AD839</td>
+<td>37D44B52C1093F89</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200709145915</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">678ADCDB9C6AD839</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200709145915</SimpleData>
+<SimpleData name="JOIN_COUNT">2</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="INC_CRC">37D44B52C1093F89</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.75670425885,1.31484130124191,0.0 103.75670420366,1.31665002899115,0.0 103.758501303954,1.31665008392394,0.0 103.758501357849,1.3148413560992,0.0 103.75670425885,1.31484130124191,0.0</coordinates>
+<coordinates>103.76748613572,1.34197253070611,0.0 103.767486087318,1.34378125848246,0.0 103.769283207658,1.34378130656499,0.0 103.76928325474,1.3419725787239,0.0 103.76748613572,1.34197253070611,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -784,33 +784,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>1</td>
+<td>2</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>C9BFCB14306D6272</td>
+<td>FDA01D168D2BF4DB</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200709145915</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">C9BFCB14306D6272</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200709145915</SimpleData>
+<SimpleData name="JOIN_COUNT">2</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="INC_CRC">FDA01D168D2BF4DB</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.742324846709,1.38538115182035,0.0 103.742324777648,1.38718987784693,0.0 103.744121929151,1.38718994671125,0.0 103.744121996848,1.38538122059485,0.0 103.742324846709,1.38538115182035,0.0</coordinates>
+<coordinates>103.693804229995,1.34377814159886,0.0 103.693804127293,1.34558686515152,0.0 103.695601244821,1.34558696791976,0.0 103.695601346199,1.34377824422891,0.0 103.693804229995,1.34377814159886,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -829,24 +829,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>84331330C44F3046</td>
+<td>71F84A8F5EC43608</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200708105215</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">84331330C44F3046</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200708105215</SimpleData>
+<SimpleData name="INC_CRC">71F84A8F5EC43608</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.758500321164,1.34920718022916,0.0 103.75850026586,1.35101590754717,0.0 103.760297391158,1.35101596257666,0.0 103.760297445134,1.34920723518495,0.0 103.758500321164,1.34920718022916,0.0</coordinates>
+<coordinates>103.702789812365,1.34377864144489,0.0 103.702789716277,1.34558736567058,0.0 103.704586834469,1.34558746177776,0.0 103.704586929234,1.34377873742284,0.0 103.702789812365,1.34377864144489,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -865,24 +865,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>843B9E5799919647</td>
+<td>F2F23163718ED5C4</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200708105215</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">843B9E5799919647</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200708105215</SimpleData>
+<SimpleData name="INC_CRC">F2F23163718ED5C4</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.760298718841,1.30579776976869,0.0 103.760298666602,1.3076064977983,0.0 103.762095760589,1.30760654976443,0.0 103.762095811542,1.30579782166292,0.0 103.760298718841,1.30579776976869,0.0</coordinates>
+<coordinates>103.7099782806,1.34377901737414,0.0 103.709978189803,1.34558774210601,0.0 103.711775308495,1.34558783288433,0.0 103.711775397969,1.3437791080304,0.0 103.7099782806,1.34377901737414,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -892,33 +892,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>1</td>
+<td>2</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>A965942D16EAEEB7</td>
+<td>82B2E92FB661768C</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200708105215</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">A965942D16EAEEB7</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200708105215</SimpleData>
+<SimpleData name="JOIN_COUNT">2</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="INC_CRC">82B2E92FB661768C</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.695601750349,1.33654334919695,0.0 103.695601649517,1.33835207299515,0.0 103.6973987619,1.33835217388559,0.0 103.697398861417,1.33654344995099,0.0 103.695601750349,1.33654334919695,0.0</coordinates>
+<coordinates>103.767486087318,1.34378125848246,0.0 103.76748603885,1.34558998623192,0.0 103.769283160513,1.34559003437919,0.0 103.769283207658,1.34378130656499,0.0 103.767486087318,1.34378125848246,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -937,24 +937,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>F22559B44D145B17</td>
+<td>E25CAD3477A19839</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200708105215</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">F22559B44D145B17</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200708105215</SimpleData>
+<SimpleData name="INC_CRC">E25CAD3477A19839</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.697398662248,1.3401608977934,0.0 103.697398562462,1.34196962167439,0.0 103.699195677617,1.34196972150899,0.0 103.699195776084,1.3401609974934,0.0 103.697398662248,1.3401608977934,0.0</coordinates>
+<coordinates>103.709978189803,1.34558774210601,0.0 103.709978098885,1.34739646681095,0.0 103.711775218901,1.34739655771134,0.0 103.711775308495,1.34558783288433,0.0 103.709978189803,1.34558774210601,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -973,24 +973,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>5E994FD61A3F0408</td>
+<td>F81DE7CBB03D1946</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200708105215</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">5E994FD61A3F0408</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200708105215</SimpleData>
+<SimpleData name="INC_CRC">F81DE7CBB03D1946</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.702790004152,1.34016119291287,0.0 103.702789908323,1.34196991719231,0.0 103.704587023871,1.34197001304102,0.0 103.704587118381,1.34016128863236,0.0 103.702790004152,1.34016119291287,0.0</coordinates>
+<coordinates>103.738732102327,1.34558903469318,0.0 103.738732032601,1.34739776113622,0.0 103.740529154331,1.34739783069246,0.0 103.740529222733,1.34558910415602,0.0 103.738732102327,1.34558903469318,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1009,24 +1009,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>E73086FED683E178</td>
+<td>893B98E3854A4BD4</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200708105215</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">E73086FED683E178</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200708105215</SimpleData>
+<SimpleData name="INC_CRC">893B98E3854A4BD4</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.71357260349,1.34197047235513,0.0 103.713572515458,1.34377919735623,0.0 103.715369633066,1.34377928535164,0.0 103.715369719777,1.34197056023206,0.0 103.71357260349,1.34197047235513,0.0</coordinates>
+<coordinates>103.740529222733,1.34558910415602,0.0 103.740529154331,1.34739783069246,0.0 103.742326276153,1.34739789891469,0.0 103.74232634323,1.34558917228664,0.0 103.740529222733,1.34558910415602,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1045,24 +1045,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>CCB5B042B30C9C19</td>
+<td>96E3CBFF5AC69B50</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200629145715</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">CCB5B042B30C9C19</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200629145715</SimpleData>
+<SimpleData name="INC_CRC">96E3CBFF5AC69B50</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.713572162142,1.35101409709136,0.0 103.713572073516,1.35282282195765,0.0 103.715369197756,1.35282291054548,0.0 103.715369285052,1.35101418556071,0.0 103.713572162142,1.35101409709136,0.0</coordinates>
+<coordinates>103.753109068045,1.34558955309369,0.0 103.753109008916,1.3473982802338,0.0 103.754906131331,1.34739833911794,0.0 103.754906189136,1.34558961189875,0.0 103.753109068045,1.34558955309369,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1081,24 +1081,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>87BF54C0E942C1AC</td>
+<td>0657A8F873066B0B</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200713180618</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">87BF54C0E942C1AC</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200713180618</SimpleData>
+<SimpleData name="INC_CRC">0657A8F873066B0B</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.754906073449,1.34920706631016,0.0 103.754906015489,1.35101579347539,0.0 103.756703140637,1.35101585118008,0.0 103.756703197269,1.34920712393757,0.0 103.754906073449,1.34920706631016,0.0</coordinates>
+<coordinates>103.745920520066,1.34739803135711,0.0 103.745920455551,1.34920675813606,0.0 103.747717578965,1.34920682244249,0.0 103.747717642153,1.34739809557731,0.0 103.745920520066,1.34739803135711,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1117,24 +1117,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>38EB8788DD7BA225</td>
+<td>2C1A458FE28D0CB0</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200703191715</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">38EB8788DD7BA225</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200703191715</SimpleData>
+<SimpleData name="INC_CRC">2C1A458FE28D0CB0</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.745920455551,1.34920675813606,0.0 103.745920390951,1.35101548488801,0.0 103.747717515692,1.35101554928068,0.0 103.747717578965,1.34920682244249,0.0 103.745920455551,1.34920675813606,0.0</coordinates>
+<coordinates>103.781863798711,1.30760703594786,0.0 103.781863761846,1.30941576469594,0.0 103.78366085785,1.3094158011772,0.0 103.783660893428,1.30760707237871,0.0 103.781863798711,1.30760703594786,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1153,24 +1153,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>DF308DB836F652A9</td>
+<td>C9737AECB37D26AF</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200707141115</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">DF308DB836F652A9</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200707141115</SimpleData>
+<SimpleData name="INC_CRC">C9737AECB37D26AF</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.747717515692,1.35101554928068,0.0 103.747717452334,1.35282427609184,0.0 103.749514578491,1.35282433923136,0.0 103.749514640518,1.35101561233576,0.0 103.747717515692,1.35101554928068,0.0</coordinates>
+<coordinates>103.812414695116,1.27324161640908,0.0 103.812414680526,1.27505034626139,0.0 103.814211752973,1.27505036032466,0.0 103.814211766309,1.27324163045241,0.0 103.812414695116,1.27324161640908,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1180,33 +1180,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>2</td>
+<td>1</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>4BE550E69CB4383C</td>
+<td>D2209CAE645442F1</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200707141115</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">2</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="INC_CRC">4BE550E69CB4383C</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200707141115</SimpleData>
+<SimpleData name="JOIN_COUNT">1</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="INC_CRC">D2209CAE645442F1</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.789052710332,1.27685877796782,0.0 103.789052679361,1.27866750734663,0.0 103.790849753911,1.27866753790715,0.0 103.790849783625,1.27685880848509,0.0 103.789052710332,1.27685877796782,0.0</coordinates>
+<coordinates>103.760298771007,1.30398904171295,0.0 103.760298718841,1.30579776976869,0.0 103.762095811542,1.30579782166292,0.0 103.762095862425,1.30398909353528,0.0 103.760298771007,1.30398904171295,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1225,24 +1225,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>BEAB8AF3BAE1F0E6</td>
+<td>D2209CAE645442F1</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200707141115</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">BEAB8AF3BAE1F0E6</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200707141115</SimpleData>
+<SimpleData name="INC_CRC">D2209CAE645442F1</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.720761645447,1.32930973689117,0.0 103.72076156348,1.33111846254267,0.0 103.722558672335,1.33111854443716,0.0 103.722558752994,1.32930981867434,0.0 103.720761645447,1.32930973689117,0.0</coordinates>
+<coordinates>103.760298771007,1.30398904171295,0.0 103.760298718841,1.30579776976869,0.0 103.762095811542,1.30579782166292,0.0 103.762095862425,1.30398909353528,0.0 103.760298771007,1.30398904171295,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1261,24 +1261,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>D2C1184F4E1972F1</td>
+<td>34FA384B5D0F1C75</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200707141115</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">D2C1184F4E1972F1</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200707141115</SimpleData>
+<SimpleData name="INC_CRC">34FA384B5D0F1C75</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.693804434983,1.3401606944129,0.0 103.693804332558,1.34196941801931,0.0 103.695601447442,1.34196952051117,0.0 103.695601548547,1.34016079676657,0.0 103.693804434983,1.3401606944129,0.0</coordinates>
+<coordinates>103.762095811542,1.30579782166292,0.0 103.762095760589,1.30760654976443,0.0 103.763892854646,1.30760660043596,0.0 103.763892904314,1.30579787226433,0.0 103.762095811542,1.30579782166292,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1297,24 +1297,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>2AB21908A6157C55</td>
+<td>5F0BBB6A87F10C40</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200707141115</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">2AB21908A6157C55</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200707141115</SimpleData>
+<SimpleData name="INC_CRC">5F0BBB6A87F10C40</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.742326477113,1.34197171894979,0.0 103.742326410216,1.34378044563166,0.0 103.744123529481,1.34378051234023,0.0 103.744123595056,1.34197178556854,0.0 103.742326477113,1.34197171894979,0.0</coordinates>
+<coordinates>103.722558510688,1.33473599588285,0.0 103.7225584297,1.33654472156565,0.0 103.724355542601,1.33654480247082,0.0 103.724355622276,1.3347360766785,0.0 103.722558510688,1.33473599588285,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1324,33 +1324,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>1</td>
+<td>2</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>304731DE25A75AC3</td>
+<td>0B10B85697424D86</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200707141115</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">304731DE25A75AC3</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200707141115</SimpleData>
+<SimpleData name="JOIN_COUNT">2</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="INC_CRC">0B10B85697424D86</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.749514826103,1.34558943148689,0.0 103.749514764324,1.34739815846349,0.0 103.751311886579,1.34739822001565,0.0 103.751311947033,1.3455894929564,0.0 103.749514826103,1.34558943148689,0.0</coordinates>
+<coordinates>103.6973989608,1.33473472598965,0.0 103.697398861417,1.33654344995099,0.0 103.69919597262,1.33654354938178,0.0 103.699196070688,1.33473482528583,0.0 103.6973989608,1.33473472598965,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1369,24 +1369,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>962E03A3E3D7E750</td>
+<td>1F9B5D3735DC715D</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200707141115</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">962E03A3E3D7E750</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200707141115</SimpleData>
+<SimpleData name="INC_CRC">1F9B5D3735DC715D</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.722557859709,1.34920580059436,0.0 103.722557777842,1.35101452606219,0.0 103.724354901319,1.35101460784358,0.0 103.724354981857,1.34920588226622,0.0 103.722557859709,1.34920580059436,0.0</coordinates>
+<coordinates>103.742326610635,1.33835426550554,0.0 103.742326543919,1.34016299224107,0.0 103.744123660543,1.34016305877,0.0 103.744123725942,1.33835433194465,0.0 103.742326610635,1.33835426550554,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1405,24 +1405,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>C6A280A458D13C31</td>
+<td>ACB760250B11144C</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200707141115</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">C6A280A458D13C31</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200707141115</SimpleData>
+<SimpleData name="INC_CRC">ACB760250B11144C</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.756703197269,1.34920712393757,0.0 103.756703140637,1.35101585118008,0.0 103.75850026586,1.35101590754717,0.0 103.758500321164,1.34920718022916,0.0 103.756703197269,1.34920712393757,0.0</coordinates>
+<coordinates>103.744123725942,1.33835433194465,0.0 103.744123660543,1.34016305877,0.0 103.745920777256,1.34016312397209,0.0 103.745920841337,1.3383543970587,0.0 103.744123725942,1.33835433194465,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1441,24 +1441,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>01372FB4C39A0134</td>
+<td>C1B1FED95628838A</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200707141115</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">01372FB4C39A0134</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200707141115</SimpleData>
+<SimpleData name="INC_CRC">C1B1FED95628838A</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.742326141729,1.35101535208988,0.0 103.742326074382,1.35282407863695,0.0 103.744123200278,1.35282414579463,0.0 103.744123266296,1.35101541915775,0.0 103.742326141729,1.35101535208988,0.0</coordinates>
+<coordinates>103.765689066423,1.34016375362302,0.0 103.765689016766,1.34197248135968,0.0 103.76748613572,1.34197253070611,0.0 103.767486184057,1.34016380290291,0.0 103.765689066423,1.34016375362302,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1477,24 +1477,24 @@
 <td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>BE57991B82DA29FF</td>
+<td>658B9ED7B8ACF5D1</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200707141115</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">2</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="INC_CRC">BE57991B82DA29FF</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200707141115</SimpleData>
+<SimpleData name="INC_CRC">658B9ED7B8ACF5D1</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.75131170473,1.35282440103149,0.0 103.751311643951,1.35463312798269,0.0 103.753108771603,1.3546331885243,0.0 103.753108831051,1.35282446149224,0.0 103.75131170473,1.35282440103149,0.0</coordinates>
+<coordinates>103.769283301757,1.34016385085596,0.0 103.76928325474,1.3419725787239,0.0 103.771080373822,1.34197262541304,0.0 103.771080419521,1.34016389748215,0.0 103.769283301757,1.34016385085596,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1504,33 +1504,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>3</td>
+<td>2</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 3</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 3</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>B85877B61C04915F</td>
+<td>C49EE8F2AE65CB27</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200716142811</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">3</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 3</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 3</SimpleData>
-<SimpleData name="INC_CRC">B85877B61C04915F</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200716142811</SimpleData>
+<SimpleData name="JOIN_COUNT">2</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="INC_CRC">C49EE8F2AE65CB27</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.740529154331,1.34739783069246,0.0 103.740529085838,1.34920655720194,0.0 103.742326208986,1.34920662551579,0.0 103.742326276153,1.34739789891469,0.0 103.740529154331,1.34739783069246,0.0</coordinates>
+<coordinates>103.702789908323,1.34196991719231,0.0 103.702789812365,1.34377864144489,0.0 103.704586929234,1.34377873742284,0.0 103.704587023871,1.34197001304102,0.0 103.702789908323,1.34196991719231,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1549,24 +1549,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>F81EAFD4F6ACF51F</td>
+<td>5B6924EAD9CE9EEC</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200716142811</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">F81EAFD4F6ACF51F</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200716142811</SimpleData>
+<SimpleData name="INC_CRC">5B6924EAD9CE9EEC</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.756703253825,1.34739839666806,0.0 103.756703197269,1.34920712393757,0.0 103.758500321164,1.34920718022916,0.0 103.758500376394,1.34739845288416,0.0 103.756703253825,1.34739839666806,0.0</coordinates>
+<coordinates>103.72076073767,1.34920571758669,0.0 103.720760654475,1.3510144429432,0.0 103.722557777842,1.35101452606219,0.0 103.722557859709,1.34920580059436,0.0 103.72076073767,1.34920571758669,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1576,33 +1576,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>10</td>
+<td>1</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 10</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 10</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>18AEC36994FE97F5</td>
+<td>962E03A3E3D7E750</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200716142811</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">10</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 10</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 10</SimpleData>
-<SimpleData name="INC_CRC">18AEC36994FE97F5</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200716142811</SimpleData>
+<SimpleData name="JOIN_COUNT">1</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="INC_CRC">962E03A3E3D7E750</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.753108890418,1.35101573443311,0.0 103.753108831051,1.35282446149224,0.0 103.754905957451,1.35282452061359,0.0 103.754906015489,1.35101579347539,0.0 103.753108890418,1.35101573443311,0.0</coordinates>
+<coordinates>103.722557859709,1.34920580059436,0.0 103.722557777842,1.35101452606219,0.0 103.724354901319,1.35101460784358,0.0 103.724354981857,1.34920588226622,0.0 103.722557859709,1.34920580059436,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1621,24 +1621,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>2BACC229DD345015</td>
+<td>38EB8788DD7BA225</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200716142811</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">2BACC229DD345015</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200716142811</SimpleData>
+<SimpleData name="INC_CRC">38EB8788DD7BA225</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.763892953914,1.30398914406658,0.0 103.763892904314,1.30579787226433,0.0 103.765689997155,1.30579792157293,0.0 103.765690045471,1.30398919330685,0.0 103.763892953914,1.30398914406658,0.0</coordinates>
+<coordinates>103.745920455551,1.34920675813606,0.0 103.745920390951,1.35101548488801,0.0 103.747717515692,1.35101554928068,0.0 103.747717578965,1.34920682244249,0.0 103.745920455551,1.34920675813606,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1648,33 +1648,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>1</td>
+<td>2</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>47B34B6BF9B69EFB</td>
+<td>2BB8156B9AE0A4A5</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200716142811</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">47B34B6BF9B69EFB</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200716142811</SimpleData>
+<SimpleData name="JOIN_COUNT">2</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="INC_CRC">2BB8156B9AE0A4A5</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.763892655286,1.31484151286047,0.0 103.763892605274,1.31665024090092,0.0 103.765689705854,1.31665029061945,0.0 103.765689754572,1.31484156251068,0.0 103.763892655286,1.31484151286047,0.0</coordinates>
+<coordinates>103.724354901319,1.35101460784358,0.0 103.724354820672,1.3528233333939,0.0 103.726151945587,1.35282341394543,0.0 103.726152024903,1.35101468828738,0.0 103.724354901319,1.35101460784358,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1684,33 +1684,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>1</td>
+<td>2</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>19DAE2F667C44224</td>
+<td>9DA177C135AEA2CA</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200716142811</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">19DAE2F667C44224</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200716142811</SimpleData>
+<SimpleData name="JOIN_COUNT">2</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="INC_CRC">9DA177C135AEA2CA</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.740529495418,1.33835419774137,0.0 103.740529427385,1.34016292438529,0.0 103.742326543919,1.34016299224107,0.0 103.742326610635,1.33835426550554,0.0 103.740529495418,1.33835419774137,0.0</coordinates>
+<coordinates>103.715369197756,1.35282291054548,0.0 103.715369110343,1.35463163550318,0.0 103.717166236032,1.35463172286832,0.0 103.717166322113,1.35282299779393,0.0 103.715369197756,1.35282291054548,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1729,24 +1729,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>2E24ED3FCE6502E8</td>
+<td>9E540E51B05D6959</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200716142811</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">2E24ED3FCE6502E8</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200716142811</SimpleData>
+<SimpleData name="INC_CRC">9E540E51B05D6959</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.758500541638,1.34197227068756,0.0 103.758500486631,1.34378099811332,0.0 103.760297606627,1.34378105284802,0.0 103.760297660314,1.34197232534855,0.0 103.758500541638,1.34197227068756,0.0</coordinates>
+<coordinates>103.753108771603,1.3546331885243,0.0 103.753108712076,1.35644191552925,0.0 103.754905841142,1.35644197480875,0.0 103.754905899335,1.35463324772473,0.0 103.753108771603,1.3546331885243,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1756,33 +1756,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>1</td>
+<td>2</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>2BB8156B1D29108F</td>
+<td>9A2E7225070EF3C8</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200716142811</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">2BB8156B1D29108F</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200716142811</SimpleData>
+<SimpleData name="JOIN_COUNT">2</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="INC_CRC">9A2E7225070EF3C8</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.724354901319,1.35101460784358,0.0 103.724354820672,1.3528233333939,0.0 103.726151945587,1.35282341394543,0.0 103.726152024903,1.35101468828738,0.0 103.724354901319,1.35101460784358,0.0</coordinates>
+<coordinates>103.745920066647,1.36005911824156,0.0 103.745920001526,1.36186784483077,0.0 103.747717134274,1.36186790974088,0.0 103.747717198056,1.36005918306542,0.0 103.745920066647,1.36005911824156,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1801,24 +1801,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>2BB8156B1D29108F</td>
+<td>9D5D045603768952</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200716142811</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">2BB8156B1D29108F</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200716142811</SimpleData>
+<SimpleData name="INC_CRC">9D5D045603768952</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.724354901319,1.35101460784358,0.0 103.724354820672,1.3528233333939,0.0 103.726151945587,1.35282341394543,0.0 103.726152024903,1.35101468828738,0.0 103.724354901319,1.35101460784358,0.0</coordinates>
+<coordinates>103.74951432955,1.36005924654274,0.0 103.749514267107,1.36186797330264,0.0 103.751311400022,1.36186803551606,0.0 103.751311461126,1.3600593086735,0.0 103.74951432955,1.36005924654274,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1837,66 +1837,30 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>18AEC3694E0EE2C9</td>
+<td>C2D85056D2888B64</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200716142811</td>
+<td>20200729183915</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">18AEC3694E0EE2C9</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200716142811</SimpleData>
+<SimpleData name="INC_CRC">C2D85056D2888B64</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.753108890418,1.35101573443311,0.0 103.753108831051,1.35282446149224,0.0 103.754905957451,1.35282452061359,0.0 103.754906015489,1.35101579347539,0.0 103.753108890418,1.35101573443311,0.0</coordinates>
+<coordinates>103.700992987069,1.33835237169132,0.0 103.700992890052,1.34016109586655,0.0 103.702790004152,1.34016119291287,0.0 103.702790099852,1.33835246860662,0.0 103.700992987069,1.33835237169132,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
 </Placemark>
 <Placemark id="kml_52">
 <name>kml_52</name>
-<snippet> </snippet>
-<description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
-<th>JOIN_COUNT</th>
-<td>1</td>
-</tr><tr bgcolor="">
-<th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
-</tr><tr bgcolor="#E3E3F3">
-<th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
-</tr><tr bgcolor="">
-<th>INC_CRC</th>
-<td>730F8B48FBD43E10</td>
-</tr><tr bgcolor="#E3E3F3">
-<th>FMEL_UPD_D</th>
-<td>20200716142811</td>
-</tr></table></center>]]></description>
-<ExtendedData>
-<SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">730F8B48FBD43E10</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200716142811</SimpleData>
-</SchemaData>
-</ExtendedData>
-<Polygon>
-<outerBoundaryIs>
-<LinearRing>
-<coordinates>103.744122468253,1.37272013700592,0.0 103.744122401174,1.3745288633156,0.0 103.745919543257,1.37452893019027,0.0 103.745919608984,1.37272020379256,0.0 103.744122468253,1.37272013700592,0.0</coordinates>
-</LinearRing>
-</outerBoundaryIs>
-</Polygon>
-</Placemark>
-<Placemark id="kml_53">
-<name>kml_53</name>
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
@@ -1909,24 +1873,60 @@
 <td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>EED0FB80951A05A0</td>
+<td>C6A280A4DF18881B</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200716142811</td>
+<td>20200729183915</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">2</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="INC_CRC">EED0FB80951A05A0</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200716142811</SimpleData>
+<SimpleData name="INC_CRC">C6A280A4DF18881B</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.765688967043,1.3437812090695,0.0 103.765688917253,1.34558993675243,0.0 103.76748603885,1.34558998623192,0.0 103.767486087318,1.34378125848246,0.0 103.765688967043,1.3437812090695,0.0</coordinates>
+<coordinates>103.756703197269,1.34920712393757,0.0 103.756703140637,1.35101585118008,0.0 103.75850026586,1.35101590754717,0.0 103.758500321164,1.34920718022916,0.0 103.756703197269,1.34920712393757,0.0</coordinates>
+</LinearRing>
+</outerBoundaryIs>
+</Polygon>
+</Placemark>
+<Placemark id="kml_53">
+<name>kml_53</name>
+<snippet> </snippet>
+<description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
+<th>JOIN_COUNT</th>
+<td>3</td>
+</tr><tr bgcolor="">
+<th>AREANAME</th>
+<td>No. of Dengue Cases : 3</td>
+</tr><tr bgcolor="#E3E3F3">
+<th>DETAIL</th>
+<td>No. of Dengue Cases : 3</td>
+</tr><tr bgcolor="">
+<th>INC_CRC</th>
+<td>D13C391AACAB492C</td>
+</tr><tr bgcolor="#E3E3F3">
+<th>FMEL_UPD_D</th>
+<td>20200729183915</td>
+</tr></table></center>]]></description>
+<ExtendedData>
+<SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
+<SimpleData name="JOIN_COUNT">3</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 3</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 3</SimpleData>
+<SimpleData name="INC_CRC">D13C391AACAB492C</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
+</SchemaData>
+</ExtendedData>
+<Polygon>
+<outerBoundaryIs>
+<LinearRing>
+<coordinates>103.699195183286,1.35101334118344,0.0 103.699195084021,1.35282206503736,0.0 103.700992207261,1.35282216434022,0.0 103.700992305196,1.35101344035348,0.0 103.699195183286,1.35101334118344,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1936,33 +1936,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>1</td>
+<td>2</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>4AEA9B8E7B9E73FB</td>
+<td>17BCCB100BBB1CB5</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200716142811</td>
+<td>20200729183915</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">4AEA9B8E7B9E73FB</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200716142811</SimpleData>
+<SimpleData name="JOIN_COUNT">2</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="INC_CRC">17BCCB100BBB1CB5</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.769283207658,1.34378130656499,0.0 103.769283160513,1.34559003437919,0.0 103.77108028224,1.34559008119423,0.0 103.771080328062,1.34378135331708,0.0 103.769283207658,1.34378130656499,0.0</coordinates>
+<coordinates>103.722557777842,1.35101452606219,0.0 103.722557695866,1.35282325150298,0.0 103.724354820672,1.3528233333939,0.0 103.724354901319,1.35101460784358,0.0 103.722557777842,1.35101452606219,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -1972,33 +1972,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>1</td>
+<td>5</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 5</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 5</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>C4660BCDD6DDB437</td>
+<td>18AEC369D6B2A92F</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200729183915</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">C4660BCDD6DDB437</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="JOIN_COUNT">5</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 5</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 5</SimpleData>
+<SimpleData name="INC_CRC">18AEC369D6B2A92F</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.727949304253,1.34739731578452,0.0 103.727949226476,1.34920604160255,0.0 103.729746348943,1.34920611926701,0.0 103.729746425394,1.34739739334483,0.0 103.727949304253,1.34739731578452,0.0</coordinates>
+<coordinates>103.753108890418,1.35101573443311,0.0 103.753108831051,1.35282446149224,0.0 103.754905957451,1.35282452061359,0.0 103.754906015489,1.35101579347539,0.0 103.753108890418,1.35101573443311,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2017,24 +2017,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>98DF3731E3B990FC</td>
+<td>09380379A073233D</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200729183915</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">98DF3731E3B990FC</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="INC_CRC">09380379A073233D</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.744122868865,1.36186777857232,0.0 103.744122802318,1.36367650504626,0.0 103.745919936319,1.36367657139274,0.0 103.745920001526,1.36186784483077,0.0 103.744122868865,1.36186777857232,0.0</coordinates>
+<coordinates>103.744122266753,1.37814631585241,0.0 103.744122199409,1.37995504207947,0.0 103.745919345556,1.37995510921824,0.0 103.745919411543,1.37814638290315,0.0 103.744122266753,1.37814631585241,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2053,24 +2053,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>8E3238137147D89C</td>
+<td>8DF3C4779B8734EB</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200729183915</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">8E3238137147D89C</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="INC_CRC">8DF3C4779B8734EB</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.751310846427,1.37814657586855,0.0 103.75131078451,1.37995530243699,0.0 103.753107930993,1.37995536411072,0.0 103.753107991553,1.37814663746141,0.0 103.751310846427,1.37814657586855,0.0</coordinates>
+<coordinates>103.783661421191,1.28047613728213,0.0 103.783661386351,1.28228486646926,0.0 103.785458463283,1.28228490092485,0.0 103.785458496863,1.28047617168911,0.0 103.783661421191,1.28047613728213,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2089,24 +2089,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>D13C391AE0F56CDF</td>
+<td>D940EA83378C12B7</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200729183915</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">D13C391AE0F56CDF</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="INC_CRC">D940EA83378C12B7</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.699195183286,1.35101334118344,0.0 103.699195084021,1.35282206503736,0.0 103.700992207261,1.35282216434022,0.0 103.700992305196,1.35101344035348,0.0 103.699195183286,1.35101334118344,0.0</coordinates>
+<coordinates>103.774675504227,1.30398942014287,0.0 103.774675462329,1.30579814872369,0.0 103.776472555546,1.3057981902754,0.0 103.77647259616,1.303989461637,0.0 103.774675504227,1.30398942014287,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2125,24 +2125,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>BABF2234BB3D4701</td>
+<td>DF1B47A9E00DE07E</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200729183915</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">BABF2234BB3D4701</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">DF1B47A9E00DE07E</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.690209892655,1.34558665561843,0.0 103.690209787166,1.34739537886241,0.0 103.69200690574,1.34739548443683,0.0 103.692007009904,1.34558676105108,0.0 103.690209892655,1.34558665561843,0.0</coordinates>
+<coordinates>103.808820535698,1.27505031434773,0.0 103.808820518577,1.27685904412924,0.0 103.810617592235,1.27685906074079,0.0 103.810617608101,1.27505033093574,0.0 103.808820535698,1.27505031434773,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2152,33 +2152,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>1</td>
+<td>2</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>3C561A30E99F1DBC</td>
+<td>3CEBE9220F98E92F</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200729183915</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">3C561A30E99F1DBC</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="JOIN_COUNT">2</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="INC_CRC">3CEBE9220F98E92F</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.744123463817,1.34558923908503,0.0 103.744123398065,1.34739796580291,0.0 103.745920520066,1.34739803135711,0.0 103.745920584493,1.34558930455121,0.0 103.744123463817,1.34558923908503,0.0</coordinates>
+<coordinates>103.767486853924,1.31484161085912,0.0 103.767486806501,1.31665033903443,0.0 103.769283907213,1.31665038614584,0.0 103.769283953342,1.31484165790579,0.0 103.767486853924,1.31484161085912,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2197,24 +2197,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>04D54DF0884F2D0F</td>
+<td>2C7FF479E92D019E</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200729183915</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">04D54DF0884F2D0F</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">2C7FF479E92D019E</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.729746348943,1.34920611926701,0.0 103.729746272389,1.3510148451622,0.0 103.731543396287,1.35101492159322,0.0 103.731543471512,1.34920619559567,0.0 103.729746348943,1.34920611926701,0.0</coordinates>
+<coordinates>103.692007425161,1.33835186723915,0.0 103.692007321557,1.3401605907324,0.0 103.693804434983,1.3401606944129,0.0 103.69380453727,1.33835197077967,0.0 103.692007425161,1.33835186723915,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2233,24 +2233,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>80A5E707AC3F4EFB</td>
+<td>F1B7ACCDBA657205</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200729183915</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">80A5E707AC3F4EFB</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">F1B7ACCDBA657205</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.742326208986,1.34920662551579,0.0 103.742326141729,1.35101535208988,0.0 103.744123266296,1.35101541915775,0.0 103.744123332225,1.34920669249383,0.0 103.742326208986,1.34920662551579,0.0</coordinates>
+<coordinates>103.702790099852,1.33835246860662,0.0 103.702790004152,1.34016119291287,0.0 103.704587118381,1.34016128863236,0.0 103.704587212763,1.33835256419687,0.0 103.702790099852,1.33835246860662,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2269,24 +2269,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>02BDF194111FB1C7</td>
+<td>20E9AD892388173E</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200729183915</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">02BDF194111FB1C7</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">20E9AD892388173E</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.717166408079,1.35101427269246,0.0 103.717166322113,1.35282299779393,0.0 103.718963446584,1.35282308370299,0.0 103.71896353122,1.35101435848663,0.0 103.717166408079,1.35101427269246,0.0</coordinates>
+<coordinates>103.749514887798,1.34378070448338,0.0 103.749514826103,1.34558943148689,0.0 103.751311947033,1.3455894929564,0.0 103.751312007406,1.34378076587023,0.0 103.749514887798,1.34378070448338,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2305,66 +2305,30 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>573292020DBEF95C</td>
+<td>CDEAC0BA0FC024EA</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200729183915</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">573292020DBEF95C</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">CDEAC0BA0FC024EA</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.700992207261,1.35282216434022,0.0 103.700992109195,1.35463088829989,0.0 103.702789233899,1.35463098639439,0.0 103.702789330633,1.3528222623037,0.0 103.700992207261,1.35282216434022,0.0</coordinates>
+<coordinates>103.697398362485,1.34558706935578,0.0 103.697398262294,1.3473957931561,0.0 103.699195381417,1.34739589339451,0.0 103.699195480283,1.34558716945959,0.0 103.697398362485,1.34558706935578,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
 </Placemark>
 <Placemark id="kml_65">
 <name>kml_65</name>
-<snippet> </snippet>
-<description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
-<th>JOIN_COUNT</th>
-<td>3</td>
-</tr><tr bgcolor="">
-<th>AREANAME</th>
-<td>No. of Dengue Cases : 3</td>
-</tr><tr bgcolor="#E3E3F3">
-<th>DETAIL</th>
-<td>No. of Dengue Cases : 3</td>
-</tr><tr bgcolor="">
-<th>INC_CRC</th>
-<td>38F0F47083628D39</td>
-</tr><tr bgcolor="#E3E3F3">
-<th>FMEL_UPD_D</th>
-<td>20200714140026</td>
-</tr></table></center>]]></description>
-<ExtendedData>
-<SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">3</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 3</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 3</SimpleData>
-<SimpleData name="INC_CRC">38F0F47083628D39</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
-</SchemaData>
-</ExtendedData>
-<Polygon>
-<outerBoundaryIs>
-<LinearRing>
-<coordinates>103.74951451638,1.3546330660999,0.0 103.749514454186,1.35644179294133,0.0 103.751311583091,1.35644185490678,0.0 103.751311643951,1.35463312798269,0.0 103.74951451638,1.3546330660999,0.0</coordinates>
-</LinearRing>
-</outerBoundaryIs>
-</Polygon>
-</Placemark>
-<Placemark id="kml_66">
-<name>kml_66</name>
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
@@ -2377,24 +2341,60 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>F33FCB06828EE76D</td>
+<td>81AC30841CCEA68D</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200729183915</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">F33FCB06828EE76D</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">81AC30841CCEA68D</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.745920131681,1.35825039162513,0.0 103.745920066647,1.36005911824156,0.0 103.747717198056,1.36005918306542,0.0 103.747717261753,1.35825045636276,0.0 103.745920131681,1.35825039162513,0.0</coordinates>
+<coordinates>103.718963784448,1.34558818267547,0.0 103.718963700152,1.34739690797283,0.0 103.720760820753,1.34739699220318,0.0 103.720760903724,1.34558826679272,0.0 103.718963784448,1.34558818267547,0.0</coordinates>
+</LinearRing>
+</outerBoundaryIs>
+</Polygon>
+</Placemark>
+<Placemark id="kml_66">
+<name>kml_66</name>
+<snippet> </snippet>
+<description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
+<th>JOIN_COUNT</th>
+<td>2</td>
+</tr><tr bgcolor="">
+<th>AREANAME</th>
+<td>No. of Dengue Cases : 2</td>
+</tr><tr bgcolor="#E3E3F3">
+<th>DETAIL</th>
+<td>No. of Dengue Cases : 2</td>
+</tr><tr bgcolor="">
+<th>INC_CRC</th>
+<td>87BF54C06E8B7586</td>
+</tr><tr bgcolor="#E3E3F3">
+<th>FMEL_UPD_D</th>
+<td>20200729183915</td>
+</tr></table></center>]]></description>
+<ExtendedData>
+<SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
+<SimpleData name="JOIN_COUNT">2</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="INC_CRC">87BF54C06E8B7586</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
+</SchemaData>
+</ExtendedData>
+<Polygon>
+<outerBoundaryIs>
+<LinearRing>
+<coordinates>103.754906073449,1.34920706631016,0.0 103.754906015489,1.35101579347539,0.0 103.756703140637,1.35101585118008,0.0 103.756703197269,1.34920712393757,0.0 103.754906073449,1.34920706631016,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2413,24 +2413,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>09380379A073233D</td>
+<td>710B2931687683AA</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200729183915</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">09380379A073233D</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">710B2931687683AA</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200729183915</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.744122266753,1.37814631585241,0.0 103.744122199409,1.37995504207947,0.0 103.745919345556,1.37995510921824,0.0 103.745919411543,1.37814638290315,0.0 103.744122266753,1.37814631585241,0.0</coordinates>
+<coordinates>103.747717070408,1.36367663638908,0.0 103.747717006456,1.36548536301,0.0 103.749514141972,1.36548542674066,0.0 103.749514204581,1.36367670003529,0.0 103.747717070408,1.36367663638908,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2449,24 +2449,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>052928976C4B6442</td>
+<td>47304817377473FE</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">052928976C4B6442</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">47304817377473FE</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.749513701382,1.37814651291122,0.0 103.749513638109,1.379955239397,0.0 103.75131078451,1.37995530243699,0.0 103.751310846427,1.37814657586855,0.0 103.749513701382,1.37814651291122,0.0</coordinates>
+<coordinates>103.756703140637,1.35101585118008,0.0 103.756703083929,1.35282457839556,0.0 103.758500210482,1.35282463483814,0.0 103.75850026586,1.35101590754717,0.0 103.756703140637,1.35101585118008,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2485,24 +2485,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>14AFEA369C228F6D</td>
+<td>47304817377473FE</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">14AFEA369C228F6D</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">47304817377473FE</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.74771649179,1.37995517499075,0.0 103.747716427075,1.38176390136447,0.0 103.749513574752,1.38176396585517,0.0 103.749513638109,1.379955239397,0.0 103.74771649179,1.37995517499075,0.0</coordinates>
+<coordinates>103.756703140637,1.35101585118008,0.0 103.756703083929,1.35282457839556,0.0 103.758500210482,1.35282463483814,0.0 103.75850026586,1.35101590754717,0.0 103.756703140637,1.35101585118008,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2521,24 +2521,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>BAA5EE6C4F049FF8</td>
+<td>F0AA22655AA6EB4F</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">BAA5EE6C4F049FF8</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">F0AA22655AA6EB4F</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.790849724155,1.28047626730361,0.0 103.790849694357,1.28228499667446,0.0 103.792646771469,1.28228502605194,0.0 103.792646800006,1.28047629663964,0.0 103.790849724155,1.28047626730361,0.0</coordinates>
+<coordinates>103.738731752761,1.3546326666384,0.0 103.738731682566,1.35644139294628,0.0 103.740528810946,1.35644146296954,0.0 103.740528879807,1.35463273656826,0.0 103.738731752761,1.3546326666384,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2557,24 +2557,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>84F58C15306D8E4F</td>
+<td>EAC84BB700759D95</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">84F58C15306D8E4F</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">EAC84BB700759D95</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.803429255895,1.28047644603325,0.0 103.80342923492,1.28228517565664,0.0 103.805226312276,1.2822851961474,0.0 103.805226331991,1.2804764664951,0.0 103.803429255895,1.28047644603325,0.0</coordinates>
+<coordinates>103.736933833746,1.37452858220807,0.0 103.736933761167,1.37633730812021,0.0 103.738730904238,1.37633738053361,0.0 103.738730975464,1.37452865452628,0.0 103.736933833746,1.37452858220807,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2593,24 +2593,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>ADD3EC767553F0A6</td>
+<td>63A1171FFDFB73ED</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">ADD3EC767553F0A6</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">63A1171FFDFB73ED</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.767486184057,1.34016380290291,0.0 103.76748613572,1.34197253070611,0.0 103.76928325474,1.3419725787239,0.0 103.769283301757,1.34016385085596,0.0 103.767486184057,1.34016380290291,0.0</coordinates>
+<coordinates>103.744122401174,1.3745288633156,0.0 103.744122334008,1.37633758959777,0.0 103.745919477443,1.37633765656048,0.0 103.745919543257,1.37452893019027,0.0 103.744122401174,1.3745288633156,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2629,24 +2629,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>187F4C18159BAC48</td>
+<td>63A1171FFDFB73ED</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">187F4C18159BAC48</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">63A1171FFDFB73ED</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.76029728299,1.35463341727893,0.0 103.760297228797,1.35644214458943,0.0 103.762094358162,1.35644219849705,0.0 103.762094411022,1.35463347111464,0.0 103.76029728299,1.35463341727893,0.0</coordinates>
+<coordinates>103.744122401174,1.3745288633156,0.0 103.744122334008,1.37633758959777,0.0 103.745919477443,1.37633765656048,0.0 103.745919543257,1.37452893019027,0.0 103.744122401174,1.3745288633156,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2665,24 +2665,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>900F2AE03E98AC97</td>
+<td>964E95216C809FEE</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200707141115</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">900F2AE03E98AC97</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200707141115</SimpleData>
+<SimpleData name="INC_CRC">964E95216C809FEE</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.74232519066,1.37633752127239,0.0 103.742325122051,1.37814624743721,0.0 103.744122266753,1.37814631585241,0.0 103.744122334008,1.37633758959777,0.0 103.74232519066,1.37633752127239,0.0</coordinates>
+<coordinates>103.740528047403,1.37633745158434,0.0 103.740527977439,1.37814617765754,0.0 103.742325122051,1.37814624743721,0.0 103.74232519066,1.37633752127239,0.0 103.740528047403,1.37633745158434,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2701,24 +2701,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>78C74AE626E10099</td>
+<td>052928976C4B6442</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200706174518</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">78C74AE626E10099</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200706174518</SimpleData>
+<SimpleData name="INC_CRC">052928976C4B6442</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.695601041654,1.34920441522063,0.0 103.695600939866,1.35101313883059,0.0 103.697398061508,1.3510132406758,0.0 103.697398161969,1.34920451692945,0.0 103.695601041654,1.34920441522063,0.0</coordinates>
+<coordinates>103.749513701382,1.37814651291122,0.0 103.749513638109,1.379955239397,0.0 103.75131078451,1.37995530243699,0.0 103.751310846427,1.37814657586855,0.0 103.749513701382,1.37814651291122,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2737,24 +2737,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>4D2778F1DCA9D3D6</td>
+<td>D3E7845E8C0D5F50</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200706174518</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">4D2778F1DCA9D3D6</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200706174518</SimpleData>
+<SimpleData name="INC_CRC">D3E7845E8C0D5F50</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.713572250649,1.34920537219804,0.0 103.713572162142,1.35101409709136,0.0 103.715369285052,1.35101418556071,0.0 103.715369372231,1.3492054605489,0.0 103.713572250649,1.34920537219804,0.0</coordinates>
+<coordinates>103.744122131977,1.38176376827892,0.0 103.744122064457,1.38357249445073,0.0 103.745919213323,1.38357256176556,0.0 103.745919279483,1.38176383550572,0.0 103.744122131977,1.38176376827892,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2773,24 +2773,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>DFEC847632D1513B</td>
+<td>EA34016D80C47CFD</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200623174515</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">DFEC847632D1513B</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200623174515</SimpleData>
+<SimpleData name="INC_CRC">EA34016D80C47CFD</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.781863835525,1.30579830717362,0.0 103.781863798711,1.30760703594786,0.0 103.783660893428,1.30760707237871,0.0 103.783660928956,1.30579834355406,0.0 103.781863835525,1.30579830717362,0.0</coordinates>
+<coordinates>103.760298351649,1.31845886542524,0.0 103.760298298904,1.32026759327095,0.0 103.762095401938,1.32026764574042,0.0 103.762095453386,1.31845891782281,0.0 103.760298351649,1.31845886542524,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2809,24 +2809,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>94CE1CDF2F81D783</td>
+<td>81CBD7E1A1BD7225</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200630150615</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">94CE1CDF2F81D783</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200630150615</SimpleData>
+<SimpleData name="INC_CRC">81CBD7E1A1BD7225</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.749514267107,1.36186797330264,0.0 103.749514204581,1.36367670003529,0.0 103.751311338837,1.36367676233137,0.0 103.751311400022,1.36186803551606,0.0 103.749514267107,1.36186797330264,0.0</coordinates>
+<coordinates>103.760298614291,1.30941522580174,0.0 103.760298561907,1.31122395377898,0.0 103.76209565847,1.31122400588893,0.0 103.762095709565,1.30941527783978,0.0 103.760298614291,1.30941522580174,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2845,24 +2845,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>1888BB5EECAD282E</td>
+<td>15ABBD00877D3443</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200630150615</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">1888BB5EECAD282E</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200630150615</SimpleData>
+<SimpleData name="INC_CRC">15ABBD00877D3443</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.726152104113,1.34920596260229,0.0 103.726152024903,1.35101468828738,0.0 103.727949148594,1.35101476739358,0.0 103.727949226476,1.34920604160255,0.0 103.726152104113,1.34920596260229,0.0</coordinates>
+<coordinates>103.751312962313,1.3148411288594,0.0 103.751312903241,1.31664985637143,0.0 103.753110003302,1.31664991521489,0.0 103.75311006108,1.314841187622,0.0 103.751312962313,1.3148411288594,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2881,24 +2881,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>3C5BEF8A61E9B0A4</td>
+<td>34C996119991162D</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">3C5BEF8A61E9B0A4</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">34C996119991162D</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.763892705229,1.31303278479371,0.0 103.763892655286,1.31484151286047,0.0 103.765689754572,1.31484156251068,0.0 103.765689803222,1.3130328343756,0.0 103.763892705229,1.31303278479371,0.0</coordinates>
+<coordinates>103.756704093054,1.32026748441057,0.0 103.756704037637,1.32207621208067,0.0 103.758501141825,1.32207626723992,0.0 103.758501195942,1.32026753949433,0.0 103.756704093054,1.32026748441057,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2908,33 +2908,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>2</td>
+<td>1</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>60BEA8823120DE91</td>
+<td>62E3908240C5D016</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">2</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="INC_CRC">60BEA8823120DE91</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="JOIN_COUNT">1</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="INC_CRC">62E3908240C5D016</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.699195776084,1.3401609974934,0.0 103.699195677617,1.34196972150899,0.0 103.700992792904,1.34196982001497,0.0 103.700992890052,1.34016109586655,0.0 103.699195776084,1.3401609974934,0.0</coordinates>
+<coordinates>103.692007528625,1.33654314371911,0.0 103.692007425161,1.33835186723915,0.0 103.69380453727,1.33835197077967,0.0 103.693804639418,1.33654324711966,0.0 103.692007528625,1.33654314371911,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2953,24 +2953,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>B6F401EDC79E3429</td>
+<td>945E0B056E3E0EB8</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">B6F401EDC79E3429</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">945E0B056E3E0EB8</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.740529427385,1.34016292438529,0.0 103.740529359259,1.3419716510024,0.0 103.742326477113,1.34197171894979,0.0 103.742326543919,1.34016299224107,0.0 103.740529427385,1.34016292438529,0.0</coordinates>
+<coordinates>103.783661455981,1.27866740806938,0.0 103.783661421191,1.28047613728213,0.0 103.785458496863,1.28047617168911,0.0 103.785458530395,1.27866744242774,0.0 103.783661455981,1.27866740806938,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -2980,33 +2980,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>2</td>
+<td>1</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>BF057C4369B2185B</td>
+<td>C70CF9B28D5341FE</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">2</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="INC_CRC">BF057C4369B2185B</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="JOIN_COUNT">1</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="INC_CRC">C70CF9B28D5341FE</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.704587023871,1.34197001304102,0.0 103.704586929234,1.34377873742284,0.0 103.706384046231,1.34377883207036,0.0 103.706384139547,1.34197010756111,0.0 103.704587023871,1.34197001304102,0.0</coordinates>
+<coordinates>103.762095760589,1.30760654976443,0.0 103.762095709565,1.30941527783978,0.0 103.76389280491,1.30941532858142,0.0 103.763892854646,1.30760660043596,0.0 103.762095760589,1.30760654976443,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3025,24 +3025,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>0A63DE3E9913E574</td>
+<td>BA143E6B9EBE462C</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">0A63DE3E9913E574</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">BA143E6B9EBE462C</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.704586929234,1.34377873742284,0.0 103.704586834469,1.34558746177776,0.0 103.706383952789,1.34558755655272,0.0 103.706384046231,1.34377883207036,0.0 103.704586929234,1.34377873742284,0.0</coordinates>
+<coordinates>103.742325122051,1.37814624743721,0.0 103.74232505335,1.37995497357445,0.0 103.744122199409,1.37995504207947,0.0 103.744122266753,1.37814631585241,0.0 103.742325122051,1.37814624743721,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3061,24 +3061,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>A78024AA8FD66428</td>
+<td>EC78DEB5EA3EA47C</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">A78024AA8FD66428</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">EC78DEB5EA3EA47C</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.753109008916,1.3473982802338,0.0 103.753108949707,1.34920700734695,0.0 103.754906073449,1.34920706631016,0.0 103.754906131331,1.34739833911794,0.0 103.753109008916,1.3473982802338,0.0</coordinates>
+<coordinates>103.722558591567,1.33292727017334,0.0 103.722558510688,1.33473599588285,0.0 103.724355622276,1.3347360766785,0.0 103.724355701842,1.33292735085947,0.0 103.722558591567,1.33292727017334,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3097,24 +3097,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>AA2ADDD8728C5F40</td>
+<td>8E3238137147D89C</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">AA2ADDD8728C5F40</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">8E3238137147D89C</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.724354981857,1.34920588226622,0.0 103.724354901319,1.35101460784358,0.0 103.726152024903,1.35101468828738,0.0 103.726152104113,1.34920596260229,0.0 103.724354981857,1.34920588226622,0.0</coordinates>
+<coordinates>103.751310846427,1.37814657586855,0.0 103.75131078451,1.37995530243699,0.0 103.753107930993,1.37995536411072,0.0 103.753107991553,1.37814663746141,0.0 103.751310846427,1.37814657586855,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3124,33 +3124,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>2</td>
+<td>1</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>993C0BDAA662192C</td>
+<td>BD0E8DACDBC3C97B</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">2</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="INC_CRC">993C0BDAA662192C</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="JOIN_COUNT">1</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="INC_CRC">BD0E8DACDBC3C97B</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.753108949707,1.34920700734695,0.0 103.753108890418,1.35101573443311,0.0 103.754906015489,1.35101579347539,0.0 103.754906073449,1.34920706631016,0.0 103.753108949707,1.34920700734695,0.0</coordinates>
+<coordinates>103.754905136759,1.37814669768981,0.0 103.754905077555,1.37995542441819,0.0 103.756702224196,1.3799554833594,0.0 103.756702282043,1.37814675655374,0.0 103.754905136759,1.37814669768981,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3169,24 +3169,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>9D5D045603768952</td>
+<td>75955EC69BBBFE9E</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">9D5D045603768952</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">75955EC69BBBFE9E</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.74951432955,1.36005924654274,0.0 103.749514267107,1.36186797330264,0.0 103.751311400022,1.36186803551606,0.0 103.751311461126,1.3600593086735,0.0 103.74951432955,1.36005924654274,0.0</coordinates>
+<coordinates>103.749513638109,1.379955239397,0.0 103.749513574752,1.38176396585517,0.0 103.751310722512,1.38176402897782,0.0 103.75131078451,1.37995530243699,0.0 103.749513638109,1.379955239397,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3205,24 +3205,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>93BD6AACAC301933</td>
+<td>668A068DE0D80938</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">93BD6AACAC301933</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">668A068DE0D80938</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.745920001526,1.36186784483077,0.0 103.745919936319,1.36367657139274,0.0 103.747717070408,1.36367663638908,0.0 103.747717134274,1.36186790974088,0.0 103.745920001526,1.36186784483077,0.0</coordinates>
+<coordinates>103.740527837233,1.38176362972117,0.0 103.740527766993,1.38357235571154,0.0 103.74232491568,1.38357242576605,0.0 103.74232498456,1.38176369968407,0.0 103.740527837233,1.38176362972117,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3232,33 +3232,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>1</td>
+<td>2</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>FE8E4E4286B74240</td>
+<td>60CBB94C35098E6B</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">FE8E4E4286B74240</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="JOIN_COUNT">2</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="INC_CRC">60CBB94C35098E6B</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.75131078451,1.37995530243699,0.0 103.751310722512,1.38176402897782,0.0 103.753107870353,1.38176409073242,0.0 103.753107930993,1.37995536411072,0.0 103.75131078451,1.37995530243699,0.0</coordinates>
+<coordinates>103.74232498456,1.38176369968407,0.0 103.74232491568,1.38357242576605,0.0 103.744122064457,1.38357249445073,0.0 103.744122131977,1.38176376827892,0.0 103.74232498456,1.38176369968407,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3277,24 +3277,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>54EDBF345D39A4F1</td>
+<td>C838326B2A439E5D</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">54EDBF345D39A4F1</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">C838326B2A439E5D</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.751310722512,1.38176402897782,0.0 103.751310660432,1.38357275549101,0.0 103.753107809634,1.38357281732647,0.0 103.753107870353,1.38176409073242,0.0 103.751310722512,1.38176402897782,0.0</coordinates>
+<coordinates>103.781863909001,1.30218084954679,0.0 103.781863872289,1.30398957837325,0.0 103.783660964436,1.30398961470328,0.0 103.783660999866,1.30218088582641,0.0 103.781863909001,1.30218084954679,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3304,33 +3304,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>2</td>
+<td>1</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>79525591B89D6D96</td>
+<td>43ED7821AF1B5214</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">2</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="INC_CRC">79525591B89D6D96</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="JOIN_COUNT">1</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="INC_CRC">43ED7821AF1B5214</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.753107870353,1.38176409073242,0.0 103.753107809634,1.38357281732647,0.0 103.754904958915,1.3835728777921,0.0 103.754905018274,1.38176415111897,0.0 103.753107870353,1.38176409073242,0.0</coordinates>
+<coordinates>103.771081186958,1.30941551858401,0.0 103.771081142308,1.31122424696582,0.0 103.772878239268,1.31122429128663,0.0 103.772878282629,1.30941556284366,0.0 103.771081186958,1.30941551858401,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3349,24 +3349,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>ECE9050D09EF939D</td>
+<td>8C4434AD7B605AEC</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">ECE9050D09EF939D</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">8C4434AD7B605AEC</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.758501572688,1.30760644453756,0.0 103.758501519089,1.30941517246731,0.0 103.760298614291,1.30941522580174,0.0 103.760298666602,1.3076064977983,0.0 103.758501572688,1.30760644453756,0.0</coordinates>
+<coordinates>103.700993083955,1.33654364748931,0.0 103.700992987069,1.33835237169132,0.0 103.702790099852,1.33835246860662,0.0 103.702790195422,1.33654374427358,0.0 103.700993083955,1.33654364748931,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3385,24 +3385,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>7B4782B075D92A7F</td>
+<td>510739CC9C34A0D5</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">7B4782B075D92A7F</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">510739CC9C34A0D5</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.765689851806,1.31122410621425,0.0 103.765689803222,1.3130328343756,0.0 103.767486901283,1.31303288265751,0.0 103.767486948576,1.31122415442963,0.0 103.765689851806,1.31122410621425,0.0</coordinates>
+<coordinates>103.742326677261,1.33654553874322,0.0 103.742326610635,1.33835426550554,0.0 103.744123725942,1.33835433194465,0.0 103.744123791252,1.33654560509251,0.0 103.742326677261,1.33654553874322,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3421,24 +3421,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>81A4B10AAD3B5CC3</td>
+<td>0910B9937A34D8F6</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">81A4B10AAD3B5CC3</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">0910B9937A34D8F6</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.767486806501,1.31665033903443,0.0 103.767486759012,1.31845906718339,0.0 103.76928386102,1.31845911435954,0.0 103.769283907213,1.31665038614584,0.0 103.767486806501,1.31665033903443,0.0</coordinates>
+<coordinates>103.722558348602,1.3383534472217,0.0 103.722558267394,1.34016217285097,0.0 103.724355382929,1.3401622539752,0.0 103.724355462819,1.3383535282364,0.0 103.722558348602,1.3383534472217,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3457,24 +3457,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>C2D85056D2888B64</td>
+<td>2502DB67DDE8D774</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">C2D85056D2888B64</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">2502DB67DDE8D774</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.700992987069,1.33835237169132,0.0 103.700992890052,1.34016109586655,0.0 103.702790004152,1.34016119291287,0.0 103.702790099852,1.33835246860662,0.0 103.700992987069,1.33835237169132,0.0</coordinates>
+<coordinates>103.704587118381,1.34016128863236,0.0 103.704587023871,1.34197001304102,0.0 103.706384139547,1.34197010756111,0.0 103.706384232738,1.340161383025,0.0 103.704587118381,1.34016128863236,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3493,24 +3493,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>673C456A93079DD8</td>
+<td>08FBDEA3E4C2EB8E</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">673C456A93079DD8</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">08FBDEA3E4C2EB8E</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.688413095127,1.34016037939088,0.0 103.688412988744,1.34196910257198,0.0 103.690210103208,1.34196920904972,0.0 103.690210208271,1.34016048572506,0.0 103.688413095127,1.34016037939088,0.0</coordinates>
+<coordinates>103.745920777256,1.34016312397209,0.0 103.745920713088,1.34197185085866,0.0 103.747717831207,1.34197191482014,0.0 103.747717894056,1.34016318784733,0.0 103.745920777256,1.34016312397209,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3520,33 +3520,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>1</td>
+<td>2</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>FD3BE24EA094E6DD</td>
+<td>6822FE90F94E9438</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">FD3BE24EA094E6DD</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="JOIN_COUNT">2</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="INC_CRC">6822FE90F94E9438</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.688412988744,1.34196910257198,0.0 103.688412882218,1.34377782572622,0.0 103.690209998002,1.34377793234752,0.0 103.690210103208,1.34196920904972,0.0 103.688412988744,1.34196910257198,0.0</coordinates>
+<coordinates>103.697398562462,1.34196962167439,0.0 103.697398462541,1.34377834552853,0.0 103.699195579016,1.34377844549774,0.0 103.699195677617,1.34196972150899,0.0 103.697398562462,1.34196962167439,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3565,24 +3565,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>07D47EDAD0FF1407</td>
+<td>2235C6D1025D4597</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200714140026</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">07D47EDAD0FF1407</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200714140026</SimpleData>
+<SimpleData name="INC_CRC">2235C6D1025D4597</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.733340815281,1.34378009213234,0.0 103.733340741681,1.34558881831134,0.0 103.7351378618,1.34558889177084,0.0 103.735137934077,1.34378016549306,0.0 103.733340815281,1.34378009213234,0.0</coordinates>
+<coordinates>103.735138006258,1.34197143918839,0.0 103.735137934077,1.34378016549306,0.0 103.736935052971,1.34378023752335,0.0 103.73693512383,1.3419715111217,0.0 103.735138006258,1.34197143918839,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3601,24 +3601,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>76CD0A5C66952D5F</td>
+<td>2E24ED3FCE6502E8</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">76CD0A5C66952D5F</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="INC_CRC">2E24ED3FCE6502E8</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.808820620935,1.26600666505827,0.0 103.808820603936,1.26781539496697,0.0 103.810617671336,1.26781541146082,0.0 103.810617687089,1.26600668152859,0.0 103.808820620935,1.26600666505827,0.0</coordinates>
+<coordinates>103.758500541638,1.34197227068756,0.0 103.758500486631,1.34378099811332,0.0 103.760297606627,1.34378105284802,0.0 103.760297660314,1.34197232534855,0.0 103.758500541638,1.34197227068756,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3637,24 +3637,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>F53019FF088FB68A</td>
+<td>177AE28DD6D059FA</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">F53019FF088FB68A</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="INC_CRC">177AE28DD6D059FA</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.810617687089,1.26600668152859,0.0 103.810617671336,1.26781541146082,0.0 103.812414738759,1.26781542669948,0.0 103.812414753266,1.26600669674549,0.0 103.810617687089,1.26600668152859,0.0</coordinates>
+<coordinates>103.733340741681,1.34558881831134,0.0 103.733340667982,1.34739754446342,0.0 103.735137789425,1.34739761802169,0.0 103.7351378618,1.34558889177084,0.0 103.733340741681,1.34558881831134,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3673,24 +3673,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>D9218B233E40BA35</td>
+<td>517D852E223E2B30</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">D9218B233E40BA35</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="INC_CRC">517D852E223E2B30</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.693805249405,1.32569090459915,0.0 103.693805148086,1.32749962841911,0.0 103.695602252466,1.32749972980546,0.0 103.69560235248,1.32569100584732,0.0 103.693805249405,1.32569090459915,0.0</coordinates>
+<coordinates>103.747717705256,1.34558936868516,0.0 103.747717642153,1.34739809557731,0.0 103.749514764324,1.34739815846349,0.0 103.749514826103,1.34558943148689,0.0 103.747717705256,1.34558936868516,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3700,33 +3700,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>2</td>
+<td>1</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>5DD5D9E146B3A994</td>
+<td>8A3FCE0FEDBB1965</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">2</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="INC_CRC">5DD5D9E146B3A994</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="JOIN_COUNT">1</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="INC_CRC">8A3FCE0FEDBB1965</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.738732241498,1.34197158172636,0.0 103.738732171959,1.34378030822322,0.0 103.740529291042,1.34378037759265,0.0 103.740529359259,1.3419716510024,0.0 103.738732241498,1.34197158172636,0.0</coordinates>
+<coordinates>103.751311886579,1.34739822001565,0.0 103.751311826044,1.34920694704794,0.0 103.753108949707,1.34920700734695,0.0 103.753109008916,1.3473982802338,0.0 103.751311886579,1.34739822001565,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3736,33 +3736,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>2</td>
+<td>1</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 2</td>
+<td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>67C812CEBC412F53</td>
+<td>5EA2450B59531D66</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200727225415</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">2</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
-<SimpleData name="INC_CRC">67C812CEBC412F53</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="JOIN_COUNT">1</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="INC_CRC">5EA2450B59531D66</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200727225415</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.744122735681,1.3654852314929,0.0 103.744122668957,1.36729395791223,0.0 103.745919805645,1.36729402443478,0.0 103.745919871025,1.36548529792742,0.0 103.744122735681,1.3654852314929,0.0</coordinates>
+<coordinates>103.747717578965,1.34920682244249,0.0 103.747717515692,1.35101554928068,0.0 103.749514640518,1.35101561233576,0.0 103.749514702463,1.34920688541312,0.0 103.747717578965,1.34920682244249,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3781,24 +3781,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>34B4B8495A743F2C</td>
+<td>03704DC465BC8DD9</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">34B4B8495A743F2C</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="INC_CRC">03704DC465BC8DD9</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.807023463319,1.27505029649735,0.0 103.807023444943,1.27685902625353,0.0 103.808820518577,1.27685904412924,0.0 103.808820535698,1.27505031434773,0.0 103.807023463319,1.27505029649735,0.0</coordinates>
+<coordinates>103.760298404322,1.31665013755316,0.0 103.760298351649,1.31845886542524,0.0 103.762095453386,1.31845891782281,0.0 103.762095504763,1.31665018987882,0.0 103.760298404322,1.31665013755316,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3817,24 +3817,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>DF1B47A9E00DE07E</td>
+<td>81A4B10AAD3B5CC3</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">DF1B47A9E00DE07E</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="INC_CRC">81A4B10AAD3B5CC3</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.808820535698,1.27505031434773,0.0 103.808820518577,1.27685904412924,0.0 103.810617592235,1.27685906074079,0.0 103.810617608101,1.27505033093574,0.0 103.808820535698,1.27505031434773,0.0</coordinates>
+<coordinates>103.767486806501,1.31665033903443,0.0 103.767486759012,1.31845906718339,0.0 103.76928386102,1.31845911435954,0.0 103.769283907213,1.31665038614584,0.0 103.767486806501,1.31665033903443,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3844,33 +3844,33 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>1</td>
+<td>4</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 4</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 4</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>488B9008AE3CEF8E</td>
+<td>8DF3C477C8ACEED4</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">488B9008AE3CEF8E</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="JOIN_COUNT">4</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 4</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 4</SimpleData>
+<SimpleData name="INC_CRC">8DF3C477C8ACEED4</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.736935966691,1.32026679221771,0.0 103.736935896978,1.3220755189392,0.0 103.738733000232,1.32207558849673,0.0 103.738733068646,1.32026686168004,0.0 103.736935966691,1.32026679221771,0.0</coordinates>
+<coordinates>103.783661421191,1.28047613728213,0.0 103.783661386351,1.28228486646926,0.0 103.785458463283,1.28228490092485,0.0 103.785458496863,1.28047617168911,0.0 103.783661421191,1.28047613728213,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3889,24 +3889,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>6099EEAD902E1F83</td>
+<td>4AEA9B8E7B9E73FB</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">6099EEAD902E1F83</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="INC_CRC">4AEA9B8E7B9E73FB</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.720761809048,1.32569228550841,0.0 103.720761727303,1.32750101121307,0.0 103.722558833543,1.32750109288493,0.0 103.722558913983,1.32569236706895,0.0 103.720761809048,1.32569228550841,0.0</coordinates>
+<coordinates>103.769283207658,1.34378130656499,0.0 103.769283160513,1.34559003437919,0.0 103.77108028224,1.34559008119423,0.0 103.771080328062,1.34378135331708,0.0 103.769283207658,1.34378130656499,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3925,24 +3925,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>CE17FCA24D116A3A</td>
+<td>373447ADA6169473</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">CE17FCA24D116A3A</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="INC_CRC">373447ADA6169473</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.720761727303,1.32750101121307,0.0 103.720761645447,1.32930973689117,0.0 103.722558752994,1.32930981867434,0.0 103.722558833543,1.32750109288493,0.0 103.720761727303,1.32750101121307,0.0</coordinates>
+<coordinates>103.745920584493,1.34558930455121,0.0 103.745920520066,1.34739803135711,0.0 103.747717642153,1.34739809557731,0.0 103.747717705256,1.34558936868516,0.0 103.745920584493,1.34558930455121,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3961,24 +3961,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>879B9898345E500A</td>
+<td>62E13AB2A0CAC8C3</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">879B9898345E500A</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="INC_CRC">62E13AB2A0CAC8C3</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.733341035488,1.33835391343414,0.0 103.733340962185,1.3401626396937,0.0 103.735138078341,1.34016271285687,0.0 103.735138150326,1.33835398649853,0.0 103.733341035488,1.33835391343414,0.0</coordinates>
+<coordinates>103.762095862425,1.30398909353528,0.0 103.762095811542,1.30579782166292,0.0 103.763892904314,1.30579787226433,0.0 103.763892953914,1.30398914406658,0.0 103.762095862425,1.30398909353528,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -3997,24 +3997,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>1F771C1ECA7A43F9</td>
+<td>213FF9FCD027DDC0</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">1F771C1ECA7A43F9</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="INC_CRC">213FF9FCD027DDC0</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.690210103208,1.34196920904972,0.0 103.690209998002,1.34377793234752,0.0 103.692007113929,1.3437780376384,0.0 103.692007217813,1.34196931419883,0.0 103.690210103208,1.34196920904972,0.0</coordinates>
+<coordinates>103.720761481401,1.33292718816753,0.0 103.72076139921,1.33473591376572,0.0 103.722558510688,1.33473599588285,0.0 103.722558591567,1.33292727017334,0.0 103.720761481401,1.33292718816753,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -4033,24 +4033,24 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>F2F23163718ED5C4</td>
+<td>F22559B44D145B17</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">F2F23163718ED5C4</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="INC_CRC">F22559B44D145B17</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.7099782806,1.34377901737414,0.0 103.709978189803,1.34558774210601,0.0 103.711775308495,1.34558783288433,0.0 103.711775397969,1.3437791080304,0.0 103.7099782806,1.34377901737414,0.0</coordinates>
+<coordinates>103.697398662248,1.3401608977934,0.0 103.697398562462,1.34196962167439,0.0 103.699195677617,1.34196972150899,0.0 103.699195776084,1.3401609974934,0.0 103.697398662248,1.3401608977934,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
@@ -4060,39 +4060,75 @@
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
-<td>1</td>
+<td>2</td>
 </tr><tr bgcolor="">
 <th>AREANAME</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>DETAIL</th>
-<td>No. of Dengue Cases : 1</td>
+<td>No. of Dengue Cases : 2</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>279ADBFAA039D98E</td>
+<td>220145DFACD66DBA</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
-<SimpleData name="JOIN_COUNT">1</SimpleData>
-<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">279ADBFAA039D98E</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="JOIN_COUNT">2</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 2</SimpleData>
+<SimpleData name="INC_CRC">220145DFACD66DBA</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.745920648834,1.34378057771838,0.0 103.745920584493,1.34558930455121,0.0 103.747717705256,1.34558936868516,0.0 103.747717768274,1.34378064176609,0.0 103.745920648834,1.34378057771838,0.0</coordinates>
+<coordinates>103.706384139547,1.34197010756111,0.0 103.706384046231,1.34377883207036,0.0 103.708181163353,1.34377892538746,0.0 103.708181255349,1.34197020075256,0.0 103.706384139547,1.34197010756111,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
 </Placemark>
 <Placemark id="kml_114">
 <name>kml_114</name>
+<snippet> </snippet>
+<description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
+<th>JOIN_COUNT</th>
+<td>3</td>
+</tr><tr bgcolor="">
+<th>AREANAME</th>
+<td>No. of Dengue Cases : 3</td>
+</tr><tr bgcolor="#E3E3F3">
+<th>DETAIL</th>
+<td>No. of Dengue Cases : 3</td>
+</tr><tr bgcolor="">
+<th>INC_CRC</th>
+<td>B85877B61C04915F</td>
+</tr><tr bgcolor="#E3E3F3">
+<th>FMEL_UPD_D</th>
+<td>20200728150217</td>
+</tr></table></center>]]></description>
+<ExtendedData>
+<SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
+<SimpleData name="JOIN_COUNT">3</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 3</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 3</SimpleData>
+<SimpleData name="INC_CRC">B85877B61C04915F</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
+</SchemaData>
+</ExtendedData>
+<Polygon>
+<outerBoundaryIs>
+<LinearRing>
+<coordinates>103.740529154331,1.34739783069246,0.0 103.740529085838,1.34920655720194,0.0 103.742326208986,1.34920662551579,0.0 103.742326276153,1.34739789891469,0.0 103.740529154331,1.34739783069246,0.0</coordinates>
+</LinearRing>
+</outerBoundaryIs>
+</Polygon>
+</Placemark>
+<Placemark id="kml_115">
+<name>kml_115</name>
 <snippet> </snippet>
 <description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
 <th>JOIN_COUNT</th>
@@ -4105,24 +4141,60 @@
 <td>No. of Dengue Cases : 1</td>
 </tr><tr bgcolor="">
 <th>INC_CRC</th>
-<td>E25CAD3477A19839</td>
+<td>F81EAFD4F6ACF51F</td>
 </tr><tr bgcolor="#E3E3F3">
 <th>FMEL_UPD_D</th>
-<td>20200715105945</td>
+<td>20200728150217</td>
 </tr></table></center>]]></description>
 <ExtendedData>
 <SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
 <SimpleData name="JOIN_COUNT">1</SimpleData>
 <SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
 <SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
-<SimpleData name="INC_CRC">E25CAD3477A19839</SimpleData>
-<SimpleData name="FMEL_UPD_D">20200715105945</SimpleData>
+<SimpleData name="INC_CRC">F81EAFD4F6ACF51F</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
 </SchemaData>
 </ExtendedData>
 <Polygon>
 <outerBoundaryIs>
 <LinearRing>
-<coordinates>103.709978189803,1.34558774210601,0.0 103.709978098885,1.34739646681095,0.0 103.711775218901,1.34739655771134,0.0 103.711775308495,1.34558783288433,0.0 103.709978189803,1.34558774210601,0.0</coordinates>
+<coordinates>103.756703253825,1.34739839666806,0.0 103.756703197269,1.34920712393757,0.0 103.758500321164,1.34920718022916,0.0 103.758500376394,1.34739845288416,0.0 103.756703253825,1.34739839666806,0.0</coordinates>
+</LinearRing>
+</outerBoundaryIs>
+</Polygon>
+</Placemark>
+<Placemark id="kml_116">
+<name>kml_116</name>
+<snippet> </snippet>
+<description><![CDATA[<center><table><tr><th colspan='2' align='center'><em>Attributes</em></th></tr><tr bgcolor="#E3E3F3">
+<th>JOIN_COUNT</th>
+<td>1</td>
+</tr><tr bgcolor="">
+<th>AREANAME</th>
+<td>No. of Dengue Cases : 1</td>
+</tr><tr bgcolor="#E3E3F3">
+<th>DETAIL</th>
+<td>No. of Dengue Cases : 1</td>
+</tr><tr bgcolor="">
+<th>INC_CRC</th>
+<td>E2D1416477A03B5A</td>
+</tr><tr bgcolor="#E3E3F3">
+<th>FMEL_UPD_D</th>
+<td>20200728150217</td>
+</tr></table></center>]]></description>
+<ExtendedData>
+<SchemaData schemaUrl="#kml_schema_ft_DENGUECASE_SOUTHWEST_AREA">
+<SimpleData name="JOIN_COUNT">1</SimpleData>
+<SimpleData name="AREANAME">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="DETAIL">No. of Dengue Cases : 1</SimpleData>
+<SimpleData name="INC_CRC">E2D1416477A03B5A</SimpleData>
+<SimpleData name="FMEL_UPD_D">20200728150217</SimpleData>
+</SchemaData>
+</ExtendedData>
+<Polygon>
+<outerBoundaryIs>
+<LinearRing>
+<coordinates>103.693803921476,1.34920431217602,0.0 103.693803818359,1.35101303564779,0.0 103.695600939866,1.35101313883059,0.0 103.695601041654,1.34920441522063,0.0 103.693803921476,1.34920431217602,0.0</coordinates>
 </LinearRing>
 </outerBoundaryIs>
 </Polygon>
