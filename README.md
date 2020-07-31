@@ -8,35 +8,9 @@
 
 ---
 
-## Meeting (28 July 2020) <- ?
-
-### Admin
-- [x] Split analyses into time and space
-  - [x] [analyze_time.R](https://github.com/roscoelai/dasr2020capstone/blob/master/src/analyze_time.R)
-  - [x] [analyze_space.R](https://github.com/roscoelai/dasr2020capstone/blob/master/src/analyze_space.R)
-- [x] Complete set of backup data on GitHub
-  - [x] HCI Directory (clinics)
-  - [x] .kml files
-  - [x] MOH bulletin
-  - [x] MSS data
-  - [x] MSS station positions
-- [ ] Document has substance up to just before "Model" section
-- [ ] Need a candidate model for temporal analysis
-- [x] Might have a plausible candidate for spatial analysis
+## Meeting (31 July 2020)
 
 ### Temporal
-- [x] How to aggreagate overall/island-wide meteorological data?
-  - [ ] <s>Choose 1 climate station (e.g. Changi)</s>
-  - [ ] <s>Aggregate climate stations with sufficient data (~4 stations)</s>
-  - [x] **ALL** OF IT!
-    - Unit of analysis is epidemiological week
-    - Aggregate values from every station that has data for that week
-- [ ] Transform meteorological data
-  - [x] Mean and median rainfall
-  - [x] Mean and median temperature
-  - [x] Mean and median temperature range
-  - [ ] Anything else?
-- [x] Combine meteorological and epidemiological data (join by Epiyear and Epiweek)
 - [ ] Account for time lag
   - [ ] Shift case numbers (Y) up by 1 row?
   - [ ] Shift predictors (X) down by 1 row?
@@ -60,6 +34,90 @@
   - Standard choropleth weaknesses:
     - Modifiable areal unit problem (MAUP)
     - Ecological fallacy
+
+---
+
+## Data
+- [Weekly Infectious Disease Bulletin, Ministry of Health (MOH)](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
+  - [Latest data as of 31 July 2020 (2012-W01 to 2020-W30)](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020d1092fcb484447bc96ef1722b16b0c08.xlsx)
+  - [Backup copy as of 31 July 2020 (2012-W01 to 2020-W30)](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh/weekly-infectious-disease-bulletin-year-2020.xlsx)
+  - [R script](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_moh_weekly.R)
+- [Historical Daily Records, Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
+  - [Backup copy as of 28 July 2020 (2012-01 to 2020-06, 19 stations) ](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss/mss_daily_2012_2020_19stations_20200728.csv)
+  - [R script](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_mss_daily.R)
+  - [List of stations, weather parameters and periods of records](http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf)
+- [Listing of Licensed Healthcare Institutions, Ministry of Health (MOH)](http://hcidirectory.sg/hcidirectory/)
+  - [Backup copy as of 25 July 2020](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/hcid/hci_clinics_20200725.csv)
+  - [R script (part 1)](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_hcidirectory.R)
+  - [R script (part 2)](https://github.com/roscoelai/dasr2020capstone/blob/master/src/zipcodes_to_geocodes.R)
+- [Approximate geocoordinates of dengue cases](https://data.gov.sg/search?q=denguecases), Data.gov.sg
+
+| Date       | Central     | North East  | South East  | South West  |
+| :--------: | :---------: | :---------: | :---------: | :---------: |
+| 2020-06-26 | [.kml][c1]  | [.kml][c2]  | [.kml][c3]  | [.kml][c4]  |
+| 2020-07-07 | [.kml][c5]  | [.kml][c6]  | [.kml][c7]  | [.kml][c8]  |
+| 2020-07-09 | [.kml][c9]  | [.kml][c10] | [.kml][c11] | [.kml][c12] |
+| 2020-07-15 | [.kml][c13] | [.kml][c14] | [.kml][c15] | [.kml][c16] |
+| 2020-07-17 | [.kml][c17] | [.kml][c18] | [.kml][c19] | [.kml][c20] |
+| 2020-07-28 | [.kml][c21] | [.kml][c22] | [.kml][c23] | [.kml][c24] |
+
+[c1]: https://geo.data.gov.sg/denguecase-central-area/2020/06/26/kml/denguecase-central-area.kml
+[c2]: https://geo.data.gov.sg/denguecase-northeast-area/2020/06/26/kml/denguecase-northeast-area.kml
+[c3]: https://geo.data.gov.sg/denguecase-southeast-area/2020/06/26/kml/denguecase-southeast-area.kml
+[c4]: https://geo.data.gov.sg/denguecase-southwest-area/2020/06/26/kml/denguecase-southwest-area.kml
+[c5]: https://geo.data.gov.sg/denguecase-central-area/2020/07/07/kml/denguecase-central-area.kml
+[c6]: https://geo.data.gov.sg/denguecase-northeast-area/2020/07/07/kml/denguecase-northeast-area.kml
+[c7]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/07/kml/denguecase-southeast-area.kml
+[c8]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/07/kml/denguecase-southwest-area.kml
+[c9]: https://geo.data.gov.sg/denguecase-central-area/2020/07/09/kml/denguecase-central-area.kml
+[c10]: https://geo.data.gov.sg/denguecase-northeast-area/2020/07/09/kml/denguecase-northeast-area.kml
+[c11]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/09/kml/denguecase-southeast-area.kml
+[c12]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/09/kml/denguecase-southwest-area.kml
+[c13]: https://geo.data.gov.sg/denguecase-central-area/2020/07/15/kml/denguecase-central-area.kml
+[c14]: https://geo.data.gov.sg/denguecase-northeast-area/2020/07/15/kml/denguecase-northeast-area.kml
+[c15]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/15/kml/denguecase-southeast-area.kml
+[c16]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/15/kml/denguecase-southwest-area.kml
+[c17]: https://geo.data.gov.sg/denguecase-central-area/2020/07/17/kml/denguecase-central-area.kml
+[c18]: https://geo.data.gov.sg/denguecase-northeast-area/2020/07/17/kml/denguecase-northeast-area.kml
+[c19]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/17/kml/denguecase-southeast-area.kml
+[c20]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/17/kml/denguecase-southwest-area.kml
+[c21]: https://geo.data.gov.sg/denguecase-central-area/2020/07/28/kml/denguecase-central-area.kml
+[c22]: https://geo.data.gov.sg/denguecase-northeast-area/2020/07/28/kml/denguecase-northeast-area.kml
+[c23]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/28/kml/denguecase-southeast-area.kml
+[c24]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/28/kml/denguecase-southwest-area.kml
+
+- [Approximate geocoordinates of _Aedes_ mosquito breeding habitats](https://data.gov.sg/search?q=aedes+habitats), Data.gov.sg
+
+Date       | Central      | North East   | North West   | South East   | South West 
+:--------: | :----------: | :----------: | :----------: | :----------: | :---------:
+2020-07-14 | [.kml][h1]   | [.kml][h2]   | [.kml][h3]   | [.kml][h4]   | [.kml][h5] 
+2020-07-17 | [.kml][h6]   | [.kml][h7]   | [.kml][h8]   | [.kml][h9]   | [.kml][h10]
+2020-07-23 |              |              |              | [.kml][h14]  | [.kml][h15]
+2020-07-28 | [.kml][[h16] | [.kml][[h17] | [.kml][[h18] | [.kml][h19]  | [.kml][h20]
+
+[h1]: https://geo.data.gov.sg/breedinghabitat-central-area/2020/07/14/kml/breedinghabitat-central-area.kml
+[h2]: https://geo.data.gov.sg/breedinghabitat-northeast-area/2020/07/14/kml/breedinghabitat-northeast-area.kml
+[h3]: https://geo.data.gov.sg/breedinghabitat-northwest-area/2020/07/14/kml/breedinghabitat-northwest-area.kml
+[h4]: https://geo.data.gov.sg/breedinghabitat-southeast-area/2020/07/14/kml/breedinghabitat-southeast-area.kml
+[h5]: https://geo.data.gov.sg/breedinghabitat-southwest-area/2020/07/14/kml/breedinghabitat-southwest-area.kml
+[h6]: https://geo.data.gov.sg/breedinghabitat-central-area/2020/07/17/kml/breedinghabitat-central-area.kml
+[h7]: https://geo.data.gov.sg/breedinghabitat-northeast-area/2020/07/17/kml/breedinghabitat-northeast-area.kml
+[h8]: https://geo.data.gov.sg/breedinghabitat-northwest-area/2020/07/17/kml/breedinghabitat-northwest-area.kml
+[h9]: https://geo.data.gov.sg/breedinghabitat-southeast-area/2020/07/17/kml/breedinghabitat-southeast-area.kml
+[h10]: https://geo.data.gov.sg/breedinghabitat-southwest-area/2020/07/17/kml/breedinghabitat-southwest-area.kml
+[h14]: https://geo.data.gov.sg/breedinghabitat-southeast-area/2020/07/23/kml/breedinghabitat-southeast-area.kml
+[h15]: https://geo.data.gov.sg/breedinghabitat-southwest-area/2020/07/23/kml/breedinghabitat-southwest-area.kml
+[h16]: https://geo.data.gov.sg/breedinghabitat-central-area/2020/07/28/kml/breedinghabitat-central-area.kml
+[h17]: https://geo.data.gov.sg/breedinghabitat-northeast-area/2020/07/28/kml/breedinghabitat-northeast-area.kml
+[h18]: https://geo.data.gov.sg/breedinghabitat-northwest-area/2020/07/28/kml/breedinghabitat-northwest-area.kml
+[h19]: https://geo.data.gov.sg/breedinghabitat-southeast-area/2020/07/28/kml/breedinghabitat-southeast-area.kml
+[h20]: https://geo.data.gov.sg/breedinghabitat-southwest-area/2020/07/28/kml/breedinghabitat-southwest-area.kml
+
+- [Singapore Residents by Planning Area and Type of Dwelling, Jun 2017](https://data.gov.sg/dataset/singapore-residents-by-planning-area-and-type-of-dwelling-jun-2017), Data.gov.sg
+  - Planning areas (URA MP14)
+  - Populations of planning areas
+  - Breakdown by type of dwelling
+  - [.kml file](https://geo.data.gov.sg/plan-bdy-dwelling-type-2017/2017/09/27/kml/plan-bdy-dwelling-type-2017.kml)
 
 ---
 
@@ -96,94 +154,6 @@
   - [x] Population
   - [x] Type of housing
   - [x] Number of clinics
-
----
-
-## Data
-- [Weekly Infectious Disease Bulletin, Ministry of Health (MOH)](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
-  - [Latest data as of 24 July 2020 (2012-W01 to 2020-W29)](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx)
-  - [Backup copy as of 24 July 2020 (2012-W01 to 2020-W29)](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh/weekly-infectious-disease-bulletin-year-2020.xlsx)
-  - [R script](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_moh_weekly.R)
-- [Historical Daily Records, Meteorological Service Singapore (MSS)](http://www.weather.gov.sg/climate-historical-daily/)
-  - [Backup copy as of 28 July 2020 (2012-01 to 2020-06, 19 stations) ](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/mss/mss_daily_2012_2020_19stations_20200728.csv)
-  - [R script](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_mss_daily.R)
-  - [List of stations, weather parameters and periods of records](http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf)
-- [Listing of Licensed Healthcare Institutions, Ministry of Health (MOH)](http://hcidirectory.sg/hcidirectory/)
-  - [Backup copy as of 25 July 2020](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/hcid/hci_clinics_20200725.csv)
-  - [R script (part 1)](https://github.com/roscoelai/dasr2020capstone/blob/master/src/import_hcidirectory.R)
-  - [R script (part 2)](https://github.com/roscoelai/dasr2020capstone/blob/master/src/zipcodes_to_geocodes.R)
-- [Approximate geocoordinates of dengue cases](https://data.gov.sg/search?q=denguecases), Data.gov.sg
-
-| Date       | Central     | North East  | South East  | South West  |
-| :--------: | :---------: | :---------: | :---------: | :---------: |
-| 2020-06-26 | [.kml][c1]  | [.kml][c2]  | [.kml][c3]  | [.kml][c4]  |
-| 2020-07-07 | [.kml][c5]  | [.kml][c6]  | [.kml][c7]  | [.kml][c8]  |
-| 2020-07-09 | [.kml][c9]  | [.kml][c10] | [.kml][c11] | [.kml][c12] |
-| 2020-07-15 | [.kml][c13] | [.kml][c14] | [.kml][c15] | [.kml][c16] |
-| 2020-07-17 | [.kml][c17] | [.kml][c18] | [.kml][c19] | [.kml][c20] |
-
-[c1]: https://geo.data.gov.sg/denguecase-central-area/2020/06/26/kml/denguecase-central-area.kml
-[c2]: https://geo.data.gov.sg/denguecase-northeast-area/2020/06/26/kml/denguecase-northeast-area.kml
-[c3]: https://geo.data.gov.sg/denguecase-southeast-area/2020/06/26/kml/denguecase-southeast-area.kml
-[c4]: https://geo.data.gov.sg/denguecase-southwest-area/2020/06/26/kml/denguecase-southwest-area.kml
-[c5]: https://geo.data.gov.sg/denguecase-central-area/2020/07/07/kml/denguecase-central-area.kml
-[c6]: https://geo.data.gov.sg/denguecase-northeast-area/2020/07/07/kml/denguecase-northeast-area.kml
-[c7]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/07/kml/denguecase-southeast-area.kml
-[c8]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/07/kml/denguecase-southwest-area.kml
-[c9]: https://geo.data.gov.sg/denguecase-central-area/2020/07/09/kml/denguecase-central-area.kml
-[c10]: https://geo.data.gov.sg/denguecase-northeast-area/2020/07/09/kml/denguecase-northeast-area.kml
-[c11]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/09/kml/denguecase-southeast-area.kml
-[c12]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/09/kml/denguecase-southwest-area.kml
-[c13]: https://geo.data.gov.sg/denguecase-central-area/2020/07/15/kml/denguecase-central-area.kml
-[c14]: https://geo.data.gov.sg/denguecase-northeast-area/2020/07/15/kml/denguecase-northeast-area.kml
-[c15]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/15/kml/denguecase-southeast-area.kml
-[c16]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/15/kml/denguecase-southwest-area.kml
-[c17]: https://geo.data.gov.sg/denguecase-central-area/2020/07/17/kml/denguecase-central-area.kml
-[c18]: https://geo.data.gov.sg/denguecase-northeast-area/2020/07/17/kml/denguecase-northeast-area.kml
-[c19]: https://geo.data.gov.sg/denguecase-southeast-area/2020/07/17/kml/denguecase-southeast-area.kml
-[c20]: https://geo.data.gov.sg/denguecase-southwest-area/2020/07/17/kml/denguecase-southwest-area.kml
-
-- [Approximate geocoordinates of _Aedes_ mosquito breeding habitats](https://data.gov.sg/search?q=aedes+habitats), Data.gov.sg
-
-Date       | Central      | North East   | North West   | South East   | South West 
-:--------: | :----------: | :----------: | :----------: | :----------: | :---------:
-2020-07-14 | [.kml][h1]   | [.kml][h2]   | [.kml][h3]   | [.kml][h4]   | [.kml][h5] 
-2020-07-17 | [.kml][h6]   | [.kml][h7]   | [.kml][h8]   | [.kml][h9]   | [.kml][h10]
-2020-07-23 |              |              |              | [.kml][h14]  | [.kml][h15]
-
-[h1]: https://geo.data.gov.sg/breedinghabitat-central-area/2020/07/14/kml/breedinghabitat-central-area.kml
-[h2]: https://geo.data.gov.sg/breedinghabitat-northeast-area/2020/07/14/kml/breedinghabitat-northeast-area.kml
-[h3]: https://geo.data.gov.sg/breedinghabitat-northwest-area/2020/07/14/kml/breedinghabitat-northwest-area.kml
-[h4]: https://geo.data.gov.sg/breedinghabitat-southeast-area/2020/07/14/kml/breedinghabitat-southeast-area.kml
-[h5]: https://geo.data.gov.sg/breedinghabitat-southwest-area/2020/07/14/kml/breedinghabitat-southwest-area.kml
-[h6]: https://geo.data.gov.sg/breedinghabitat-central-area/2020/07/17/kml/breedinghabitat-central-area.kml
-[h7]: https://geo.data.gov.sg/breedinghabitat-northeast-area/2020/07/17/kml/breedinghabitat-northeast-area.kml
-[h8]: https://geo.data.gov.sg/breedinghabitat-northwest-area/2020/07/17/kml/breedinghabitat-northwest-area.kml
-[h9]: https://geo.data.gov.sg/breedinghabitat-southeast-area/2020/07/17/kml/breedinghabitat-southeast-area.kml
-[h10]: https://geo.data.gov.sg/breedinghabitat-southwest-area/2020/07/17/kml/breedinghabitat-southwest-area.kml
-[h14]: https://geo.data.gov.sg/breedinghabitat-southeast-area/2020/07/23/kml/breedinghabitat-southeast-area.kml
-[h15]: https://geo.data.gov.sg/breedinghabitat-southwest-area/2020/07/23/kml/breedinghabitat-southwest-area.kml
-
-- [Singapore Residents by Planning Area and Type of Dwelling, Jun 2017](https://data.gov.sg/dataset/singapore-residents-by-planning-area-and-type-of-dwelling-jun-2017), Data.gov.sg
-  - Planning areas (URA MP14)
-  - Populations of planning areas
-  - Breakdown by type of dwelling
-  - [.kml file](https://geo.data.gov.sg/plan-bdy-dwelling-type-2017/2017/09/27/kml/plan-bdy-dwelling-type-2017.kml)
-
-### Unsourceable
-- COVID-19 cases (Apr - Jul 2020)
-
-### Deprecated
-- [Monthly Air Temperature And Sunshine, Relative Humidity And Rainfall, Singapore Department of Statistics (DOS)](https://www.tablebuilder.singstat.gov.sg/publicfacing/initApiList.action)
-  - Higher resolution (daily) data available from MSS
-  - Might reconsider if humidity data is needed
-  - [.csv file](https://www.tablebuilder.singstat.gov.sg/publicfacing/api/csv/title/15306.csv)
-- [Master Plan 2014 Planning Area Boundary (No Sea)](https://data.gov.sg/dataset/master-plan-2014-planning-area-boundary-no-sea), Data.gov.sg
-  - Names and sizes of planning areas
-  - [.zip file](https://geo.data.gov.sg/mp14-plng-area-no-sea-pl/2016/05/11/kml/mp14-plng-area-no-sea-pl.zip)
-- [CHAS Clinics](https://data.gov.sg/dataset/chas-clinics), Data.gov.sg
-  - Geocoordinates of CHAS clinics
-  - [.kml file](https://geo.data.gov.sg/moh-chas-clinics/2020/07/05/kml/moh-chas-clinics.kml)
 
 ---
 

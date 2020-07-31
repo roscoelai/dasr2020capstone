@@ -4,23 +4,40 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 library(magrittr)
 
-import_moh_weekly <- function(url_or_path) {
+import_moh_weekly <- function(url_or_path = NULL) {
   #' Weekly Infectious Diseases Bulletin
   #' 
   #' @description
-  #' Weekly infectious diseases bulletin from the Ministry of Health (MOH). 
-  #' Data from 2012-W01 to 2020-W29 (as of 24 July 2020). Relevant links are 
-  #' given under details.
+  #' \href{https://www.moh.gov.sg/resources-statistics/infectious-disease-
+  #' statistics/2020/weekly-infectious-diseases-bulletin}{MOH Weekly Infectious 
+  #' Disease Bulletin} from the Ministry of Health (MOH). 
   #' 
-  #' @details
-  #' \href{https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin}{MOH Weekly Infectious Disease Bulletin}
-  #'
-  #' \href{https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx}{Latest data as of 24 July 2020 (2012-W01 to 2020-W29)}
-  #' 
-  #' \href{https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx}{Backup copy as of 24 July 2020 (2012-W01 to 2020-W29)}
+  #' \href{https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/
+  #' weekly-infectious-disease-bulletin-year-2020
+  #' d1092fcb484447bc96ef1722b16b0c08.xlsx}{Latest data as of 31 July 2020 
+  #' (2012-W01 to 2020-W30)}.
   #' 
   #' @param url_or_path The URL or file path of the .xlsx file.
-  #' @return Weekly infectious diseases bulletin (2012-W01 to 2020-W29).
+  #' @return Weekly infectious diseases bulletin (2012-W01 to 2020-W30).
+  
+  # If no URL or path is specified, try to get the file directly from MOH.
+  if (is.null(url_or_path)) {
+    url_or_path = paste0(
+      "https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/",
+      "weekly-infectious-disease-bulletin-year-2020",
+      "d1092fcb484447bc96ef1722b16b0c08.xlsx"
+    )
+  }
+  
+  # Check if the given path is a URL by trying to download to a temp file. If 
+  #   successful, return the temp file. If not, return the original path.
+  xlsx_file = tryCatch({
+    temp = tempfile(fileext = ".xlsx")
+    download.file(url_or_path, destfile = temp, mode = "wb")
+    temp
+  }, error = function(e) {
+    url_or_path
+  })
   
   # Columns will be renamed to follow 2020
   colnames_2020 = c(
@@ -39,28 +56,18 @@ import_moh_weekly <- function(url_or_path) {
     "Zika virus infection" = "Zika"
   )
   
-  # Check if the given path is a URL by trying to download to a temp file. If 
-  #   successful, return the temp file. If not, return the original path.
-  xlsx_file = tryCatch({
-    temp = tempfile(fileext = ".xlsx")
-    download.file(url_or_path, destfile = temp, mode = "wb")
-    temp
-  }, error = function(e) {
-    url_or_path
-  })
-  
   xlsx_file %>%
     readxl::excel_sheets() %>% 
     lapply(function(sheetname) {
       df = readxl::read_xlsx(xlsx_file, sheetname, skip = 1)
       
-      # Date formats are different for 2020
+      # Date formats are different for 2020 (dmy instead of mdy)
       if (sheetname == "2020") {
         df$Start = lubridate::dmy(df$Start)
         df$End = lubridate::dmy(df$End)
       }
       
-      # Find and rename columns that need to be renamed
+      # Find and rename columns that need to be renamed, and rename them
       mapper = na.omit(colnames_2020[names(df)])
       dplyr::rename_with(df, ~mapper, names(mapper))
     }) %>% 
@@ -74,32 +81,17 @@ import_moh_weekly <- function(url_or_path) {
 # Import START ----
 
 # From MOH
-bulletin <- 
-  paste0(
-    "https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/",
-    "weekly-infectious-disease-bulletin-year-2020",
-    "71e221d63d4b4be0aa2b03e9c5e78ac2.xlsx"
-  ) %>% 
-  import_moh_weekly()
+bulletin <- import_moh_weekly()
 
-# From GitHub
-bulletin <- 
-  paste0(
-    "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
-    "data/moh/weekly-infectious-disease-bulletin-year-2020",
-    "71e221d63d4b4be0aa2b03e9c5e78ac2.xlsx"
-  ) %>% 
-  import_moh_weekly()
+# From online repo
+bulletin <- import_moh_weekly(paste0(
+  "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
+  "data/moh/weekly-infectious-disease-bulletin-year-2020.xlsx"
+))
 
-# From HDD
-bulletin <- 
-  paste0(
-    "../data/moh/weekly-infectious-disease-bulletin-year-2020",
-    "71e221d63d4b4be0aa2b03e9c5e78ac2.xlsx"
-  ) %>% 
-  import_moh_weekly()
-
-bulletin %>%
-  readr::write_csv("../data/moh_weekly_bulletin_20200724.csv")
+# From local
+bulletin <- import_moh_weekly(
+  "../data/moh/weekly-infectious-disease-bulletin-year-2020.xlsx"
+)
 
 # Import END ----
