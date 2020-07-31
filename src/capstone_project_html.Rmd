@@ -1,7 +1,7 @@
 ---
 title: "Analysing Dengue Cases in Singapore"
 author: "Shayne, Roscoe, Anu"
-date: "28 July 2020"
+date: "31 July 2020"
 output:
   html_document:
     theme: flatly
@@ -24,13 +24,9 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 ## Problem Statement
 
-Dengue fever is a vector-borne infectious disease that is endemic in the tropical world. Singapore is one of several countries with high disease burden of dengue. In 2020, Singapore saw 1,158 dengue cases in a week of June - the highest number of weekly dengue cases ever recorded since 2014. Why is there a sudden spike in dengue cases this year?
+In our Capstone Project, we aim to explore the relationship between meteorological conditions (Air temperature and rainfall) of Singapore and clinical conditions commonly seen in local community – Dengue fever (DF), hand food mouth disease (HFMD), upper respiratory tract infection (URTI) and diarrhea. Specifically, does higher temperature and rainfall associated with the rise in clinical conditions in the community? Furthermore, we are interested to investigate if types of housing is associated with the number of Dengue fever cases.
 
-In our Capstone Project, we ask two questions about potential factors affecting dengue cases. Our questions are not confirmatory in nature; rather, they are exploratory.
-
-1. Does atmospheric variables influence the incidence of dengue cases? Specifically, is higher humidity, precipitation, or temperature associated with increased numbers of dengue cases?
-
-2. Do local factors explain the different number of cases in different regions of Singapore?
+Dengue fever is a vector-borne infectious disease that is endemic in the tropical world. Singapore is one of several countries with high disease burden of dengue. In 2020, Singapore saw 1,158 dengue cases in a week of June - the highest number of weekly dengue cases ever recorded since 2014. The sudden increase is worrisome, therefore greater emphasis on analysis will be focused on Dengue fever.
 
 For our data science project, we activated the following packages, using the `Tidyverse` approach.
 
@@ -63,44 +59,169 @@ pacman::p_load(
 
 Then, we imported our dataset.
 
-> The most time-consuming component of data science? This might take a while...
+> Most time-consuming, finding data, is.
 
-We work towards 2 separate datasets: `data_time` for temporal analysis, and `data_space` for spatial analysis. They will only be fully available after the tidy and transform process since there's quite a bit of aggregating and joining involved.
+We work towards 2 datasets: `data_time` for temporal analysis, and `data_space` for spatial analysis. When they are ready, the import-tidy-transform process would have been completed (at least for the first round of transform, subsequent rounds of transforms might still be required depending on the exigencies informed by the modeling and visualization processes).
 
-We start with 7 raw datasets.
+All data are available online and were gathered into 7 distinct raw datasets ([click here](https://github.com/roscoelai/dasr2020capstone#data) for a summary page):
 
-The main sources are:  
-1. [Data.gov.sg](https://data.gov.sg/)  
-2. [MOH Weekly Infectious Disease Bulletin](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)  
-3. [MOH Healthcare Institutions Directory](http://hcidirectory.sg/hcidirectory/)  
-4. [MSS Historical Daily Weather Records](http://www.weather.gov.sg/climate-historical-daily/)
-
-[Click here](https://github.com/roscoelai/dasr2020capstone#data) for a summary page.
+* Meteorological Service Singapore (MSS)  
+  + [Historical daily weather records](http://www.weather.gov.sg/climate-historical-daily/)  
+  + [List of stations, weather parameters and periods of records available](http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf)
+* Ministry of Health (MOH)  
+  + [Weekly infectious disease bulletin](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)  
+  + [Healthcare Institutions (HCI) Directory](http://hcidirectory.sg/hcidirectory/)  
+* [Data.gov.sg](https://data.gov.sg/)  
+  + [Dengue cases](https://data.gov.sg/search?q=denguecases)  
+  + [_Aedes_ mosquito breeding habitats](https://data.gov.sg/search?q=aedes+habitats)  
+  + [Singapore residents by planning area and type of dwelling, Jun 2017](https://data.gov.sg/dataset/singapore-residents-by-planning-area-and-type-of-dwelling-jun-2017)
 
 The full glorious details of their providence are given below.
 
-### Webscraping functions
+#### Helper functions
 
-> The following code chunk has been disabled, but is provided here to show the details behind the webscraping processes.
+> The following functions **must** be activated no matter which method of data import is chosen.
+
+```{r import-helper-functions}
+import_moh_weekly <- function(url_or_path = NULL) {
+  #' Weekly Infectious Diseases Bulletin
+  #' 
+  #' @description
+  #' \href{https://www.moh.gov.sg/resources-statistics/infectious-disease-
+  #' statistics/2020/weekly-infectious-diseases-bulletin}{MOH Weekly Infectious 
+  #' Disease Bulletin} from the Ministry of Health (MOH). 
+  #' 
+  #' \href{https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/
+  #' weekly-infectious-disease-bulletin-year-2020
+  #' d1092fcb484447bc96ef1722b16b0c08.xlsx}{Latest data as of 31 July 2020 
+  #' (2012-W01 to 2020-W30)}.
+  #' 
+  #' @param url_or_path The URL or file path of the .xlsx file.
+  #' @return Weekly infectious diseases bulletin (2012-W01 to 2020-W30).
+  
+  # If no URL or path is specified, try to get the file directly from MOH.
+  if (is.null(url_or_path)) {
+    url_or_path = paste0(
+      "https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/",
+      "weekly-infectious-disease-bulletin-year-2020",
+      "d1092fcb484447bc96ef1722b16b0c08.xlsx"
+    )
+  }
+  
+  # Check if the given path is a URL by trying to download to a temp file. If 
+  #   successful, return the temp file. If not, return the original path.
+  xlsx_file = tryCatch({
+    temp = tempfile(fileext = ".xlsx")
+    download.file(url_or_path, destfile = temp, mode = "wb")
+    temp
+  }, error = function(e) {
+    url_or_path
+  })
+  
+  # Columns will be renamed to follow 2020
+  colnames_2020 = c(
+    "Campylobacter enterosis" = "Campylobacter enteritis",
+    "Campylobacterenterosis" = "Campylobacter enteritis",
+    "Campylobacteriosis" = "Campylobacter enteritis",
+    "Chikungunya Fever" = "Chikungunya",
+    "Dengue Haemorrhagic Fever" = "DHF",
+    "Dengue Fever" = "Dengue",
+    "Hand, Foot and Mouth Disease" = "HFMD",
+    "Hand, Foot Mouth Disease" = "HFMD",
+    "Nipah virus infection" = "Nipah",
+    "Viral Hepatitis A" = "Acute Viral Hepatitis A",
+    "Viral Hepatitis E" = "Acute Viral Hepatitis E",
+    "Zika Virus Infection" = "Zika",
+    "Zika virus infection" = "Zika"
+  )
+  
+  xlsx_file %>%
+    readxl::excel_sheets() %>% 
+    lapply(function(sheetname) {
+      df = readxl::read_xlsx(xlsx_file, sheetname, skip = 1)
+      
+      # Date formats are different for 2020 (dmy instead of mdy)
+      if (sheetname == "2020") {
+        df$Start = lubridate::dmy(df$Start)
+        df$End = lubridate::dmy(df$End)
+      }
+      
+      # Find and rename columns that need to be renamed, and rename them
+      mapper = na.omit(colnames_2020[names(df)])
+      dplyr::rename_with(df, ~mapper, names(mapper))
+    }) %>% 
+    dplyr::bind_rows() %>% 
+    dplyr::rename(Epiweek = `Epidemiology Wk`) %>% 
+    dplyr::mutate(Epiyear = lubridate::epiyear(Start)) %>% 
+    dplyr::select(Epiyear, everything()) %>% 
+    dplyr::arrange(Start)
+}
+
+read_kmls <- function(url_or_path) {
+  #' Read Single or Multiple KML Files
+  #' 
+  #' @description
+  #' There are (at least) 2 approaches to handling .kml data:
+  #' \enumerate{
+  #'   \item sp - rgdal::readOGR()
+  #'   \item sf - sf::st_read()
+  #' }
+  #'
+  #' The sp approach was abandoned as their objects were rather complex and 
+  #'   did not facilitate method chaining.
+  #'
+  #' The sf approach produced objects that look like data.frames, which had 
+  #'   better support for method chaining, but also some peculiarities:
+  #' \itemize{
+  #'   \item Dimension: set to XY using sf::st_zm()
+  #'   \item Geographic CRS: use sf::`st_crs<-`("WGS84") World Geodetic 
+  #'         Survey 1984
+  #' }
+  #' 
+  #' @param url_or_path The URL(s) or file path(s) of the .kml file(s).
+  #' @return A single combined sf object.
+  
+  # Check if the given paths are URLs by trying to download to temp files. If 
+  #   successful, return the temp files. If not, return the original paths.
+  kml_files = tryCatch({
+    temp = tempfile(fileext = rep(".kml", length(url_or_path)))
+    Map(function(x, y) download.file(x, y, mode = "wb"), url_or_path, temp)
+    temp
+  }, error = function(e) {
+    url_or_path
+  })
+  
+  kml_files %>% 
+    lapply(sf::st_read, quiet = T) %>% 
+    dplyr::bind_rows() %>% 
+    tibble::as_tibble() %>% 
+    sf::st_as_sf() %>% 
+    sf::st_zm()
+}
+```
+
+### Import data from scratch (where available)
+
+#### Webscraping functions
+
+The following code chunk has been disabled, but is provided here to show the details behind the webscraping processes.
 
 ```{r import-webscraping, eval=FALSE}
 import_mss_daily <- function(years, stations = NULL) {
   #' Historical Daily Weather Records
   #' 
   #' @description
-  #' Daily weather records from the Meteorological Service Singapore (MSS). 
+  #' \href{http://www.weather.gov.sg/climate-historical-daily/}{Daily weather 
+  #' records} from the Meteorological Service Singapore (MSS). 
   #' Available data ranges from January 1980 to June 2020. Only 19 of the 63 
   #' climate stations are recognized by this function, because these contain 
-  #' more than just rainfall data. Relevant links are given under details.
+  #' more than just rainfall data. \href{http://www.weather.gov.sg/wp-content/
+  #' uploads/2016/12/Station_Records.pdf}{List of stations, weather parameters 
+  #' and periods of records}.
   #' 
   #' MSS is nice enough to have their data in .csv files, with a systematic 
   #' naming scheme. Data compilation becomes as simple as generating the 
   #' appropriate list of URLs.
-  #' 
-  #' @details
-  #' \href{http://www.weather.gov.sg/climate-historical-daily/}{MSS Daily Records}
-  #' 
-  #' \href{http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf}{List of stations, weather parameters and periods of records}
   #' 
   #' @param years A vector of the years of interest.
   #' @param stations A vector of the climate station names.
@@ -438,124 +559,16 @@ zipcodes_to_geocodes <- function(zipcodes) {
 }
 ```
 
-### Read helpers
+#### Import data _de novo_
 
-> The following functions must be activated.
-
-```{r import-helper-functions}
-import_moh_weekly <- function(url_or_path) {
-  #' Weekly Infectious Diseases Bulletin
-  #' 
-  #' @description
-  #' Weekly infectious diseases bulletin from the Ministry of Health (MOH). 
-  #' Data from 2012-W01 to 2020-W29 (as of 24 July 2020). Relevant links are 
-  #' given under details.
-  #' 
-  #' @details
-  #' \href{https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin}{MOH Weekly Infectious Disease Bulletin}
-  #'
-  #' \href{https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx}{Latest data as of 24 July 2020 (2012-W01 to 2020-W29)}
-  #' 
-  #' \href{https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/data/moh/weekly-infectious-disease-bulletin-year-202071e221d63d4b4be0aa2b03e9c5e78ac2.xlsx}{Backup copy as of 24 July 2020 (2012-W01 to 2020-W29)}
-  #' 
-  #' @param url_or_path The URL or file path of the .xlsx file.
-  #' @return Weekly infectious diseases bulletin (2012-W01 to 2020-W29).
-  
-  # Columns will be renamed to follow 2020
-  colnames_2020 = c(
-    "Campylobacter enterosis" = "Campylobacter enteritis",
-    "Campylobacterenterosis" = "Campylobacter enteritis",
-    "Campylobacteriosis" = "Campylobacter enteritis",
-    "Chikungunya Fever" = "Chikungunya",
-    "Dengue Haemorrhagic Fever" = "DHF",
-    "Dengue Fever" = "Dengue",
-    "Hand, Foot and Mouth Disease" = "HFMD",
-    "Hand, Foot Mouth Disease" = "HFMD",
-    "Nipah virus infection" = "Nipah",
-    "Viral Hepatitis A" = "Acute Viral Hepatitis A",
-    "Viral Hepatitis E" = "Acute Viral Hepatitis E",
-    "Zika Virus Infection" = "Zika",
-    "Zika virus infection" = "Zika"
-  )
-  
-  # Check if the given path is a URL by trying to download to a temp file. If 
-  #   successful, return the temp file. If not, return the original path.
-  xlsx_file = tryCatch({
-    temp = tempfile(fileext = ".xlsx")
-    download.file(url_or_path, destfile = temp, mode = "wb")
-    temp
-  }, error = function(e) {
-    url_or_path
-  })
-  
-  xlsx_file %>%
-    readxl::excel_sheets() %>% 
-    lapply(function(sheetname) {
-      df = readxl::read_xlsx(xlsx_file, sheetname, skip = 1)
-      
-      # Date formats are different for 2020
-      if (sheetname == "2020") {
-        df$Start = lubridate::dmy(df$Start)
-        df$End = lubridate::dmy(df$End)
-      }
-      
-      # Find and rename columns that need to be renamed
-      mapper = na.omit(colnames_2020[names(df)])
-      dplyr::rename_with(df, ~mapper, names(mapper))
-    }) %>% 
-    dplyr::bind_rows() %>% 
-    dplyr::rename(Epiweek = `Epidemiology Wk`) %>% 
-    dplyr::mutate(Epiyear = lubridate::epiyear(Start)) %>% 
-    dplyr::select(Epiyear, everything()) %>% 
-    dplyr::arrange(Start)
-}
-
-read_kmls <- function(url_or_path) {
-  # There are (at least) 2 approaches to handling .kml data:
-  # 1. sp - rgdal::readOGR()
-  # 2. sf - sf::st_read()
-  #
-  # The sp approach was quickly abandoned as their objects were rather complex 
-  #   and did not facilitate method chaining.
-  #
-  # The sf approach produced objects that look like data.frames, which aided 
-  #   method chaining, but had their own peculiarities:
-  #   - Dimension: set to XY using sf::st_zm()
-  #   - Geographic CRS: use sf::`st_crs<-`("WGS84") World Geodetic Survey 1984
-  
-  # Check if the given paths are URLs by trying to download to temp files. If 
-  #   successful, return the temp files. If not, return the original paths.
-  kml_files = tryCatch({
-    temp = tempfile(fileext = rep(".kml", length(url_or_path)))
-    Map(function(x, y) download.file(x, y, mode = "wb"), url_or_path, temp)
-    temp
-  }, error = function(e) {
-    url_or_path
-  })
-  
-  kml_files %>% 
-    lapply(sf::st_read, quiet = T) %>% 
-    dplyr::bind_rows() %>% 
-    tibble::as_tibble() %>% 
-    sf::st_as_sf() %>% 
-    sf::st_zm()
-}
-```
-
-### Import data _de novo_ (where available)
-
-> The following code chunk has been disabled, but is provided here to show how the data may be obtain from primary sources (except for 1). Using this code chunk would require a valid Google Maps Platform API key.
+The following code chunk has been disabled, but is provided here to show how the data may be obtained from primary sources (with one exception). Using this code chunk would require activating the previous code chunk, as well as a valid Google Maps Platform API key.
 
 ```{r grand-import-de-novo, eval=FALSE}
 grand_import_de_novo <- function() {
   # This might take a while, and requires a Google Maps Platform API key
   
   list(
-    "moh_bulletin" = import_moh_weekly(paste0(
-      "https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/",
-      "weekly-infectious-disease-bulletin-year-2020",
-      "71e221d63d4b4be0aa2b03e9c5e78ac2.xlsx"
-    )),
+    "moh_bulletin" = import_moh_weekly(),
     
     "mss_19stations" = import_mss_daily(years = 2012:2020),
     
@@ -596,9 +609,9 @@ grand_import_de_novo <- function() {
 # raw_data <- grand_import_de_novo()
 ```
 
-### Load raw data into memory (the easy way)
+### Import data from saved files
 
-> If the data files are available locally, set `from_online_repo = F` for faster loading. Otherwise, the file will be obtained from an online repository. The .csv files will be read directly while the other file formats will be downloaded to a temporary folder and read locally.
+If the data files are available locally, set `from_online_repo = F` for faster loading. Otherwise, the file will be obtained from an online repository. The .csv files will be read directly while the other file formats will be downloaded to a temporary folder and read locally.
 
 ```{r grand-import-no-webscraping, results='hide', message=FALSE}
 grand_import_no_webscraping <- function(from_online_repo = TRUE) {
@@ -658,24 +671,48 @@ raw_data <- grand_import_no_webscraping(from_online_repo = F)
 
 ### A quick and dirty overview of the raw data
 
-```{r mass-glimpse}
-names(raw_data)
-
-# Too verbose
-# raw_data %>% 
-#   purrr::walk(dplyr::glimpse)
+```{r quick-look-raw}
+raw_data %T>% {
+  print(tibble::tibble(names = names(.),
+                       data = .,
+                       nrow = sapply(., nrow),
+                       ncol = sapply(., ncol)))
+}
 ```
+
+Behold! Our 7 raw datasets, nicely packaged in the list `raw_data`. No more importing should be necessary from this point.
 
 ---
 
 ## Tidy & Transform
 
-> The tidying process can (ironically) be tidied. It takes too long to get to `data_space`. Relook the flow of logic. And too many reassignments!
+### `data_time`
 
-### It is relatively straightforward to get `data_time`.
+The unit of analysis for `data_time` is the epidemiological week.
 
-```{r tidy-time, results='hide', message=FALSE}
-# Minimize size of datasets, choose "easier" column names
+The data from the MOH bulletin is already organized this way. The only things left to do are to select the relevant columns and possibly provide "easier" column names.
+
+The meteorological data time period (2012-2020) matches the MOH bulletin, more or less. However, it's units are in days. Furthermore, the dates are duplicated for 19 climate stations. To match the MOH bulletin's national-level data, the meteorological data must be aggregated to the level of the epidemiological week (and year).
+
+How many values are we aggregating for each variable, for each week?
+
+```{r tidy-time-aggregate-numbers}
+raw_data$mss_19stations %>% 
+  tidyr::pivot_longer(Rainfall:Temp_range) %>% 
+  tidyr::drop_na() %>% 
+  dplyr::count(Epiyear, Epiweek, name) %>% 
+  dplyr::select(name, n) %T>% 
+  { print(table(.)) } %>% 
+  ggplot(aes(x = n, color = name)) +
+  geom_histogram(binwidth = 1) +
+  facet_grid(name ~ ., scales = "free") + 
+  labs(x = "Number of values", y = "Number of weeks") + 
+  theme(legend.position = "none")
+```
+
+Now we join the datasets to get `data_time`.
+
+```{r tidy-transform-time, fig.height=11, fig.width=9}
 data_time <- raw_data$moh_bulletin %>% 
   dplyr::select(Epiyear:End,
                 Dengue,
@@ -684,10 +721,8 @@ data_time <- raw_data$moh_bulletin %>%
                 `Acute Diarrhoea`) %>% 
   dplyr::rename(URTI = `Acute Upper Respiratory Tract infections`,
                 Diarrhoea = `Acute Diarrhoea`) %>% 
-  tidyr::drop_na() %>% 
   dplyr::left_join(
     raw_data$mss_19stations %>% 
-      # Aggregation schema (up to 19 stations x up to 7 days -> 1 value)
       dplyr::group_by(Epiyear, Epiweek) %>% 
       dplyr::summarise(Mean_rainfall = mean(Rainfall, na.rm = T),
                        Med_rainfall = median(Rainfall, na.rm = T),
@@ -697,28 +732,56 @@ data_time <- raw_data$moh_bulletin %>%
                        Med_temp_rng = median(Temp_range, na.rm = T),
                        .groups = "drop"),
     by = c("Epiyear", "Epiweek")
-  )
+  ) %>% 
+  tidyr::drop_na()
+
+# Data Cleaning
+mask <- data_time$End < "2012-01-01" | data_time$End > "2020-07-31"
+
+# Must personally see what's wrong
+data_time[mask,]
+
+# Correct it - thankfully the start date seems ok
+data_time[mask, "End"] <- data_time$Start[mask] + lubridate::days(6)
+
+# Then check that it's corrected
+data_time[mask,]
 ```
 
-### On the other hand, `data_space` requires **a lot** more wrangling.
+Let's see what inside `data_time`
 
-```{r tidy-space, results='hide', message=FALSE}
-data <- list(
-  "dengue_points" = raw_data$dengue_polys %>% 
-    dplyr::transmute(n = sub(".*: (\\d+).*", "\\1", Description)) %>% 
-    sf::st_centroid() %>% 
-    .[rep(1:nrow(.), as.numeric(.$n)),],
+```{r}
+dplyr::glimpse(data_time)
+```
+
+`data_time` contains 10 features: 4 indicators of disease numbers and 6 aggregated meteorological measures. Each value is associated with an epidemiological week. The time period spans from 2012-W01 to 2020-W30. As the meteorological records for July 2020 have not been published, there are no corresponding values for 2020-W28 and 2020-W29.
+
+### `data_space`
+
+> **A lot** more wrangling is involved.
+
+The unit of analysis for `data_space` is the planning area. This is specified by `raw_data$planning_areas`, and the other datasets would have to be transformed to match before merging.
+
+Spatial analysis would be rather limited and more emphasis placed on visualization.
+
+```{r tidy-transform-space, results='hide', message=FALSE}
+grand_transform_space <- function(raw_data) {
+  data = list(
+    "dengue_points" = raw_data$dengue_polys,
+    "aedes_points" = raw_data$aedes_polys
+  ) %>% 
+    lapply(function(df) {
+      df %>% 
+        dplyr::transmute(n = sub(".*: (\\d+).*", "\\1", Description)) %>% 
+        sf::st_centroid() %>% 
+        .[rep(1:nrow(.), as.numeric(.$n)),]
+    })
   
-  "aedes_points" = raw_data$aedes_polys %>% 
-    dplyr::transmute(n = sub(".*: (\\d+).*", "\\1", Description)) %>% 
-    sf::st_centroid() %>% 
-    .[rep(1:nrow(.), as.numeric(.$n)),],
-  
-  "clinic_points" = raw_data$hci_clinics %>% 
+  data[["clinic_points"]] = raw_data$hci_clinics %>% 
     sf::st_as_sf(coords = c("lon", "lat")) %>% 
-    sf::`st_crs<-`("WGS84"),
+    sf::`st_crs<-`("WGS84")
   
-  "weather_points" = raw_data$mss_19stations %>% 
+  data[["weather_points"]] = raw_data$mss_19stations %>% 
     dplyr::filter(Epiyear == 2020) %>% 
     # Filter for the last 3 weeks
     dplyr::filter(Epiweek > max(Epiweek) - 3) %>% 
@@ -734,24 +797,52 @@ data <- list(
     tidyr::drop_na() %>% 
     dplyr::left_join(
       raw_data$mss_63station_pos %>% 
-        sf::st_as_sf(coords = c("Long. (E)", "Lat.(N)")) %>% 
-        sf::`st_crs<-`("WGS84") %>% 
-        dplyr::select(Station),
+        dplyr::select(Station:`Long. (E)`),
       by = "Station"
     ) %>% 
-    sf::st_as_sf(),
+    sf::st_as_sf(coords = c("Long. (E)", "Lat.(N)")) %>% 
+    sf::`st_crs<-`("WGS84")
   
-  "planning_areas" = raw_data$planning_areas %>% 
+  # Because we have weather_points, we can define IDW interpolation and 
+  #   immediately join with planning_areas.
+  
+  idw_interpolation <- function(points, polys, ordinal = 2) {
+    # Inverse-distance-weighted (IDW) interpolation
+    # - Very large ordinal: Proximity (Thiessen) interpolation
+    # - Large ordinal: Heavily weighted by inverse-distance
+    # - Moderate ordinal: Weighted by inverse-distance
+    # - Zero ordinal: Un-weighted average
+    # - Negative ordinal: Nonsense! (more weight to further stations)
+    
+    # Matrix of inverse-distances raised to some power (npolys x npoints)
+    weights = polys %>% 
+      sf::st_centroid() %>% 
+      sf::st_distance(points) %>% 
+      units::set_units(km) %>% 
+      { 1 / (. ^ ordinal) }  # (55 x 16)
+    
+    values = points %>% 
+      as.data.frame() %>% 
+      dplyr::select(-Station, -geometry) %>% 
+      as.matrix()  # (16 x 6)
+    
+    # (55 x 16) * (16 x 6) => (55 x 6)
+    (weights %*% values / rowSums(weights)) %>% 
+      tibble::as_tibble() %>% 
+      dplyr::mutate(plan_area = polys$plan_area)
+  }
+  
+  data[["planning_areas"]] = raw_data$planning_areas %>% 
     dplyr::bind_cols(
       # Extract data from HTML in the Description column (dwelling types)
       .$Description %>% 
         lapply(function(x) {
-        xml2::read_html(x) %>% 
-          rvest::html_node("table") %>% 
-          rvest::html_table() %>% 
-          t() %>% 
-          `colnames<-`(.[1,]) %>% 
-          .[2, 1:10]
+          xml2::read_html(x) %>% 
+            rvest::html_node("table") %>% 
+            rvest::html_table() %>% 
+            t() %>% 
+            `colnames<-`(.[1,]) %>% 
+            .[2, 1:10]
         }) %>% 
         dplyr::bind_rows()
     ) %>% 
@@ -760,139 +851,149 @@ data <- list(
     dplyr::rename(plan_area = pln_area_n,
                   pop = total) %>% 
     dplyr::mutate(plan_area = tools::toTitleCase(tolower(plan_area)),
-                  dplyr::across(pop:others, as.numeric),
-                  area_km2 = units::set_units(sf::st_area(.), km^2)) %>% 
+                  dplyr::across(pop:others, as.numeric)) %>% 
     tibble::as_tibble() %>% 
-    sf::st_as_sf()
-)
-
-idw_interpolation <- function(points, polys, ordinal = 2) {
-  # Inverse-distance-weighted interpolation
-  weights = polys %>% 
-    sf::st_centroid() %>% 
-    sf::st_distance(points) %>% 
-    # Small ordinal: Unweighted average
-    # Large ordinal: Proximity (Thiessen) interpolation
-    { 1 / (. ^ ordinal) }
-  
-  values = points %>% 
-    as.data.frame() %>% 
-    dplyr::select(-Station, -geometry) %>% 
-    as.matrix()
-  
-  (weights %*% values / rowSums(weights)) %>% 
-    tibble::as_tibble()
-}
-
-# TODO: Can we avoid reassignment?
-data$planning_areas <- data$planning_areas %>% 
-  dplyr::bind_cols(idw_interpolation(data$weather_points, .)) %>% 
-  tibble::as_tibble() %>% 
-  sf::st_as_sf()
-
-npts_in_polys <- function(points, polys, colname = "n") {
-  sf::st_intersects(points, polys) %>% 
-    tibble::as_tibble() %>% 
-    dplyr::mutate(plan_area = polys$plan_area[col.id]) %>% 
-    dplyr::count(plan_area, name = colname)
-}
-
-data_space <- data %>% 
-  {
-    list(
-      npts_in_polys(.$dengue_points, .$planning_areas, "ncases"),
-      npts_in_polys(.$aedes_points, .$planning_areas, "nhabs"),
-      npts_in_polys(.$clinic_points, .$planning_areas, "nclinics"),
-      .$planning_areas
+    sf::st_as_sf() %>% 
+    # Add meteorological data
+    dplyr::left_join(
+      idw_interpolation(data$weather_points, ., ordinal = 10),
+      by = "plan_area"
     )
-  } %>%
+  
+  data
+}
+
+data <- grand_transform_space(raw_data)
+
+data_space <- list(
+  ncases = data$dengue_points,
+  nhabs = data$aedes_points,
+  nclinics = data$clinic_points
+) %>% 
+  {
+    # Count the number of points in each polygon
+    lapply(names(.), function(name) {
+      .[[name]] %>% 
+        sf::st_intersects(data$planning_areas) %>%
+        tibble::as_tibble() %>%
+        dplyr::mutate(plan_area = data$planning_areas$plan_area[col.id]) %>%
+        dplyr::count(plan_area, name = name)
+    })
+  } %>% 
+  # Join everything
   Reduce(function(x, y) dplyr::left_join(x, y, by = "plan_area"), .) %>% 
+  dplyr::left_join(data$planning_areas, by = "plan_area") %>% 
+  sf::st_as_sf() %>% 
+  dplyr::select(-one_to_two_rm:-five_rm_exec_flats, -others) %>% 
   dplyr::mutate(
-    popden = pop / area_km2,
+    area_km2 = units::set_units(sf::st_area(.), km^2),
+    ncases_pht = ncases / pop * 100000,
+    nclinics_pht = nclinics / pop * 100000,
+    hdb_pp = hdb / pop,
+    condos_other_apts_pp = condos_other_apts / pop,
+    landed_properties_pp = landed_properties / pop,
+    popden = as.numeric(pop / area_km2),
+    habsden = as.numeric(nhabs / area_km2),
+    clinicsden = as.numeric(nclinics / area_km2),
     caseden = as.numeric(ncases / area_km2),
     label = paste0(
-      "<p><b>", plan_area,
+      "<b>", plan_area,
       "</b><br/>Area: ", round(area_km2, 2),
       "<br/>Cases: ", ncases,
       "<br/>Clinics: ", nclinics,
       "<br/>Population: ", pop,
-      "<br/><i>Aedes</i> habitats: ", nhabs,
-      "</p>"
+      "<br/><i>Aedes</i> habitats: ", nhabs
     )
-  ) %>% 
-  tibble::as_tibble() %>% 
-  sf::st_as_sf()
+  )
 ```
 
-We've finally got `data_time` and `data_space`!
-
-`data_time` contains number of cases per epidemiological week (Y) for dengue and a few other diseases from 2012-W01 to 2020-W29, as well as the aggregated weekly mean and median rainfall, temperature, and temperature range (X) from 2012-W01 to 2020-W27. We have 2 weeks of missing values :sob:
-
-`data_space` contains various information for each planning area (URA MP14), limited to the planning areas with any data on dengue case numbers. Notably, the north-west region is missing as no data were available. Information includes: dengue cases (Y), number of _Aedes_ habitats, number of clinics, population, area, meteorological variables, numbers of each dwelling type, etc.
-
-### Explore
-
-```{r explore-time-1, fig.height=12, fig.width=9}
-data_time %>% 
-  dplyr::select(-matches("Epiweek|End")) %>% 
-  dplyr::mutate(Epiyear = as.factor(Epiyear)) %>% 
-  tidyr::pivot_longer(Dengue:Med_temp_rng) %>% 
-  ggplot(aes(x = Start, y = value, color = Epiyear)) + 
-  geom_line() + 
-  geom_point(alpha = 0.3) + 
-  facet_grid(name ~ ., scales = "free_y") + 
-  labs(title = "Weekly history of variables from 2012 to 2020",
-       x = "",
-       y = "",
-       caption = "Sources: moh.gov.sg, weather.gov.sg") + 
-  theme(legend.position = "none")
+```{r}
+dplyr::glimpse(data_space)
 ```
 
-```{r explore-time-2, fig.height=5, fig.width=9}
-data_time %>% 
-  dplyr::select(-matches("Epi|End|Start")) %>% 
-  # Try some transformations
-  # dplyr::mutate(Dengue = Dengue - mean(Dengue)) %>% 
-  dplyr::mutate(Dengue_sqrt = sqrt(Dengue),
-                Dengue_log = log10(Dengue)) %>% 
-  tidyr::pivot_longer(everything()) %>% 
-  ggplot(aes(x = value, color = name)) + 
-  geom_density(size = 1) + 
-  facet_wrap(name ~ ., scales = "free") + 
-  labs(x = "",
-       caption = "Sources: moh.gov.sg, weather.gov.sg") + 
-  theme(legend.position = "none")
+`data_space` contains 19 main features for each planning area (URA MP14), including: number of dengue cases, number of _Aedes_ mosquito habitats, number of clinics, population, various dwelling types, area, and  meteorological variables. Planning areas with no record of dengue cases were excluded, leaving 33 of the 55 planning areas (a large part due to unavailability of data for the north-west region).
+
+## Explore
+
+```{r}
+# data_time %T>% 
+#   dplyr::glimpse() %>% 
+#   dplyr::select(-matches("Epiweek|End")) %>% 
+#   dplyr::mutate(Epiyear = as.factor(Epiyear)) %>% 
+#   tidyr::pivot_longer(Dengue:Med_temp_rng) %>% 
+#   ggplot(aes(x = Start, y = value, color = Epiyear)) + 
+#   geom_line() + 
+#   geom_point(alpha = 0.3) + 
+#   facet_grid(name ~ ., scales = "free_y") + 
+#   labs(title = "Weekly history of variables from 2012 to 2020",
+#        x = "",
+#        y = "",
+#        caption = "Sources: moh.gov.sg, weather.gov.sg") + 
+#   theme(legend.position = "none")
 ```
 
-```{r explore-time-3, fig.height=9, fig.width=9}
-data_time %>% 
-  dplyr::select(Epiyear, Dengue, Mean_rainfall, Med_temp, Med_temp_rng) %>% 
-  dplyr::mutate(Dengue = dplyr::lag(Dengue, 1),
-                Epiyear = as.factor(Epiyear)) %>% 
-  tidyr::pivot_longer(Mean_rainfall:Med_temp_rng) %>% 
-  ggplot(aes(x = value, y = Dengue, color = name)) + 
-  geom_point(alpha = 0.4) + 
-  geom_smooth(method = "lm", formula = y ~ x, size = 0.5) + 
-  facet_grid(Epiyear ~ name, scales = "free") + 
-  labs(x = "",
-       caption = "Sources: moh.gov.sg, weather.gov.sg") + 
-  theme(legend.position = "none")
+
+#### Choropleths
+
+##### Absolute numbers
+
+```{r explore-space-2, fig.height=10, fig.width=9}
+data_space %>% 
+  dplyr::select(ncases:pop, mean_rainfall:med_temp_rng, geometry) %>% 
+  gridExtra::grid.arrange(grobs = lapply(list(
+    ggplot(aes(fill = ncases), data = .),
+    ggplot(aes(fill = nhabs), data = .),
+    ggplot(aes(fill = nclinics), data = .),
+    ggplot(aes(fill = pop), data = .),
+    ggplot(aes(fill = mean_rainfall), data = .),
+    ggplot(aes(fill = med_rainfall), data = .),
+    ggplot(aes(fill = mean_temp), data = .),
+    ggplot(aes(fill = med_temp), data = .),
+    ggplot(aes(fill = mean_temp_rng), data = .),
+    ggplot(aes(fill = med_temp_rng), data = .)
+  ), function(x) {
+    x + 
+      geom_sf() + 
+      scale_fill_viridis_c(guide = guide_colourbar(
+        title.position = "top",
+        title.hjust = .5,
+        barwidth = 10,
+        barheight = .5
+      )) + 
+      theme_void() + 
+      theme(legend.position = "bottom")
+  }), ncol = 2)
 ```
 
-#### Decompose everything!
+##### Areal densities
 
-```{r, fig.width=9}
-data_time %>% 
-  dplyr::select(-Epiyear:-End) %>% 
-  names() %>% 
-  lapply(function(x) {
-    data_time[[x]] %>% 
-      ts(start = 2012, frequency = 52) %>% 
-      decompose(type = "additive") %>% 
-      autoplot() + 
-      labs(title = x)
-  })
+```{r explore-space-3, fig.height=6, fig.width=9}
+data_space %>% 
+  dplyr::select(ncases:pop, area_km2, geometry) %>% 
+  dplyr::mutate_at(dplyr::vars(-geometry), ~(. / area_km2)) %>% 
+  dplyr::select(-area_km2) %>% 
+  dplyr::mutate_at(dplyr::vars(-geometry), as.numeric) %>% 
+  gridExtra::grid.arrange(grobs = lapply(list(
+    ggplot(aes(fill = ncases), data = .),
+    ggplot(aes(fill = nhabs), data = .),
+    ggplot(aes(fill = nclinics), data = .),
+    ggplot(aes(fill = pop), data = .)
+  ), function(x) {
+    x + 
+      geom_sf() + 
+      scale_fill_viridis_c(guide = guide_colourbar(
+        title.position = "top",
+        title.hjust = .5,
+        barwidth = 10,
+        barheight = .5
+      )) + 
+      theme_void() + 
+      theme(legend.position = "bottom")
+  }), ncol = 2)
 ```
+
+
+#### Interactive plot of the spatial distribution of dengue cases
 
 ```{r explore-space-1}
 data_space %>% 
@@ -925,105 +1026,119 @@ data_space %>%
   )
 ```
 
-```{r}
-names(data_space)
-```
-
-#### Absolute numbers
-
-```{r explore-space-2, fig.height=10, fig.width=9}
-data_space %>% 
-  dplyr::select(ncases:pop, mean_rainfall:med_temp_rng, geometry) %>% 
-  gridExtra::grid.arrange(grobs = lapply(list(
-    ggplot(aes(fill = ncases), data = .),
-    ggplot(aes(fill = nhabs), data = .),
-    ggplot(aes(fill = nclinics), data = .),
-    ggplot(aes(fill = pop), data = .),
-    ggplot(aes(fill = mean_rainfall), data = .),
-    ggplot(aes(fill = med_rainfall), data = .),
-    ggplot(aes(fill = mean_temp), data = .),
-    ggplot(aes(fill = med_temp), data = .),
-    ggplot(aes(fill = mean_temp_rng), data = .),
-    ggplot(aes(fill = med_temp_rng), data = .)
-  ), function(x) {
-    x + 
-      geom_sf() + 
-      scale_fill_viridis_c(guide = guide_colourbar(
-        title.position = "top",
-        title.hjust = .5,
-        barwidth = 10,
-        barheight = .5
-      )) + 
-      theme_void() + 
-      theme(legend.position = "bottom")
-  }), ncol = 2)
-```
-
-#### Densities (by area)
-
-```{r explore-space-3, fig.height=6, fig.width=9}
-data_space %>% 
-  dplyr::select(ncases:pop, area_km2, geometry) %>% 
-  dplyr::mutate_at(dplyr::vars(-geometry), ~(. / area_km2)) %>% 
-  dplyr::select(-area_km2) %>% 
-  dplyr::mutate_at(dplyr::vars(-geometry), as.numeric) %>% 
-  gridExtra::grid.arrange(grobs = lapply(list(
-    ggplot(aes(fill = ncases), data = .),
-    ggplot(aes(fill = nhabs), data = .),
-    ggplot(aes(fill = nclinics), data = .),
-    ggplot(aes(fill = pop), data = .)
-  ), function(x) {
-    x + 
-      geom_sf() + 
-      scale_fill_viridis_c(guide = guide_colourbar(
-        title.position = "top",
-        title.hjust = .5,
-        barwidth = 10,
-        barheight = .5
-      )) + 
-      theme_void() + 
-      theme(legend.position = "bottom")
-  }), ncol = 2)
-```
+![](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/imgs/choropleth_mean_temp_ord_15.gif)
 
 ---
 
 ## Model
 
-For the preparation of the model, we created and ran a correlational matrix, to see how our variables of interest (within the model) are related.
+### Dengue
+
+Let's plot the x variables (Mean_rainfall, Med_temp, Med_temp_rng) and Y (Dengue)
+
+```{r, fig.height=9}
+{par(mfrow = c(3, 2))
+  hist(data_time$Dengue, breaks=40)
+  hist(data_time$Mean_rainfall, breaks=40)
+  hist(data_time$Mean_temp, breaks=40)
+  hist(data_time$Med_temp, breaks=40)
+  hist(data_time$Mean_temp_rng, breaks=40)
+  hist(data_time$Med_temp_rng, breaks=40)
+}
+
+ks.test(data_time$Mean_temp, data_time$Med_temp)
+ks.test(data_time$Mean_temp_rng, data_time$Med_temp_rng)
+```
+
+`Mean_temp` and `Med_temp` have similar distributions, and `Mean_temp_rng` and `Med_temp_rng` have similar distributions, therefore `Med_temp` and `Med_temp_rng` were used.
+
+Let's run a correlation model to see the relationship between variables
 
 ```{r}
 data_time %>% 
-  # dplyr::select(Dengue:Diarrhoea, Mean_rainfall, Med_temp, Med_temp_rng) %>% 
-  dplyr::select(Dengue, Mean_rainfall, Med_temp, Med_temp_rng) %>% 
-  as.matrix() %>% 
-  Hmisc::rcorr() %>% 
+  dplyr::select(Dengue, Mean_rainfall, Med_temp, Med_temp_rng) %>%
+  as.matrix() %>%
+  Hmisc::rcorr() %>%
   broom::tidy() %>% 
-  dplyr::filter(p.value < 0.05) %>%
+  # dplyr::filter(p.value < 0.05) %>% 
+  dplyr::mutate(dplyr::across(is.numeric, ~round(., 3))) %>% 
   dplyr::arrange(estimate)
-
 ```
 
-We performed mean-centering transformations on all the variables that will be turned into interaction terms.
+Run a linear regression model
 
-```{r, fig.height=3, fig.width=9}
-data_time %>% 
-  dplyr::select(Dengue, Med_temp, Med_temp_rng) %>% 
-  dplyr::mutate_all(~(. - mean(., na.rm = T))) %>% 
-  # scale() %>% 
-  tibble::as_tibble() %>% 
-  dplyr::mutate(Dengue_sqrt = sqrt(Dengue),
-                Dengue_log = log10(Dengue),
-                Dengue_inv = (1 / Dengue)) %>% 
-  tidyr::pivot_longer(everything()) %>% 
-  ggplot(aes(x = value, color = name)) + 
-  geom_density(size = 1) + 
-  facet_wrap(name ~ ., scales = "free") + 
-  theme(legend.position = "none")
+```{r}
+model1_Dengue <- lm(Dengue ~ Mean_rainfall + Med_temp + Med_temp_rng,
+                    data = data_time)
 
+broom::tidy(model1_Dengue) %>% 
+  dplyr::mutate(dplyr::across(is.numeric, ~round(., 3)))
+```
+
+Let's check the skewness of y variable
+
+```{r}
 data_time %>% 
-  dplyr::select(Dengue, Med_temp, Med_temp_rng) %>% 
-  dplyr::mutate_all(~(. - mean(., na.rm = T))) %>% 
+  tidyr::drop_na() %>% 
+  { e1071::skewness(.$Dengue) }  # [1] 2.033787
+```
+
+Let's see how the density plots look like after transformation
+
+```{r}
+{
+  par(mfrow = c(2, 2))
+  plot(density(data_time$Dengue, na.rm = T), main = "untransformed")
+  plot(density(sqrt(data_time$Dengue), na.rm = T), main = "sqrt")
+  plot(density(log10(data_time$Dengue), na.rm = T), main = "log10")
+  plot(density(1 / data_time$Dengue, na.rm = T), main = "inverse")
+}
+```
+
+Not really good. Try them on Model 1
+
+```{r}
+model1_log_Dengue <- lm(log10(Dengue)~Mean_rainfall+Med_temp+Med_temp_rng,
+                    data=data_time)
+broom::tidy(model1_log_Dengue)
+gvlma::gvlma(model1_log_Dengue)
+```
+
+```{r}
+model1_sqrt_Dengue <- lm(sqrt(Dengue)~Mean_rainfall+Med_temp+Med_temp_rng,
+                       data=data_time)
+broom::tidy(model1_sqrt_Dengue)
+gvlma::gvlma(model1_sqrt_Dengue)
+```
+
+```{r}
+model1_inv_Dengue <- lm((1/Dengue)~Mean_rainfall+Med_temp+Med_temp_rng,
+                        data=data_time)
+broom::tidy(model1_inv_Dengue)
+gvlma::gvlma(model1_inv_Dengue)
+```
+
+Let's have a look at the models' adjusted R2 values
+
+```{r}
+list(
+  "untransformed" = model1_Dengue,
+  "log" = model1_log_Dengue,
+  "sqrt" = model1_sqrt_Dengue,
+  "inv" = model1_inv_Dengue
+) %>% 
+  lapply(broom::glance) %>% 
+  { dplyr::bind_cols(names(.), dplyr::bind_rows(.)) } %>% 
+  dplyr::rename(name = ...1)
+```
+
+It seems that `model1_Dengue` (untransformed) has a higher adjusted R2 value than the other models, and it explains about 6% of the variance.
+
+Plot the regression models
+
+```{r}
+data_time %>% 
+  dplyr::select(Dengue, Med_temp, Med_temp_rng, Mean_rainfall) %>% 
   # scale() %>% 
   tibble::as_tibble() %>% 
   tidyr::pivot_longer(-Dengue) %>% 
@@ -1032,291 +1147,381 @@ data_time %>%
   geom_smooth(method = "lm", formula = y ~ x, color = "blue") + 
   facet_grid(. ~ name, scales = "free") + 
   theme(legend.position = "none")
-
-lm(sqrt(Dengue) ~ Med_temp + Med_temp_rng,
-   data = data_time %>% 
-     dplyr::select(Dengue, Med_temp, Med_temp_rng) %>% 
-     # dplyr::mutate_all(~(. - mean(., na.rm = T))) %>%
-     # scale() %>%
-     tibble::as_tibble()) %>%
-  # summary()
-  gvlma::gvlma() %>% 
-  autoplot()
-
 ```
 
-```{r, fig.height=5, fig.width=12}
-data_time %>% 
-  dplyr::select(Epiyear, Dengue, Mean_rainfall, Med_temp, Med_temp_rng) %>% 
-  dplyr::mutate(Dengue_w1 = Dengue,
-                Dengue = dplyr::lag(Dengue, 1),
-                Epiyear = as.factor(Epiyear)) %>% 
-  
-  # dplyr::select(-Epiyear) %>% 
-  # as.matrix() %>% 
-  # Hmisc::rcorr() %>% 
-  # broom::tidy() %>% 
+![24 hr temperature mean per month is 27.5 mean Rainfall is 13.8](http://www.weather.gov.sg/climate-climate-of-singapore/#:~:text=Rainfall%20is%20plentiful%20in%20Singapore,is%200.2mm%20or%20more.%5D)
+
+Since rainfall has marginal significance at an alpha of 10% and known to have effect on vector born diseases, we decided to explore rainfall variable by categorizing it (<11mm of rain fall and >=11mm of rainfall)
+
+```{r}
+data_time$Mean_rainfall %>% 
+  hist()
+```
+
+```{r}
+data_time <- data_time %>% 
+  dplyr::mutate(Rain_11 = ifelse(Mean_rainfall >= 11, 1, 0))
+
+# glimpse(data_time)
+```
+
+Re-Run Model1 With categorised Rain variable
+
+```{r}
+model2_Dengue <- lm(Dengue~Rain_11+Med_temp+Med_temp_rng,
+                                      data=data_time)
+
+gvlma::gvlma(model2_Dengue)
+broom::tidy(model2_Dengue)
+```
+
+Add Interaction term
+
+```{r}
+model2_Dengue_Int <- lm(Dengue ~ (Med_temp + Med_temp_rng) * Rain_11,
+                       data=data_time)
+
+gvlma::gvlma(model2_Dengue_Int)
+broom::tidy(model2_Dengue_Int)
+anova(model2_Dengue,model2_Dengue_Int)
+broom::glance(model2_Dengue)
+broom::glance(model2_Dengue_Int)
+```
+
+There is an interaction effect (Rain_11 on 2 other predictors) and Anova test shows adding the interaction terms improves the model fit (p value=0.0017).
+This interaction model has a higher R2 value too.
+
+r.squared(Model2_Dengue) --> 0.0757
+r.squared(Model2_Dengue_Int) --> 0.102
+adj.r.squared(Model2_Dengue) --> 0.0694
+adj.r.squared(Model2_Dengue_Int) --> 0.0919
+
+Unfortunately, all model assumptions failed. So This model won't be a good one for prediction
+
+Lets explore this interaction model
+
+```{r}
+#Report the model summary and significance using export_summs() function
+library(jtools)
+jtools::export_summs(model2_Dengue,model2_Dengue_Int,
+             error_format = "(p = {p.value})",
+             model.names = c("Main Effects Only",
+                             "Interaction Effects"),
+             digits = 3)
+```
+
+Probing Interaction Effects
+Run Spotlight analysis, using Johnson-Neyman Techniques
+
+```{r, fig.height=7, fig.width=9}
+#  a. Median Temperature
+interactions::sim_slopes(model2_Dengue_Int, 
+           pred = Rain_11,
+           modx = Med_temp_rng, 
+           johnson_neyman = T) #7.01
+
+interactions::interact_plot(model2_Dengue_Int,
+              pred="Med_temp",
+              modx = "Rain_11",
+              modx.labels = c("less than 11mm of rain fall", 
+                              "rain fall >=11mm"),
+              interval = T,
+              int.width = .95,
+              colors = c("deeppink",
+                         "darkgreen"),
+              vary.lty = T,
+              line.thickness = 1,
+              legend.main = "") +
+  ggplot2:: geom_vline(xintercept = 27.15, col = "red", linetype = 3, size = 1)+
+  labs(title = "Effect of Rain fall and Temperature on Dengue cases in Singapore",
+       subtitle = "With an average weekly rainfall of 11mm and above,the number of Dengue cases\nincreases with rise in temperature", 
+       x = "Weekly Median Temperature",
+       y = "Number of Dengue Cases",
+       caption = "Source: MOH, NEA Websites") +
+  annotate("text", 
+           x = 28, 
+           y = 0,
+           label = "The shaded areas denote 95% confidence intervals.\nThe vertical line marks the boundary\nbetween regions of significance and non-significance\nbased on alpha at 5%") + 
+  theme(legend.position = "top")
+```
+
+```{r, fig.height=7, fig.width=9}
+#  b. Median Temperature Range
+interactions::sim_slopes(model2_Dengue_Int, 
+           pred = Rain_11,
+           modx = Med_temp, 
+           johnson_neyman = T) #27.15
+
+interactions::interact_plot(model2_Dengue_Int,
+              pred="Med_temp_rng",
+              modx = "Rain_11",
+              modx.labels = c("less than 11mm of rain fall", 
+                              "rain fall >=11mm"), 
+              interval = T,
+              int.width = .95,
+              colors = c("deeppink",
+                         "darkgreen"),
+              vary.lty = T,
+              line.thickness = 1,
+              legend.main = "Rain Fall")+
+  ggplot2:: geom_vline(xintercept = 7.01, col = "red", linetype = 3, size = 1)+
+  labs(title = "Effect of Rain fall and Temperature Variation on Dengue Cases in Singapore",
+       subtitle = "With an average weekly rainfall of 11mm and above,the number of Dengue cases\ndecreases when tempeature variation is HIGH", 
+       x = "Weekly Median Temperature Range",
+       y = "Number of Dengue Cases",
+       caption = "Source: MOH, NEA Websites") +
+  annotate("text", 
+           x = 6, 
+           y = 100,
+           label = "The shaded areas denote 95% confidence intervals.\nThe vertical line marks the boundary\nbetween regions of significance and non-significance\nbased on alpha at 5%") + 
+  theme(legend.position = "top")
+```
+
+### Upper Respiratory Tract Infections (URTI)
+
+Since the number of URTI cases in Singapore drastically reduced due to COVID-19, we decided to exclude the values since April 2020 (from circuit breaker period), for this analysis
+
+Let's plot the x variables (Mean_rainfall,Med_temp,Med_temp_rng) and Y (URTI)
+
+```{r, fig.height=9}
+data_time_URTI <- data_time %>% 
+  dplyr::filter(URTI >= 2000)
+
+{
+  par(mfrow = c(2, 2))
+  hist(data_time_URTI$Mean_rainfall, breaks=40)
+  hist(data_time_URTI$Med_temp, breaks=40)
+  hist(data_time_URTI$Med_temp_rng, breaks=40)
+  hist(data_time_URTI$URTI, breaks=40)
+}
+```
+
+Let's run a correlation model to see the relationship between variables
+
+```{r}
+data_time_URTI %>% 
+  dplyr::select(URTI, Mean_rainfall, Med_temp, Med_temp_rng) %>%
+  as.matrix() %>%
+  Hmisc::rcorr() %>%
+  broom::tidy() %>% 
   # dplyr::filter(p.value < 0.05) %>% 
-  # dplyr::arrange(estimate)
-  
-  # dplyr::select(matches("Epi|Dengue")) %>%
-  # tidyr::pivot_longer(Dengue_w1) %>%
-  # ggplot(aes(x = value, y = Dengue, color = name)) +
-  # geom_point(alpha = 0.4) +
-  # geom_smooth(method = "lm", formula = y ~ x) +
-  # facet_grid(name ~ Epiyear, scales = "free") + 
-  # theme(legend.position = "none")
-  
-  lm(Dengue ~ Dengue_w1 * (Med_temp + Med_temp_rng), .) %>% 
-  # gvlma::gvlma()
-  autoplot()
-  # summary()
-
+  dplyr::mutate(dplyr::across(is.numeric, ~round(., 3))) %>% 
+  dplyr::arrange(estimate)
 ```
 
+Run a simple linear regression model
 
----
-
-# Edit until here
-## The rest is yet to be
-
----
-
-
-
-### Specify OLS model
-
-We ran two regression models. The first regressed demographics and social comparisons orientations onto life satisfaction (`model1`). 
-$$
-\begin{eqnarray}
-\widehat{swl} = intercept + b_1fem + b_2ageyear + b_3educ + b_4income + b_5sca + b_6scb + \epsilon
-\end{eqnarray}
-$$
-Our key investigation lies in the next model, in which we regressed demographics and social comparisons orientations, along with interaction terms, onto life satisfaction (`model2`). 
-$$
-\begin{eqnarray}
-\widehat{swl} = intercept + b_1fem + b_2ageyear + b_3educ + b_4income + b_5sca + b_6scb + \\ 
-                    + b_7fem \times sca + b_8ageyear \times sca + b_9educ \times sca + b_10educ \times sca + \epsilon
-\end{eqnarray}
-$$
 ```{r}
-# model1 <- lm(swl ~ fem + ageyear + educ + income + sca + scb, 
-#                            data2)
-# 
-# tidy(model1) %>% as_tibble()
-# glance(model1)
+model1_URTI <- lm(URTI~Mean_rainfall+Med_temp+Med_temp_rng,
+                    data=data_time_URTI)
+
+broom::tidy(model1_URTI)
+gvlma::gvlma(model1_URTI)
+```
+
+Assumption checks failed
+Let's check the skewness of y variable
+
+```{r}
+e1071::skewness(data_time_URTI$URTI) #[1] 0.8635183
 ```
 
 ```{r}
-# model2 <- lm(swl ~ (fem + ageyear + educ + income) *sca + scb, 
-#                            data2)
-# 
-# tidy(model2) %>% as_tibble()
-# glance(model2)
+#Lets see how the density plots look like after transformation
+{
+  par(mfrow = c(2, 2))
+  plot(density(data_time_URTI$URTI), main = "untransformed")
+  plot(density(sqrt(data_time_URTI$URTI)), main = "sqrt")
+  plot(density(log10(data_time_URTI$URTI)), main = "log10")
+  plot(density(1 / data_time_URTI$URTI), main = "inverse")
+}
 ```
 
-We tested if `model2`, with interaction terms, enhances the explanatory power of the model using `anova` function.
+Try them on Model 1
 
 ```{r}
-# anova(model1, model2)
+model1_log_URTI <- lm(log10(URTI)~Mean_rainfall+Med_temp+Med_temp_rng,
+                        data=data_time_URTI)
+broom::tidy(model1_log_URTI)
+gvlma::gvlma(model1_log_URTI)
 ```
-
-The results of the analysis suggest that adding the interaction terms significantly increases the R-squared of `model2`, as compared to `model1`.
-
-### Assumption Check
-
-> Prof. Roh's Note: "Here, please check the linearity assumption, using *Global Validation of Linear Model Assumption* (`gvlma`) package. You may visualize the core infomation of assumption checks, using `ggfortify` package.
-
-```{r fig.align = "center", fig.width = 10, fig.height= 10}
-# library(gvlma)
-# gvlma(model2)
-# 
-# library(ggfortify)
-# autoplot(gvlma(model2))
-```
-
-### Check Multicollinearity
-
-```{r fig.align = "center", fig.width = 10, fig.height= 10}
-# library(car)
-# vif(model1);vif(model2)
-```
-
-### Report the Results with `kable` in `R Markdown`
-
-> Prof. Roh's Note: "Now that the assumption check is done, you might want to put the results into a prettier format of table. The default print-out of table in `R Markdown` does not look good. The `knitr` package contains a very basic command, `kable`, which will format an array or data frame more presentable for display. Thus, use the following for your report."
 
 ```{r}
-# library(knitr) # Please install the package "knitr" first.
-# library(kableExtra) # You might want to use package "kableExtra" as well.
-# 
-# kable(tidy(model2))%>%
-#   kable_styling("striped", full_width = F) %>%
-#   column_spec(c(1, 5), bold = T) %>%
-#   row_spec(c(2, 4, 6, 8, 10), bold = T, color = "white", background = "red")
-# 
-# kable(glance(model2))%>%
-#   kable_styling("striped", full_width = F) %>%
-#   column_spec(c(2, 4, 6, 8, 10, 12), bold = T, color = "white", background = "red")
+model1_sqrt_URTI <- lm(sqrt(URTI)~Mean_rainfall+Med_temp+Med_temp_rng,
+                         data=data_time_URTI)
+broom::tidy(model1_sqrt_URTI)
+gvlma::gvlma(model1_sqrt_URTI)
 ```
+
+```{r}
+model1_inv_URTI <- lm((1/URTI)~Mean_rainfall+Med_temp+Med_temp_rng,
+                        data=data_time_URTI)
+broom::tidy(model1_inv_URTI)
+gvlma::gvlma(model1_inv_URTI)
+```
+
+Assumptions acceptable
+
+Plot the regression model 1
+
+```{r}
+data_time_URTI %>% 
+  dplyr::select(URTI, Med_temp, Med_temp_rng,Mean_rainfall) %>% 
+  # scale() %>% 
+  tibble::as_tibble() %>% 
+  tidyr::pivot_longer(-URTI) %>% 
+  ggplot(aes(x = value, y = URTI, color = name)) +
+  geom_point(alpha = 0.4) + 
+  geom_smooth(method = "lm", formula = y ~ x, color = "blue") + 
+  facet_grid(. ~ name, scales = "free") + 
+  theme(legend.position = "none")
+```
+
+From the plot, there are more cases when rain fall is lesser. So we decided to explore rainfall variable by categorizing it. (<11cm of rain fall and >=11cm of rainfall))
+
+```{r}
+data_time_URTI <- data_time_URTI %>% 
+  dplyr::mutate(Rain_11 = ifelse(Mean_rainfall >= 11, 1, 0))
+
+# glimpse(data_time_URTI)
+```
+
+Re-Run Model1 With categorised Rain variable
+
+```{r}
+model2_inv_URTI<- lm((1/URTI)~Rain_11+Med_temp+Med_temp_rng,
+                   data=data_time_URTI)
+
+gvlma::gvlma(model2_inv_URTI)
+broom::tidy(model2_inv_URTI)
+```
+
+Add Interaction term
+
+```{r}
+model2_inv_URTI_Int <- lm((1/URTI)~(Med_temp+Med_temp_rng)*Rain_11,
+                           data=data_time_URTI)
+
+gvlma::gvlma(model2_inv_URTI_Int)
+broom::tidy(model2_inv_URTI_Int)
+anova(model2_inv_URTI,model2_inv_URTI_Int)
+broom::glance(model2_inv_URTI)
+broom::glance(model2_inv_URTI_Int)
+```
+
+Median temperature is significant at an alpha level of 5%. There is an interaction effect too (Rain_11 on Med_temp) and Anova test shows adding the interaction terms improves the model fit (p value = 0.004838). This interaction model has a higher R2 value too.
+
+r.squared(model2_inv_URTI) --> 0.053
+r.squared(model2_inv_URTI_Int)--> 0.077
+adj.r.squared(model2_inv_URTI) --> 0.0467
+adj.r.squared(model2_inv_URTI_Int)--> 0.0660
+
+Report the model summary and significance using export_summs() function
+
+```{r}
+jtools::export_summs(model2_inv_URTI,model2_inv_URTI_Int,
+             error_format = "(p = {p.value})",
+             model.names = c("Main Effects Only",
+                             "Interaction Effects"),
+             digits = 3)
+```
+
+Probing Interaction Effects
+
+```{r, fig.height=7, fig.width=9}
+#Run Spotlight analysis, using Johnson-Neyman Techniques
+# Median Temperature
+
+# interactions::sim_slopes(model2_inv_URTI_Int,
+#            pred = Rain_11,
+#            modx = Med_temp,
+#            johnson_neyman = T) ##[27.28, 28.61]
+# 
+# #Run interaction_plot() by adding benchmark for regions of significance
+# # Use plot B to see the actual URTI numbers instead of y inverse
+# #  a. Median Temperature
+# interactions::interact_plot(model2_inv_URTI_Int,
+#             pred="Med_temp",
+#             modx = "Rain_11",
+#             modx.labels = c("less than 11cm of rain fall",
+#                             "rain fall >=11cm"),
+#             interval = T,
+#             int.width = .95,
+#             colors = c("deeppink",
+#                        "darkgreen"),
+#             vary.lty = T,
+#             line.thickness = 1,
+#             legend.main = "") +
+# ggplot2:: geom_vline(xintercept = 27.28, col = "red", linetype = 3, size = 1)+
+# labs(title = "Effect of Rain fall and Temperature on rise in URTI Cases in Singapore",
+#      subtitle = "For lower weekly rainfall, the number of URTI cases\ndereases with rise in temperature",
+#      x = "Weekly Median Temperature",
+#      y = "1/Number of URTI Cases",
+#      caption = "Source: MOH, NEA websites") +
+# annotate("text",
+#          x = 28,
+#          y = 0.0003,
+#          label = "The shaded areas denote 95% confidence intervals.\nThe vertical line marks the boundary\nbetween regions of significance and non-significance\nbased on alpha at 5%") +
+# theme(legend.position = "top")
+```
+
+```{r, fig.height=7, fig.width=9}
+##############################################
+#This model model2_URTI is just for plotting purpose.
+model2_URTI_Int <- lm(URTI~(Med_temp+Med_temp_rng)*Rain_11,
+                           data=data_time_URTI)
+
+#Run Spotlight analysis, using Johnson-Neyman Techniques
+#  Median Temperature
+# sim_slopes(model2_URTI_Int, 
+#            pred = Rain_11,
+#            modx = Med_temp, 
+#            johnson_neyman = F) 
+
+interactions::sim_slopes(model2_URTI_Int,
+           pred = Rain_11,
+           modx = Med_temp,
+           johnson_neyman = T) #[27.24, 28.48]
+
+interactions::interact_plot(model2_URTI_Int,
+              pred="Med_temp",
+              modx = "Rain_11",
+              modx.labels = c("less than 11cm of rain fall",
+                              "rain fall >=11cm"),
+              interval = T,
+              int.width = .95,
+              colors = c("deeppink",
+                         "darkgreen"),
+              vary.lty = T,
+              line.thickness = 1,
+              legend.main = "") +
+  ggplot2::geom_vline(xintercept = 27.24, col = "red", linetype = 3, size = 1)+
+  ggplot2::geom_vline(xintercept = 28.48, col = "red", linetype = 3, size = 1)+
+  labs(title = "Effect of Rain fall and Temperature on rise in URTI Cases in Singapore",
+       subtitle = "For lower weekly rainfall, the number of URTI cases\ndereases with rise in temperature",
+       x = "Weekly Median Temperature",
+       y = "Number of URTI Cases",
+       caption = "Source: MOH, NEA websites") +
+  annotate("text", 
+           x = 28, 
+           y = 2000,
+           label = "The shaded areas denote 95% confidence intervals.\nThe vertical line marks the boundary\nbetween regions of significance and non-significance\nbased on alpha at 5%") + 
+  theme(legend.position = "top")
+```
+
+
 
 ---
 
 The regression analysis came up with two significant interaction terms.
 
-*	First, it appears that the relationships between social comparisons orientation regarding abilities and life satisfaction is different depending on one’s **gender**.
+*	First, it appears that the relationships between median temperature and number of cases of dengue is different depending on one’s **gender**.
 
 *	Second, it appears that the relationships between social comparisons orientation regarding abilities and life satisfaction is different depending on one’s **education**.
 
 To see the patterns of interaction, we visualized the significant interaction effects on the next chapter.
 
-## Visualize
 
-### Part 1 (Social Comparison X Gender)
-
-To visualize the OLS regression analysis performed above, we stored the OLS regression model’s predictions.
-
-```{r}
-# grid <- data2 %>% 
-#   data_grid(sca, fem, ageyear = 0, educ = 0, income = 0, scb = 0) %>%
-#   add_predictions(model2)
-```
-
-We undid the centering of variable (`sca`).
-
-```{r}
-# grid <- grid %>% 
-#   mutate(sca = sca + mean(data$sca))
-```
-
-The following figure represents the two lines that represent differing genders, and how each gender differs in its relationships between social comparison orientation and life satisfaction.
-
-```{r fig.align = "center", fig.width = 6, fig.height= 6}
-# ggplot(grid, aes(x = sca, y = pred, color = factor(fem))) +
-#   geom_line(size = 2)+
-#   scale_color_discrete(breaks = c(0, 1), label=c("Male", "Female")) +
-#   labs(x="Social Comparion Orientation (Abilities)", 
-#        y="Life Satisfaction",
-#        color="Gender")+
-#   coord_cartesian(ylim=c(1.5, 3.5), xlim=c(0.7, 5.3))+
-#   theme_linedraw() +
-#   theme(legend.position = "top")
-```
-
-We also plotted the two genders separately, along with data points represented with dots, so that we could see the patterns of the relationship from a different angle.
-
-```{r fig.align = "center", fig.width = 6, fig.height= 6}
-# ggplot(data, aes(x = sca, y = swl))+
-#   geom_point(aes(color = factor(fem)), alpha = 0.3)+
-#   geom_line(data = grid, aes(y = pred, color = factor(fem)), size = 1)+
-#   labs(x="Social Comparion Orientation (Abilities)", 
-#        y="Life Satisfaction",
-#        color="Gender")+
-#   coord_cartesian(ylim=c(0.7, 5.3), xlim=c(0.7, 5.3))+
-#   facet_wrap(. ~ factor(fem),
-#              labeller=as_labeller(c("0"="Male","1"="Female")))+
-#   theme_linedraw() +
-#   theme(legend.position="none")
-```
-
-### Part 2 (Comparison X Education)
-
-Unlike `gender`, which is a **categorical** variable, `education` is a **continuous variable** in our model. To make it easier for interpretation, we categorized them into three levels (`mean below 1SD`, `mean`, and `mean above 1SD`). We set gender at 0.5 instead of 0, as the ratio of male and female is equal.
-
-```{r}
-# data2 %>% summarize(sd(educ))
-# 
-# grid_group3 <- data2 %>% 
-#   data_grid(sca, educ = c(-1.26, 0.00, 1.26),
-#             fem = 0.5, ageyear = 0, income = 0, scb = 0) %>% 
-#   add_predictions(model2)
-```
-
-We undid the centering of variable (`sca`).
-
-```{r}
-# grid <- grid_group3 %>% 
-#   mutate(sca = sca + mean(data$sca), educ = factor(as.double(factor(educ))))
-```
-
-The following figure represents the three lines that represent differing education levels set at `M-1SD`, `Mean`, `M+1SD`, as noted above, and how differing education levels make differences to relationships between social comparison orientation and life satisfaction.
-
-```{r fig.align = "center", fig.width = 6, fig.height= 6}
-# ggplot(grid, aes(x = sca, y = pred, color = factor(educ))) +
-#   geom_line(size = 2) +
-#   scale_color_discrete(breaks = c(1, 2, 3), 
-#                        label=c("Low in Education", 
-#                                "Mean Education", 
-#                                "High in Education")) +
-#   labs(x = "Social Comparison Orientation (Abilities)", 
-#        y = "Life Satisfaction",
-#        color = "Education") +
-#   coord_cartesian(ylim = c(2.0, 3.5), xlim = c(0.7, 5.3)) +
-#   theme_linedraw() +
-#   theme(legend.position= "top")
-```
-
-## DO THIS WAY :)
-
-> Prof. Roh's Note: "Yes, you might want to perform the analysis above, using `jtools`, `huxtable`, `ggstance`, and `interactions` packages, as you have learned in class."
-
-```{r fig.align = "center", fig.width = 10, fig.height= 10}
-# pacman::p_load(jtools, huxtable, ggstance, interactions)
-# 
-# m1 <- lm(swl ~ fem + ageyear + educ + income + sca + scb, 
-#          data = data)
-# 
-# m2 <- lm(swl ~ (fem + ageyear + educ + income) * sca + scb, 
-#          data = data) 
-# 
-# export_summs(m1, m2, 
-#              error_format = "(t = {statistic}, p = {p.value})",
-#              align = "right",
-#              model.names = c("Main Effects Only", "Interplay of Social Comparison X Demographics"),
-#              digits = 3)
-# 
-# plot_summs(m1, m2, 
-#            scale = T,
-#            plot.distributions = T,
-#            model.names = c("Main Effects Only", "Interplay of Social Comparison X Demographics")) +
-#   theme(legend.position = "top")
-# 
-# sim_slopes(m2,
-#            pred = sca, 
-#            modx = fem,
-#            johnson_neyman = F)
-# 
-# sim_slopes(m2,
-#            pred = fem, 
-#            modx = sca,
-#            johnson_neyman = T)
-# 
-# interact_plot(m2, 
-#               pred = "sca",
-#               modx = "fem", 
-#               modx.labels = c("Male",
-#                               "Female"),
-#               interval = T, 
-#               int.width = 0.95,
-#               colors = c("dodgerblue", 
-#                          "darkorange"),
-#               vary.lty = T,
-#               line.thickness = 1,
-#               legend.main = "Gender") +
-#   geom_vline(xintercept = 3.19, col = "red", linetype = 1, size = 1) +
-#   labs(title = "The Interplay of Gender and Social Comparison\non Life Satisfaction",
-#        subtitle = "Among females, the more they compare their abilities with others,\nthere seems to be lesser life satisfaction.",
-#        x = "Social Comparison of Abilities", 
-#        y = "Life Satisfaction",
-#        caption = "Source: Your Dataset") +
-#   annotate("text", 
-#            x = 2, 
-#            y = 2,
-#            label = "The shaded areas denote 95% confidence intervals.\nThe vertical line marks the boundary\nbetween regions of significance and non-significance\nbased on alpha at 5%") + 
-#   theme(legend.position = "top",
-#         text = element_text(family = "Courier"))
-
-```
 
 ## Interpretation of the Results
 
