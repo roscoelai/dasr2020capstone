@@ -1,6 +1,6 @@
 ---
 title: "Analysing Dengue Cases in Singapore"
-author: "Shayne, Roscoe, Anu"
+author: "Shayne (SY), Roscoe (RL), Anu (AS)"
 date: "02 August 2020"
 output:
   html_document:
@@ -597,21 +597,18 @@ grand_import_de_novo <- function() {
     "dengue_polys" = read_kmls(
       c("central", "northeast", "southeast", "southwest") %>% 
         paste0("https://geo.data.gov.sg/denguecase-", .,
-               "-area/2020/07/17/kml/denguecase-", ., "-area.kml")
+               "-area/2020/07/28/kml/denguecase-", ., "-area.kml")
     ),
     
-    "aedes_polys" = read_kmls(c(
-      c("central", "northeast", "northwest") %>% 
+    "aedes_polys" = read_kmls(
+      c("central", "northeast", "northwest", "southeast", "southwest") %>% 
         paste0("https://geo.data.gov.sg/breedinghabitat-", .,
-               "-area/2020/07/17/kml/breedinghabitat-", ., "-area.kml"),
-      c("southeast", "southwest") %>% 
-        paste0("https://geo.data.gov.sg/breedinghabitat-", .,
-               "-area/2020/07/23/kml/breedinghabitat-", ., "-area.kml")
-    )),
+               "-area/2020/07/28/kml/breedinghabitat-", ., "-area.kml")
+    ),
     
     "mss_63station_pos" = readr::read_csv(paste0(
       "https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/",
-        "data/mss/Station_Records.csv"
+      "data/mss/Station_Records.csv"
     ))
   )
 }
@@ -1452,7 +1449,7 @@ list(
   dplyr::rename(transformation = ...1)
 ```
 
-It seems that `models$model1_dengue` (untransformed) has a higher adjusted R2 value than the other models, and it explains about 6% of the variance.
+It seems that `models$model1_dengue` (untransformed) has a higher adjusted R^2^ value than the other models.
 
 Plot the regression models
 
@@ -1556,7 +1553,7 @@ interactions::interact_plot(
   labs(
     title = "Effect of Rain fall and Temperature on Dengue cases in Singapore",
     subtitle = paste0(
-      "With an average weekly rainfall of 11mm and above, the number of ",
+      "With an average weekly rainfall of 11mm and above, the number of \n",
       "Dengue cases increases with rise in temperature"
     ),
     x = "Weekly Median Temperature",
@@ -1607,7 +1604,7 @@ interactions::interact_plot(
       "on Dengue Cases in Singapore"
     ),
     subtitle = paste0(
-      "With an average weekly rainfall of 11mm and above, the number of ",
+      "With an average weekly rainfall of 11mm and above, the number of \n",
       "Dengue cases decreases when tempeature variation is HIGH"
     ), 
     x = "Weekly Median Temperature Range",
@@ -1872,9 +1869,8 @@ interactions::interact_plot(
   geom_vline(xintercept = 27.24, col = "red", linetype = 3, size = 1) + 
   geom_vline(xintercept = 28.48, col = "red", linetype = 3, size = 1) + 
   labs(
-    title = paste0(
-      "Effect of Rain fall and Temperature on rise in URTI Cases in Singapore"
-    ),
+    title = 
+      "Effect of Rain fall and Temperature on rise in URTI Cases in Singapore",
     subtitle = paste0(
       "For lower weekly rainfall, the number of URTI cases ",
       "decreases with rise in temperature"
@@ -1960,6 +1956,12 @@ Future research could explore creating model to predict the spread and susceptib
 [Benedum, C. M., Seidahmed, O. M., Eltahir, E. A., & Markuzon, N. (2018). Statistical modeling of the effect of rainfall flushing on dengue transmission in Singapore. _PLoS neglected tropical diseases_, 12(12), e0006935.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6283346/)
 
 [Tang, J. W., Lai, F. Y. L., Wong, F., & Hon, K. L. E. (2010). Incidence of common respiratory viral infections related to climate factors in hospitalized children in Hong Kong. _Epidemiology & Infection_, 138(2), 226-235.](https://pubmed.ncbi.nlm.nih.gov/19631018/)
+
+---
+
+## Appendix
+
+[Larger Leaflet Map](https://roscoelai.github.io/dasr2020capstone/src/capstone_leaflet_html.html)
 
 ---
 
