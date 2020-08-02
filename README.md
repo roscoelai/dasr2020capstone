@@ -1,8 +1,8 @@
 # Analysing Dengue Cases in Singapore
 
-[Preview Current Version of Document](https://roscoelai.github.io/dasr2020capstone/src/capstone_project_html.html)
+[Current Version of HTML Document](https://roscoelai.github.io/dasr2020capstone/src/capstone_project_html.html)
 
-[Preview Current Version of Leaflet Map](https://roscoelai.github.io/dasr2020capstone/src/capstone_leaflet_html.html)
+[Current Version of Leaflet Map](https://roscoelai.github.io/dasr2020capstone/src/capstone_leaflet_html.html)
 
 [Data](https://github.com/roscoelai/dasr2020capstone#data)
 
