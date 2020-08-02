@@ -1,7 +1,7 @@
 ---
 title: "Analysing Dengue Cases in Singapore"
 author: "Shayne, Roscoe, Anu"
-date: "31 July 2020"
+date: "02 August 2020"
 output:
   html_document:
     theme: flatly
@@ -13,10 +13,11 @@ output:
 knitr::opts_chunk$set(
   comment = "",
   echo = T,
+  fig.width = 9,
   warning = F
 )
 
-# If run in RStudio, set the working directory to this file's location
+# Set the working directory to this file's location (for RStudio)
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 ```
 
@@ -28,7 +29,7 @@ In our Capstone Project, we aim to explore the relationship between meteorologic
 
 Dengue fever is a vector-borne infectious disease that is endemic in the tropical world. Singapore is one of several countries with high disease burden of dengue. In 2020, Singapore saw 1,158 dengue cases in a week of June - the highest number of weekly dengue cases ever recorded since 2014. The sudden increase is worrisome, therefore greater emphasis on analysis will be focused on Dengue fever.
 
-For our data science project, we activated the following packages, using the `Tidyverse` approach.
+## Activate packages
 
 ```{r load-packages}
 # Rule for activating packages in development mode:
@@ -36,7 +37,7 @@ For our data science project, we activated the following packages, using the `Ti
 # - Exceptions:
 #   - ggfortify - to overload `ggplot2::autoplot()`
 #   - ggmap - has to be activated for `ggmap::register_google()` to work
-#   - ggplot2 - some function arguments require `ggplot2::`, it's crazy
+#   - ggplot2 - too troublesome otherwise
 #   - magrittr - `%>%`
 #
 # For deployment mode, activate every package that is referenced more than once
@@ -53,30 +54,25 @@ pacman::p_load(
 )
 ```
 
----
-
 ## Import
-
-Then, we imported our dataset.
 
 > Most time-consuming, finding data, is.
 
-We work towards 2 datasets: `data_time` for temporal analysis, and `data_space` for spatial analysis. When they are ready, the import-tidy-transform process would have been completed (at least for the first round of transform, subsequent rounds of transforms might still be required depending on the exigencies informed by the modeling and visualization processes).
+All data are available online and first gathered into separate distinct raw datasets:
 
-All data are available online and were gathered into 7 distinct raw datasets ([click here](https://github.com/roscoelai/dasr2020capstone#data) for a summary page):
-
-* Meteorological Service Singapore (MSS)  
-  + [Historical daily weather records](http://www.weather.gov.sg/climate-historical-daily/)  
+* Meteorological Service Singapore (MSS)
+  + [Historical daily weather records](http://www.weather.gov.sg/climate-historical-daily/)
   + [List of stations, weather parameters and periods of records available](http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf)
-* Ministry of Health (MOH)  
-  + [Weekly infectious disease bulletin](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)  
-  + [Healthcare Institutions (HCI) Directory](http://hcidirectory.sg/hcidirectory/)  
-* [Data.gov.sg](https://data.gov.sg/)  
-  + [Dengue cases](https://data.gov.sg/search?q=denguecases)  
-  + [_Aedes_ mosquito breeding habitats](https://data.gov.sg/search?q=aedes+habitats)  
+* Ministry of Health (MOH)
+  + [Weekly infectious disease bulletin](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
+  + [Healthcare Institutions (HCI) Directory](http://hcidirectory.sg/hcidirectory/)
+* [Data.gov.sg](https://data.gov.sg/)
+  + [Dengue cases](https://data.gov.sg/search?q=denguecases)
+  + [_Aedes_ mosquito breeding habitats](https://data.gov.sg/search?q=aedes+habitats)
   + [Singapore residents by planning area and type of dwelling, Jun 2017](https://data.gov.sg/dataset/singapore-residents-by-planning-area-and-type-of-dwelling-jun-2017)
+  + [Master Plan 2014 Region Boundary (Web)](https://data.gov.sg/dataset/master-plan-2014-region-boundary-web)
 
-The full glorious details of their providence are given below.
+[Click here](https://github.com/roscoelai/dasr2020capstone#data) for a summary page. The full glorious details of their providence are given below.
 
 #### Helper functions
 
@@ -182,11 +178,18 @@ read_kmls <- function(url_or_path) {
   #' @return A single combined sf object.
   
   # Check if the given paths are URLs by trying to download to temp files. If 
-  #   successful, return the temp files. If not, return the original paths.
+  #   successful, return the temp files. If not, return the original paths. 
+  #   Automatically extract .zip files, if any.
   kml_files = tryCatch({
-    temp = tempfile(fileext = rep(".kml", length(url_or_path)))
+    temp = tempfile(fileext = paste0(".", tools::file_ext(url_or_path)))
     Map(function(x, y) download.file(x, y, mode = "wb"), url_or_path, temp)
-    temp
+    sapply(temp, function(x) {
+      if (endsWith(x, ".zip")) {
+        unzip(x)
+      } else {
+        x
+      }
+    })
   }, error = function(e) {
     url_or_path
   })
@@ -200,9 +203,7 @@ read_kmls <- function(url_or_path) {
 }
 ```
 
-### Import data from scratch (where available)
-
-#### Webscraping functions
+### Import data _de novo_ (where available)
 
 The following code chunk has been disabled, but is provided here to show the details behind the webscraping processes.
 
@@ -559,8 +560,6 @@ zipcodes_to_geocodes <- function(zipcodes) {
 }
 ```
 
-#### Import data _de novo_
-
 The following code chunk has been disabled, but is provided here to show how the data may be obtained from primary sources (with one exception). Using this code chunk would require activating the previous code chunk, as well as a valid Google Maps Platform API key.
 
 ```{r grand-import-de-novo, eval=FALSE}
@@ -582,6 +581,11 @@ grand_import_de_novo <- function() {
     "planning_areas" = read_kmls(paste0(
       "https://geo.data.gov.sg/plan-bdy-dwelling-type-2017/2017/09/27/kml/",
       "plan-bdy-dwelling-type-2017.kml"
+    )),
+    
+    "regions" = read_kmls(paste0(
+      "https://geo.data.gov.sg/mp14-region-web-pl/2014/12/05/kml/",
+      "mp14-region-web-pl.zip"
     )),
     
     "dengue_polys" = read_kmls(
@@ -645,6 +649,10 @@ grand_import_no_webscraping <- function(from_online_repo = TRUE) {
       fld, "kmls/plan-bdy-dwelling-type-2017.kml"
     )),
     
+    "regions" = read_kmls(paste0(
+      fld, "kmls/MP14_REGION_WEB_PL.kml"
+    )),
+    
     "dengue_polys" = read_kmls(paste0(
       fld, "kmls/denguecase-", c("central",
                                  "northeast",
@@ -669,34 +677,113 @@ grand_import_no_webscraping <- function(from_online_repo = TRUE) {
 raw_data <- grand_import_no_webscraping(from_online_repo = F)
 ```
 
-### A quick and dirty overview of the raw data
+### What raw data do we have?
 
-```{r quick-look-raw}
-raw_data %T>% {
-  print(tibble::tibble(names = names(.),
-                       data = .,
-                       nrow = sapply(., nrow),
-                       ncol = sapply(., ncol)))
-}
+```{r}
+raw_data %>% 
+  tibble::tibble(
+    names = names(.),
+    data = .,
+    nrow = sapply(., nrow),
+    ncol = sapply(., ncol)
+  )
+
+raw_data
 ```
-
-Behold! Our 7 raw datasets, nicely packaged in the list `raw_data`. No more importing should be necessary from this point.
 
 ---
 
 ## Tidy & Transform
 
+```{r}
+transpose_html_table <- function(html) {
+  xml2::read_html(html) %>% 
+    rvest::html_node("table") %>% 
+    rvest::html_table() %>% 
+    t() %>% 
+    `colnames<-`(.[1,]) %>% 
+    .[2,]
+}
+
+idw_interpolation <- function(points, points_label,
+                              polys, polys_label,
+                              ordinal = 2) {
+  #' Inverse-distance-weighted (IDW) Interpolation
+  #' 
+  #' @description
+  #' Calculate the inverse-distance-weighted (IDW) averages of the values of a 
+  #' given set of points to the centroids of a given set of polygons.
+  #' 
+  #' The ordinal determines the amount of weight given to inverse-distances. 
+  #' An ordinal of 0 will return the same value (the arithmetic mean) to all 
+  #' centroids. A large ordinal will heavily penalize points that are far away. 
+  #' A negative ordinal will result in distance-weighted interpolation - please 
+  #' don't do that.
+  #' 
+  #' @param points sf object containing point features.
+  #' @param polys sf object containing polygon features.
+  #' @param points_label Column name of the labels in points.
+  #' @param polys_label Column name of the labels in polys.
+  #' @param ordinal Determines the amount of weight given to inverse-distances.
+  #' @return Interpolated values for each polygon.
+  
+  if (ordinal < 0) {
+    stop("You are highly encouraged to use a non-negative ordinal.")
+  }
+  
+  # weights: (nrow(polys) x nrow(points))
+  weights = polys %>% 
+    sf::st_centroid() %>% 
+    sf::st_distance(points) %>% 
+    units::set_units(km) %>% 
+    { 1 / (.^ordinal) }
+  
+  # values: (nrow(points) x ncol(values))
+  values = points %>% 
+    as.data.frame() %>% 
+    dplyr::select(-{{ points_label }}, -geometry) %>% 
+    as.matrix()
+  
+  # result: (nrow(polys) x ncol(values))
+  result = tibble::as_tibble(weights %*% values / rowSums(weights))
+  
+  polys %>% 
+    tibble::as_tibble() %>% 
+    dplyr::select({{ polys_label }}) %>% 
+    dplyr::bind_cols(result)
+}
+
+find_superset <- function(sub, super, super_label, sub_label = ".") {
+  sub %>% 
+    sf::st_centroid() %>% 
+    sf::st_intersects(super) %>% 
+    tibble::as_tibble() %>% 
+    dplyr::transmute(
+      {{ sub_label }} := sub[[sub_label]][row.id],
+      {{ super_label }} := super[[super_label]][col.id]
+    )
+}
+
+# Store intermediate processed data in this list
+data <- list()
+```
+
+We work towards 2 datasets:
+
+1. `data_time` containing epidemiological and meteorological data from 2012 to 2020
+2. `data_space` containing number of dengue cases, _Aedes_ mosquito habitats, clinics, population dwelling types, and most recent meteorological data broken down by the planning areas in Singapore
+
 ### `data_time`
 
 The unit of analysis for `data_time` is the epidemiological week.
 
-The data from the MOH bulletin is already organized this way. The only things left to do are to select the relevant columns and possibly provide "easier" column names.
+The epidemiological data (MOH bulletin) is already organized this way.
 
-The meteorological data time period (2012-2020) matches the MOH bulletin, more or less. However, it's units are in days. Furthermore, the dates are duplicated for 19 climate stations. To match the MOH bulletin's national-level data, the meteorological data must be aggregated to the level of the epidemiological week (and year).
+The meteorological data is organized by days for each of 19 climate stations. To match the epidemiological data, it has to be aggregated to obtain representative values at the national level by epidemiological weeks.
 
-How many values are we aggregating for each variable, for each week?
+In this way, how many values are we aggregating for each variable, for each week?
 
-```{r tidy-time-aggregate-numbers}
+```{r}
 raw_data$mss_19stations %>% 
   tidyr::pivot_longer(Rainfall:Temp_range) %>% 
   tidyr::drop_na() %>% 
@@ -710,51 +797,69 @@ raw_data$mss_19stations %>%
   theme(legend.position = "none")
 ```
 
+Most weeks will be aggregating more than 100 values for all 3 variables.
+
 Now we join the datasets to get `data_time`.
 
-```{r tidy-transform-time, fig.height=11, fig.width=9}
-data_time <- raw_data$moh_bulletin %>% 
-  dplyr::select(Epiyear:End,
-                Dengue,
-                HFMD,
-                `Acute Upper Respiratory Tract infections`,
-                `Acute Diarrhoea`) %>% 
-  dplyr::rename(URTI = `Acute Upper Respiratory Tract infections`,
-                Diarrhoea = `Acute Diarrhoea`) %>% 
-  dplyr::left_join(
-    raw_data$mss_19stations %>% 
-      dplyr::group_by(Epiyear, Epiweek) %>% 
-      dplyr::summarise(Mean_rainfall = mean(Rainfall, na.rm = T),
-                       Med_rainfall = median(Rainfall, na.rm = T),
-                       Mean_temp = mean(Mean_temp, na.rm = T),
-                       Med_temp = median(Mean_temp, na.rm = T),
-                       Mean_temp_rng = mean(Temp_range, na.rm = T),
-                       Med_temp_rng = median(Temp_range, na.rm = T),
-                       .groups = "drop"),
-    by = c("Epiyear", "Epiweek")
+```{r}
+data[["moh_bulletin_s"]] <- raw_data$moh_bulletin %>% 
+  dplyr::select(
+    Epiyear:End,
+    Dengue,
+    HFMD,
+    `Acute Upper Respiratory Tract infections`,
+    `Acute Diarrhoea`
   ) %>% 
-  tidyr::drop_na()
-
-# Data Cleaning
-mask <- data_time$End < "2012-01-01" | data_time$End > "2020-07-31"
-
-# Must personally see what's wrong
-data_time[mask,]
-
-# Correct it - thankfully the start date seems ok
-data_time[mask, "End"] <- data_time$Start[mask] + lubridate::days(6)
-
-# Then check that it's corrected
-data_time[mask,]
+  dplyr::rename(
+    URTI = `Acute Upper Respiratory Tract infections`,
+    Diarrhoea = `Acute Diarrhoea`
+  )
 ```
 
-Let's see what inside `data_time`
+Take a break to clean data for MOH bulletin
 
 ```{r}
+# Find the row(s) with error(s)
+mask <- data$moh_bulletin_s$End %>% 
+  { . < "2012-01-01" | . > "2021-01-03" }
+
+# Personally inspect the erroneous row(s)
+data$moh_bulletin_s[mask,]
+
+# Correct error(s)
+data$moh_bulletin_s[mask, "End"] <- 
+  data$moh_bulletin_s$Start[mask] + lubridate::days(6)
+
+# Check correction(s)
+data$moh_bulletin_s[mask,]
+```
+
+```{r}
+data[["mss_19stations_s"]] <- raw_data$mss_19stations %>% 
+  dplyr::group_by(Epiyear, Epiweek) %>% 
+  dplyr::summarise(
+    Mean_rainfall = mean(Rainfall, na.rm = T),
+    Med_rainfall = median(Rainfall, na.rm = T),
+    Mean_temp = mean(Mean_temp, na.rm = T),
+    Med_temp = median(Mean_temp, na.rm = T),
+    Mean_temp_rng = mean(Temp_range, na.rm = T),
+    Med_temp_rng = median(Temp_range, na.rm = T),
+    .groups = "drop"
+  )
+
+data_time <- dplyr::left_join(
+  data$moh_bulletin_s,
+  data$mss_19stations_s,
+  by = c("Epiyear", "Epiweek")
+) %>% 
+  tidyr::drop_na()
+
+data_time
+
 dplyr::glimpse(data_time)
 ```
 
-`data_time` contains 10 features: 4 indicators of disease numbers and 6 aggregated meteorological measures. Each value is associated with an epidemiological week. The time period spans from 2012-W01 to 2020-W30. As the meteorological records for July 2020 have not been published, there are no corresponding values for 2020-W28 and 2020-W29.
+`data_time` contains 10 features: 4 indicators of disease numbers and 6 aggregated meteorological measures. Each value is associated with an epidemiological week. The time period spans from 2012-W01 to 2020-W30. As the meteorological records for July 2020 have not been published, there are no corresponding values from 2020-W28 onward.
 
 ### `data_space`
 
@@ -764,156 +869,248 @@ The unit of analysis for `data_space` is the planning area. This is specified by
 
 Spatial analysis would be rather limited and more emphasis placed on visualization.
 
-```{r tidy-transform-space, results='hide', message=FALSE}
-grand_transform_space <- function(raw_data) {
-  data = list(
-    "dengue_points" = raw_data$dengue_polys,
-    "aedes_points" = raw_data$aedes_polys
-  ) %>% 
-    lapply(function(df) {
-      df %>% 
-        dplyr::transmute(n = sub(".*: (\\d+).*", "\\1", Description)) %>% 
-        sf::st_centroid() %>% 
-        .[rep(1:nrow(.), as.numeric(.$n)),]
-    })
-  
-  data[["clinic_points"]] = raw_data$hci_clinics %>% 
-    sf::st_as_sf(coords = c("lon", "lat")) %>% 
-    sf::`st_crs<-`("WGS84")
-  
-  data[["weather_points"]] = raw_data$mss_19stations %>% 
-    dplyr::filter(Epiyear == 2020) %>% 
-    # Filter for the last 3 weeks
-    dplyr::filter(Epiweek > max(Epiweek) - 3) %>% 
-    # Aggregation schema (up to 7 days x up to 3 weeks -> 1 value)
-    dplyr::group_by(Station) %>% 
-    dplyr::summarise(mean_rainfall = mean(Rainfall, na.rm = T),
-                     med_rainfall = median(Rainfall, na.rm = T),
-                     mean_temp = mean(Mean_temp, na.rm = T),
-                     med_temp = median(Mean_temp, na.rm = T),
-                     mean_temp_rng = mean(Temp_range, na.rm = T),
-                     med_temp_rng = median(Temp_range, na.rm = T),
-                     .groups = "drop") %>% 
-    tidyr::drop_na() %>% 
-    dplyr::left_join(
-      raw_data$mss_63station_pos %>% 
-        dplyr::select(Station:`Long. (E)`),
-      by = "Station"
-    ) %>% 
-    sf::st_as_sf(coords = c("Long. (E)", "Lat.(N)")) %>% 
-    sf::`st_crs<-`("WGS84")
-  
-  # Because we have weather_points, we can define IDW interpolation and 
-  #   immediately join with planning_areas.
-  
-  idw_interpolation <- function(points, polys, ordinal = 2) {
-    # Inverse-distance-weighted (IDW) interpolation
-    # - Very large ordinal: Proximity (Thiessen) interpolation
-    # - Large ordinal: Heavily weighted by inverse-distance
-    # - Moderate ordinal: Weighted by inverse-distance
-    # - Zero ordinal: Un-weighted average
-    # - Negative ordinal: Nonsense! (more weight to further stations)
-    
-    # Matrix of inverse-distances raised to some power (npolys x npoints)
-    weights = polys %>% 
+```{r, results='hide', message=FALSE}
+# Polygons are 200 m X 200 m squares. The `Description` contains the number 
+#   of occurrences within each polygon. Use a suitable regular expression 
+#   pattern to extract the number for each polygon. Find the centroid for 
+#   each polygon, then duplicate each row by the number of occurrences.
+data[c("dengue_points", "aedes_points")] <- 
+  raw_data[c("dengue_polys", "aedes_polys")] %>% 
+  lapply(function(sf_tbl_df) {
+    sf_tbl_df %>% 
+      dplyr::transmute(n = sub(".*: (\\d+).*", "\\1", Description)) %>% 
       sf::st_centroid() %>% 
-      sf::st_distance(points) %>% 
-      units::set_units(km) %>% 
-      { 1 / (. ^ ordinal) }  # (55 x 16)
-    
-    values = points %>% 
-      as.data.frame() %>% 
-      dplyr::select(-Station, -geometry) %>% 
-      as.matrix()  # (16 x 6)
-    
-    # (55 x 16) * (16 x 6) => (55 x 6)
-    (weights %*% values / rowSums(weights)) %>% 
-      tibble::as_tibble() %>% 
-      dplyr::mutate(plan_area = polys$plan_area)
-  }
-  
-  data[["planning_areas"]] = raw_data$planning_areas %>% 
-    dplyr::bind_cols(
-      # Extract data from HTML in the Description column (dwelling types)
-      .$Description %>% 
-        lapply(function(x) {
-          xml2::read_html(x) %>% 
-            rvest::html_node("table") %>% 
-            rvest::html_table() %>% 
-            t() %>% 
-            `colnames<-`(.[1,]) %>% 
-            .[2, 1:10]
-        }) %>% 
-        dplyr::bind_rows()
-    ) %>% 
-    dplyr::select(-Name, -Description) %>% 
-    dplyr::rename_all(tolower) %>% 
-    dplyr::rename(plan_area = pln_area_n,
-                  pop = total) %>% 
-    dplyr::mutate(plan_area = tools::toTitleCase(tolower(plan_area)),
-                  dplyr::across(pop:others, as.numeric)) %>% 
-    tibble::as_tibble() %>% 
-    sf::st_as_sf() %>% 
-    # Add meteorological data
-    dplyr::left_join(
-      idw_interpolation(data$weather_points, ., ordinal = 10),
-      by = "plan_area"
-    )
-  
-  data
-}
+      .[rep(1:nrow(.), as.numeric(.$n)),]
+  })
 
-data <- grand_transform_space(raw_data)
+data[["clinic_points"]] <- raw_data$hci_clinics %>% 
+  sf::st_as_sf(coords = c("lon", "lat")) %>% 
+  sf::`st_crs<-`("WGS84")
 
-data_space <- list(
-  ncases = data$dengue_points,
-  nhabs = data$aedes_points,
-  nclinics = data$clinic_points
-) %>% 
-  {
-    # Count the number of points in each polygon
-    lapply(names(.), function(name) {
-      .[[name]] %>% 
-        sf::st_intersects(data$planning_areas) %>%
-        tibble::as_tibble() %>%
-        dplyr::mutate(plan_area = data$planning_areas$plan_area[col.id]) %>%
-        dplyr::count(plan_area, name = name)
-    })
-  } %>% 
-  # Join everything
-  Reduce(function(x, y) dplyr::left_join(x, y, by = "plan_area"), .) %>% 
-  dplyr::left_join(data$planning_areas, by = "plan_area") %>% 
-  sf::st_as_sf() %>% 
+data[["weather_points"]] <- raw_data$mss_19stations %>% 
+  dplyr::filter(Epiyear == 2020) %>% 
+  dplyr::filter(Epiweek > max(Epiweek) - 4) %>% 
+  dplyr::group_by(Station) %>% 
+  dplyr::summarise(mean_rainfall = mean(Rainfall, na.rm = T),
+                   med_rainfall = median(Rainfall, na.rm = T),
+                   mean_temp = mean(Mean_temp, na.rm = T),
+                   med_temp = median(Mean_temp, na.rm = T),
+                   mean_temp_rng = mean(Temp_range, na.rm = T),
+                   med_temp_rng = median(Temp_range, na.rm = T),
+                   .groups = "drop") %>% 
+  tidyr::drop_na() %>% 
+  dplyr::left_join(
+    dplyr::select(raw_data$mss_63station_pos, Station:`Long. (E)`),
+    by = "Station"
+  ) %>% 
+  sf::st_as_sf(coords = c("Long. (E)", "Lat.(N)")) %>% 
+  sf::`st_crs<-`("WGS84")
+
+data[["planning_areas"]] <- raw_data$planning_areas %>% 
+  dplyr::bind_cols(
+    .$Description %>% 
+      lapply(transpose_html_table) %>% 
+      dplyr::bind_rows()
+  ) %>% 
+  tibble::as_tibble() %>% 
+  dplyr::rename_all(tolower) %>% 
+  dplyr::rename(plan_area = pln_area_n,
+                pop = total) %>% 
+  dplyr::mutate(plan_area = tools::toTitleCase(tolower(plan_area)),
+                dplyr::across(pop:others, as.numeric)) %>% 
+  dplyr::select(-matches("^(name|description|inc|fmel)")) %>% 
+  sf::st_as_sf()
+
+data[["regions"]] <- raw_data$regions %>% 
+  dplyr::mutate(Name = tools::toTitleCase(tolower(Name)),
+                Name = sub(" Region", "", Name)) %>% 
+  dplyr::rename(region = Name) %>% 
+  dplyr::select(-Description)
+
+# This is long
+data_space <- data$planning_areas %>% 
   dplyr::select(-one_to_two_rm:-five_rm_exec_flats, -others) %>% 
+  
+  # Regions
+  dplyr::left_join(
+    # Changi Bay and Western Islands not assigned, but inconsequential, for now
+    find_superset(
+      sub = .,
+      super = data$regions,
+      super_label = "region",
+      sub_label = "plan_area"
+    ),
+    by = "plan_area"
+  ) %>% 
+  
+  # Counts
+  dplyr::left_join(
+    list(
+      ncases = data$dengue_points,
+      nhabs = data$aedes_points,
+      nclinics = data$clinic_points
+    ) %>% {
+      lapply(names(.), function(name) {
+        find_superset(
+          sub = .[[name]],
+          super = data$planning_areas,
+          super_label = "plan_area"
+        ) %>% 
+          dplyr::count(plan_area, name = name)
+      })
+    } %>% 
+      Reduce(function(x, y) dplyr::left_join(x, y, by = "plan_area"), .)
+  ) %>% 
+  
+  dplyr::select(plan_area, region, ncases, nhabs, nclinics, everything()) %>% 
+  
+  # Meteorological data
+  dplyr::left_join(
+    idw_interpolation(
+      points = data$weather_points,
+      points_label = "Station",
+      polys = .,
+      polys_label = "plan_area",
+      ordinal = 10
+    ),
+    by = "plan_area"
+  ) %>% 
+  
+  # Calculations
   dplyr::mutate(
     area_km2 = units::set_units(sf::st_area(.), km^2),
-    ncases_pht = ncases / pop * 100000,
-    nclinics_pht = nclinics / pop * 100000,
+    ncases_p100k = ncases / pop * 100000,
+    nclinics_p100k = nclinics / pop * 100000,
     hdb_pp = hdb / pop,
     condos_other_apts_pp = condos_other_apts / pop,
     landed_properties_pp = landed_properties / pop,
-    popden = as.numeric(pop / area_km2),
-    habsden = as.numeric(nhabs / area_km2),
-    clinicsden = as.numeric(nclinics / area_km2),
-    caseden = as.numeric(ncases / area_km2),
+    pop_pkm2 = as.numeric(pop / area_km2),
+    ncases_pkm2 = as.numeric(ncases / area_km2),
+    nclinics_pkm2 = as.numeric(nclinics / area_km2),
+    nhabs_pkm2 = as.numeric(nhabs / area_km2),
     label = paste0(
-      "<b>", plan_area,
-      "</b><br/>Area: ", round(area_km2, 2),
-      "<br/>Cases: ", ncases,
-      "<br/>Clinics: ", nclinics,
-      "<br/>Population: ", pop,
-      "<br/><i>Aedes</i> habitats: ", nhabs
+      "<b>", plan_area, "</b><br/>",
+      "Area (km<sup>2</sup>): ", round(area_km2, 2), "<br/>",
+      "Population: ", pop, "<br/>",
+      "Cases: ", ncases, "<br/>",
+      "Clinics: ", nclinics, "<br/>",
+      "<i>Aedes</i> habitats: ", nhabs, "<br/>",
+      "Cases (per 100k): ", round(ncases_p100k, 2), "<br/>",
+      "Cases (per km<sup>2</sup>): ", round(ncases_pkm2, 2)
     )
   )
-```
 
-```{r}
+data_space
+
 dplyr::glimpse(data_space)
 ```
 
-`data_space` contains 19 main features for each planning area (URA MP14), including: number of dengue cases, number of _Aedes_ mosquito habitats, number of clinics, population, various dwelling types, area, and  meteorological variables. Planning areas with no record of dengue cases were excluded, leaving 33 of the 55 planning areas (a large part due to unavailability of data for the north-west region).
+`data_space` contains 14 main and 9 derived features for each planning area (URA MP14), including: number of dengue cases, number of _Aedes_ mosquito habitats, number of clinics, population, various dwelling types, area, and  meteorological variables. Dengue case data were unavailable for several planning areas, especially since data for the north-west region were not published.
+
+---
 
 ## Explore
+
+```{r}
+plot_heatmap <- function(.data, y, low_color, high_color, subtitle = "") {
+  .data %>% 
+    dplyr::mutate(
+      month = factor(
+        lubridate::month(End),
+        levels = as.character(1:12),
+        labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
+        ordered = TRUE
+      )
+    ) %>% 
+    dplyr::select(-matches("week|Start|End|Mean|Med")) %>% 
+    tidyr::pivot_longer(c(-Epiyear, -month)) %>% 
+    dplyr::filter(name == y) %>% 
+    dplyr::group_by(Epiyear, month) %>% 
+    dplyr::summarise(Cases = sum(value),
+                     .groups = "drop") %>% 
+    ggplot(aes(x = month, y = Cases, fill = Cases)) + 
+    geom_col() + 
+    scale_fill_gradient(low = low_color, high = high_color) +
+    facet_grid(Epiyear ~ .) + 
+    labs(
+      title = paste0("Number of ", y, " Cases from 2012-2020"),
+      subtitle = subtitle,
+      x = "Month",
+      y = "Cases",
+      caption = "Source: Ministry of Health"
+    ) + 
+    theme(legend.position = "none")
+}
+
+plot_choropleths <- function(.data, .vars) {
+  gridExtra::grid.arrange(grobs = lapply(.vars, function(var) {
+    ggplot(aes(fill = .data[[var]]), data = .data) + 
+      geom_sf() + 
+      scale_fill_viridis_c(guide = guide_colourbar(
+        title.position = "top",
+        title.hjust = .5,
+        barwidth = 10,
+        barheight = .5
+      )) +
+      theme_void() + 
+      theme(legend.position = "bottom")
+  }), ncol = length(.vars))
+}
+
+plot_ggbetweenstats <- function(data, x, y, xlab, ylab) {
+  type = ifelse(shapiro.test(data_space[[y]])$p.value < 0.05, "np", "p")
+  
+  ggstatsplot::ggbetweenstats(
+    data = data,
+    x = {{ x }},
+    y = {{ y }},
+    xlab = {{ xlab }},
+    ylab = {{ ylab }},
+    type = type,
+    plot.type = "box",
+    effsize.type = "biased",
+    nboot = 50,
+    pairwise.comparisons = T, 
+    pairwise.display = "significant",
+    pairwise.annotation = "p.value",
+    p.adjust.method = "bonferroni"
+  )
+}
+```
+
+### Time
+
+```{r}
+plot_heatmap(
+  data_time,
+  y = "Dengue",
+  low_color = "ivory3",
+  high_color = "deeppink4",
+  subtitle = "Highest number of Cases in 2020"
+)
+
+plot_heatmap(
+  data_time,
+  y = "HFMD",
+  low_color = "lightskyblue",
+  high_color = "darkblue"
+)
+
+plot_heatmap(
+  data_time,
+  y = "URTI",
+  low_color = "seagreen2",
+  high_color = "honeydew4"
+)
+
+plot_heatmap(
+  data_time,
+  y = "Diarrhoea",
+  low_color = "lightyellow",
+  high_color = "tomato4"
+)
+```
 
 ```{r}
 # data_time %T>% 
@@ -932,79 +1129,104 @@ dplyr::glimpse(data_space)
 #   theme(legend.position = "none")
 ```
 
+In general, the number of cases of URTI and diarrhea are consistent throughout the years; HFMD saw a sharp decrease from 2019 and DF fluctuated over the years, we observed a dip in number of Dengue cases in 2017 and a sudden spike in 2020. The decrease in dengue cases in 2017 could be attributed to several reasons such as, increase effort by NEA and the community in response to Zika outbreak in 2016 and perhaps the local population has built up immunity after outbreaks of dengue fever in the past. The spike in 2020 could be explained by the prolong period of time staying at home and the lack of resistance to a newly circulating strain of dengue virus.
 
-#### Choropleths
+![](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/imgs/choropleth_mean_temp_ord_15.gif)
 
-##### Absolute numbers
+### Space
 
-```{r explore-space-2, fig.height=10, fig.width=9}
-data_space %>% 
-  dplyr::select(ncases:pop, mean_rainfall:med_temp_rng, geometry) %>% 
-  gridExtra::grid.arrange(grobs = lapply(list(
-    ggplot(aes(fill = ncases), data = .),
-    ggplot(aes(fill = nhabs), data = .),
-    ggplot(aes(fill = nclinics), data = .),
-    ggplot(aes(fill = pop), data = .),
-    ggplot(aes(fill = mean_rainfall), data = .),
-    ggplot(aes(fill = med_rainfall), data = .),
-    ggplot(aes(fill = mean_temp), data = .),
-    ggplot(aes(fill = med_temp), data = .),
-    ggplot(aes(fill = mean_temp_rng), data = .),
-    ggplot(aes(fill = med_temp_rng), data = .)
-  ), function(x) {
-    x + 
-      geom_sf() + 
-      scale_fill_viridis_c(guide = guide_colourbar(
-        title.position = "top",
-        title.hjust = .5,
-        barwidth = 10,
-        barheight = .5
-      )) + 
-      theme_void() + 
-      theme(legend.position = "bottom")
-  }), ncol = 2)
+```{r, fig.height=3}
+plot_choropleths(data_space, c("ncases", "ncases_p100k", "ncases_pkm2"))
 ```
 
-##### Areal densities
-
-```{r explore-space-3, fig.height=6, fig.width=9}
-data_space %>% 
-  dplyr::select(ncases:pop, area_km2, geometry) %>% 
-  dplyr::mutate_at(dplyr::vars(-geometry), ~(. / area_km2)) %>% 
-  dplyr::select(-area_km2) %>% 
-  dplyr::mutate_at(dplyr::vars(-geometry), as.numeric) %>% 
-  gridExtra::grid.arrange(grobs = lapply(list(
-    ggplot(aes(fill = ncases), data = .),
-    ggplot(aes(fill = nhabs), data = .),
-    ggplot(aes(fill = nclinics), data = .),
-    ggplot(aes(fill = pop), data = .)
-  ), function(x) {
-    x + 
-      geom_sf() + 
-      scale_fill_viridis_c(guide = guide_colourbar(
-        title.position = "top",
-        title.hjust = .5,
-        barwidth = 10,
-        barheight = .5
-      )) + 
-      theme_void() + 
-      theme(legend.position = "bottom")
-  }), ncol = 2)
+```{r, fig.height=3}
+plot_choropleths(data_space, c("nhabs", "nhabs_pkm2"))
 ```
 
+```{r, fig.height=3}
+plot_choropleths(data_space, c("nclinics", "nclinics_pkm2"))
+```
 
-#### Interactive plot of the spatial distribution of dengue cases
+```{r, fig.height=3}
+plot_choropleths(data_space, c("mean_rainfall", "med_temp", "med_temp_rng"))
+```
 
-```{r explore-space-1}
+```{r, fig.height=7}
+plot_ggbetweenstats(
+  data = data_space,
+  x = "region",
+  y = "ncases",
+  xlab = "Regions in Singapore",
+  ylab = "Number of cases"
+)
+```
+
+```{r, fig.height=7}
+plot_ggbetweenstats(
+  data = data_space,
+  x = "region",
+  y = "ncases_p100k",
+  xlab = "Regions in Singapore",
+  ylab = "Number of cases (per 100,000)"
+)
+```
+
+```{r, fig.height=7}
+plot_ggbetweenstats(
+  data = data_space,
+  x = "region",
+  y = "med_temp",
+  xlab = "Regions in Singapore",
+  ylab = "Median temperature"
+)
+```
+
+```{r, fig.height=7}
+plot_ggbetweenstats(
+  data = data_space,
+  x = "region",
+  y = "med_temp_rng",
+  xlab = "Regions in Singapore",
+  ylab = "Median temperature range"
+)
+```
+
+```{r}
+data_space %>% 
+  tibble::as_tibble() %>% 
+  dplyr::select(ncases, nhabs, hdb:landed_properties) %>% 
+  tidyr::drop_na() %>% 
+  as.matrix() %>% 
+  Hmisc::rcorr() %>% 
+  broom::tidy() %>% 
+  dplyr::filter(p.value < 0.05) %>% 
+  dplyr::arrange(estimate)
+```
+
+```{r}
+data_space %>% 
+  tibble::as_tibble() %>% 
+  dplyr::select(ncases, nhabs, mean_rainfall, med_temp, med_temp_rng) %>% 
+  tidyr::drop_na() %>% 
+  as.matrix() %>% 
+  Hmisc::rcorr() %>% 
+  broom::tidy() %>% 
+  dplyr::filter(p.value < 0.05) %>% 
+  dplyr::arrange(estimate)
+```
+
+Leaflet map of case density (per km^2^) choropleth with individual case clusters overlay.
+
+```{r}
 data_space %>% 
   leaflet::leaflet(width = "100%") %>%
   leaflet::addTiles() %>%
   leaflet::addPolygons(
     weight = 1,
     opacity = 1,
-    fillOpacity = 0.6,
+    fillOpacity = 0.7,
     smoothFactor = 0.5,
-    fillColor = ~leaflet::colorNumeric("Reds", caseden)(caseden),
+    fillColor = ~leaflet::colorNumeric("Reds", ncases_pkm2)(ncases_pkm2),
     label = ~lapply(label, htmltools::HTML),
     popup = ~lapply(label, htmltools::HTML)
   ) %>%
@@ -1025,8 +1247,6 @@ data_space %>%
       style = list("color" = "blue"))
   )
 ```
-
-![](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/imgs/choropleth_mean_temp_ord_15.gif)
 
 ---
 
@@ -1511,37 +1731,45 @@ interactions::interact_plot(model2_URTI_Int,
 
 
 
----
-
-The regression analysis came up with two significant interaction terms.
-
-*	First, it appears that the relationships between median temperature and number of cases of dengue is different depending on one’s **gender**.
-
-*	Second, it appears that the relationships between social comparisons orientation regarding abilities and life satisfaction is different depending on one’s **education**.
-
-To see the patterns of interaction, we visualized the significant interaction effects on the next chapter.
-
-
-
 ## Interpretation of the Results
 
-From our data science project, we could find the following two findings:
+Associations between number of DF and URTI in the community with Rainfall and Temperature
+In the modeling analyses, all models for the 4 clinical conditions except URTI failed the assumption checks. Despite failing the checks, we continued to test several modeling for DF as we are interested in the disease. The interpretation below will be focusing on URTI and DF.
 
-1.	The relationships between the tendency of people to compare themselves to others’ abilities and life satisfaction differ depending on one’s gender. Specifically, there appears to be no relationship between social comparisons orientation and life satisfaction among males. On the other hand, among females, the more they compare their abilities with others, there seems to be lesser life satisfaction. Thus, social comparison seems to be harmful for life satisfaction among females, whereas there seems to be no relationships between social comparisons and life satisfaction among males. (You might want to highlight that the relationships between social comparisons orientation and life satisfaction is based on observational study, leading to correlations, not causations, in `Limitations and Future Directions` section below).
+We hypothesized that there will be an increase in URTI cases when the air temperature is low as people are more susceptible to common cold during cold weather. We observed that the number of URTI cases increase when the air temperature is low with low rainfall but a decrease in cases during low temperature with high rainfall. One of the reasons for this phenomenon could be people may wear more layers when the rain is heavier to protect them from the rain and cold as heavy rainfall is likely to be associated with cold weather. 
 
-2.	The relationships between social comparison and life satisfaction also depends on one’s education level. It appears that, among those who received average and high levels of education, the greater the social comparison tendency, the lower the life satisfaction. Such a negative relationship between social comparison and life satisfaction was not found among those with relatively lower levels of education. Social comparison regarding one’s abilities can hurt one’s life satisfaction, when one receives average and above-average levels of education (again, acknowledge that the findings are correlational though, thus further investigation with a/b testing should follow).
+However, it is interesting to note that there is an increase in number of cases for DF and URTI during high air temperature with high rainfall (>11mm). The increase in DF in warmer temperature is likely attributed to the optimal temperature for mosquito to develop, research has shown that mosquito replicates faster at higher temperature during incubation period (Liu et al., 2017). The increase in URTI under high temperature is interesting and worthy of further exploration especially in tropical countries, understanding the aetiology would be helpful in reducing the cases. A possible explanation suggested for this was indoor transmission in air-conditioned environments accounted for most of the transmission (Tang, Wong and Hon, 2010).
+
+Dengue fever was observed to decrease in high rainfall and low temperature. We understand that precipitation is associated to increase incidence of dengue fever.  However, our results seemed to support a recent study that claimed that heavy rainfall could disrupt breeding habitat and mosquitoes’ reproductive cycle by washing away by the rain (Benedum, Seidahmed, Eltahir, Markuzon, 2018). 
+
+
 
 ## Implications
 
 > Prof. Roh's Note: "This is where you provide the significance of the findings. Unlike the other sections, where your goal is to describe the results that you found (**what the data told you**). This is where you chime in and proactively discuss the meaning of the results."
 
+Importance of keeping warm, dry and maintain good hygiene even during low rainfall to prevent developing URTI.
+
+
+
 ## Limitations and Future Directions
 
 > Prof. Roh's Note: "Acknowledging limitations is not where you just provide a laundry list of what is missing and what should have done. Please take the responsibility of your analyses and inform your readers to understand what the results tell and don’t (or can’t) tell. More importantly, this is the section where you technically begin your next data science project, by highlighting what would be informative down the line to shed further light on what you have found here."
 
+We have identified some potential pitfalls for our project.
+
+- Failure of assumption checks for the models could be due to several reasons:
+  - Insufficient data points. To improve the quality of data, daily number of cases should be used. 
+  - Clinical conditions defined were too generalised. For example, Dengue fever can be caused by different strains of dengue virus.
+- Limitations in obtaining data to conduct more informative analyses. For example, patient’s demographic data. 
+
+
+
 ## References
 
-> References
+Liu, Z., Zhang, Z., Lai, Z., Zhou, T., Jia, Z., Gu, J., ... & Chen, X. G. (2017). Temperature increase enhances Aedes albopictus competence to transmit dengue virus. Frontiers in microbiology, 8, 2337.
+Benedum, C. M., Seidahmed, O. M., Eltahir, E. A., & Markuzon, N. (2018). Statistical modeling of the effect of rainfall flushing on dengue transmission in Singapore. PLoS neglected tropical diseases, 12(12), e0006935.
+Tang, J. W., Lai, F. Y. L., Wong, F., & Hon, K. L. E. (2010). Incidence of common respiratory viral infections related to climate factors in hospitalized children in Hong Kong. Epidemiology & Infection, 138(2), 226-235.
 
 ## Appendix
 
@@ -1550,3 +1778,4 @@ From our data science project, we could find the following two findings:
 ## Contribution Statement
 
 > Prof. Roh's Note: "Please describe your individual contribution to the team's project (**in detail**)."
+

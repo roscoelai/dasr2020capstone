@@ -124,6 +124,9 @@ Date       | Central     | North East  | North West  | South East  | South West
   - Populations of planning areas
   - Breakdown by type of dwelling
   - [.kml file](https://geo.data.gov.sg/plan-bdy-dwelling-type-2017/2017/09/27/kml/plan-bdy-dwelling-type-2017.kml)
+- [Master Plan 2014 Region Boundary (Web)](https://data.gov.sg/dataset/master-plan-2014-region-boundary-web), Data.gov.sg
+  - Regions (URA MP14)
+  - [.zip file](https://geo.data.gov.sg/mp14-region-web-pl/2014/12/05/kml/mp14-region-web-pl.zip)
 
 ---
 

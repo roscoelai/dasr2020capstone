@@ -1,34 +1,50 @@
 # analyze_space.R
 
-{
-  setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-  
-  pacman::p_load(
-    ggfortify,
-    ggplot2,
-    magrittr
-  )
-}
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+pacman::p_load(
+  ggfortify,
+  ggplot2,
+  magrittr
+)
 
 read_kmls <- function(url_or_path) {
-  # There are (at least) 2 approaches to handling .kml data:
-  # 1. sp - rgdal::readOGR()
-  # 2. sf - sf::st_read()
-  #
-  # The sp approach was quickly abandoned as their objects were rather complex 
-  #   and did not facilitate method chaining.
-  #
-  # The sf approach produced objects that look like data.frames, which allowed 
-  #   for method chaining, but had their own peculiarities:
-  #   - Dimension: set to XY using sf::st_zm()
-  #   - Geographic CRS: use sf::`st_crs<-`("WGS84") World Geodetic Survey 1984
+  #' Read Single or Multiple KML Files
+  #' 
+  #' @description
+  #' There are (at least) 2 approaches to handling .kml data:
+  #' \enumerate{
+  #'   \item sp - rgdal::readOGR()
+  #'   \item sf - sf::st_read()
+  #' }
+  #'
+  #' The sp approach was abandoned as their objects were rather complex and 
+  #'   did not facilitate method chaining.
+  #'
+  #' The sf approach produced objects that look like data.frames, which had 
+  #'   better support for method chaining, but also some peculiarities:
+  #' \itemize{
+  #'   \item Dimension: set to XY using sf::st_zm()
+  #'   \item Geographic CRS: use sf::`st_crs<-`("WGS84") World Geodetic 
+  #'         Survey 1984
+  #' }
+  #' 
+  #' @param url_or_path The URL(s) or file path(s) of the .kml file(s).
+  #' @return A single combined sf object.
   
   # Check if the given paths are URLs by trying to download to temp files. If 
-  #   successful, return the temp files. If not, return the original paths.
+  #   successful, return the temp files. If not, return the original paths. 
+  #   Automatically extract .zip files, if any.
   kml_files = tryCatch({
-    temp = tempfile(fileext = rep(".kml", length(dsns)))
-    Map(function(u, d) download.file(u, d, mode="wb"), url_or_path, temp)
-    temp
+    temp = tempfile(fileext = paste0(".", tools::file_ext(url_or_path)))
+    Map(function(x, y) download.file(x, y, mode = "wb"), url_or_path, temp)
+    sapply(temp, function(x) {
+      if (endsWith(x, ".zip")) {
+        unzip(x)
+      } else {
+        x
+      }
+    })
   }, error = function(e) {
     url_or_path
   })
@@ -100,9 +116,6 @@ raw_data <- grand_import_no_webscraping(from_online_repo = F)
 # Transform ----
 
 grand_transform_space <- function(raw_data) {
-  
-  # It's ugly, but we have to do the transformations 1-by-1...
-  
   data = list(
     "dengue_points" = raw_data$dengue_polys,
     "aedes_points" = raw_data$aedes_polys
@@ -119,15 +132,6 @@ grand_transform_space <- function(raw_data) {
     sf::`st_crs<-`("WGS84")
   
   data[["weather_points"]] = raw_data$mss_19stations %>% 
-    dplyr::mutate(
-      # Calculate daily temperature range
-      Temp_range = Max_temp - Min_temp,
-      # Calculate epidemiological years and weeks
-      Date = lubridate::ymd(paste(Year, Month, Day, sep = "-")),
-      Epiyear = lubridate::epiyear(Date),
-      Epiweek = lubridate::epiweek(Date),
-      .keep = "unused"
-    ) %>% 
     dplyr::filter(Epiyear == 2020) %>% 
     # Filter for the last 3 weeks
     dplyr::filter(Epiweek > max(Epiweek) - 3) %>% 
@@ -226,8 +230,10 @@ data_space <- list(
   sf::st_as_sf() %>% 
   dplyr::mutate(
     area_km2 = units::set_units(sf::st_area(.), km^2),
-    popden = pop / area_km2,
+    popden = as.numeric(pop / area_km2),
     caseden = as.numeric(ncases / area_km2),
+    landedden = as.numeric(landed_properties / area_km2),
+    landedprop = landed_properties / pop,
     label = paste0(
       "<b>", plan_area,
       "</b><br/>Area: ", round(area_km2, 2),
@@ -345,6 +351,51 @@ data_space_pw %>%
   theme(legend.position = "none")
 
 # Model ----
+
+# ncases ~ popden + landedprop
+
+shapiro.test(data_space$popden)
+
+data_space %>% 
+  tibble::as_tibble() %>% 
+  dplyr::select(ncases, popden, landedprop, -geometry) %>% 
+  dplyr::mutate(landedprop_sqrt = sqrt(landedprop),
+                landedprop_log = log10(landedprop),
+                ncases_sqrt = sqrt(ncases),
+                ncases_log = log10(ncases)) %>% 
+  tidyr::pivot_longer(everything()) %>% 
+  ggplot(aes(x = value, color = name)) + 
+  geom_density(size = 1) + 
+  facet_wrap(~name, scales = "free") + 
+  theme(legend.position = "none")
+
+data_space %>% 
+  dplyr::mutate(landedprop_sqrt = sqrt(landedprop),
+                landedprop_log = log10(landedprop),
+                ncases_sqrt = sqrt(ncases),
+                ncases_log = log10(ncases)) %>% 
+  lm(ncases_log ~ popden * landedprop_sqrt, data = .) %>% 
+  # gvlma::gvlma()
+  summary()
+
+ks.test(scale(data_space$ncases), scale(data_space$caseden))
+data_space %>% 
+  tibble::as_tibble() %>% 
+  dplyr::mutate(ncases = scale(ncases),
+                caseden = scale(caseden)) %>% 
+  dplyr::select(ncases, caseden, -geometry) %>% 
+  tidyr::pivot_longer(everything()) %>% 
+  ggplot(aes(x = value, color = name)) + 
+  geom_density(size = 1) + 
+  facet_wrap(~name, scales = "free_x") + 
+  theme(legend.position = "none")
+
+data_space %>% 
+  # lm(log10(caseden) ~ log10(popden) + landedden, data = .) %>%
+  lm(log10(caseden) ~ log10(popden) + landedprop, data = .) %>%
+  gvlma::gvlma()
+  # car::vif()
+  summary()
 
 # Correlation
 data_space_pw %>% 
