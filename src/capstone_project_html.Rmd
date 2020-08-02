@@ -25,9 +25,9 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 ## Problem Statement
 
-In our Capstone Project, we aim to explore the relationship between meteorological conditions (Air temperature and rainfall) of Singapore and clinical conditions commonly seen in local community – Dengue fever (DF), hand food mouth disease (HFMD), upper respiratory tract infection (URTI) and diarrhea. Specifically, does higher temperature and rainfall associated with the rise in clinical conditions in the community? Furthermore, we are interested to investigate if types of housing is associated with the number of Dengue fever cases.
+In our Capstone Project, we aim to explore the relationship between meteorological conditions (air temperature and rainfall) of Singapore and clinical conditions commonly seen in local community – Dengue fever (DF), hand food mouth disease (HFMD), upper respiratory tract infection (URTI) and diarrhea.
 
-Dengue fever is a vector-borne infectious disease that is endemic in the tropical world. Singapore is one of several countries with high disease burden of dengue. In 2020, Singapore saw 1,158 dengue cases in a week of June - the highest number of weekly dengue cases ever recorded since 2014. The sudden increase is worrisome, therefore greater emphasis on analysis will be focused on Dengue fever.
+Specifically, we aim to answer the following questions: Does higher air temperature and rainfall associated with the rise in clinical conditions in the community? And which region of Singapore has the highest number of DF cases?
 
 ## Activate packages
 
@@ -978,6 +978,9 @@ data_space <- data$planning_areas %>%
   
   # Calculations
   dplyr::mutate(
+    # Combine East with North-East to increase N for comparison
+    region = ifelse(region == "East", "North-East", region),
+    
     area_km2 = units::set_units(sf::st_area(.), km^2),
     ncases_p100k = ncases / pop * 100000,
     nclinics_p100k = nclinics / pop * 100000,
@@ -988,6 +991,7 @@ data_space <- data$planning_areas %>%
     ncases_pkm2 = as.numeric(ncases / area_km2),
     nclinics_pkm2 = as.numeric(nclinics / area_km2),
     nhabs_pkm2 = as.numeric(nhabs / area_km2),
+    
     label = paste0(
       "<b>", plan_area, "</b><br/>",
       "Area (km<sup>2</sup>): ", round(area_km2, 2), "<br/>",
@@ -1009,7 +1013,7 @@ dplyr::glimpse(data_space)
 
 ---
 
-## Explore
+## Explore Data (Visualization)
 
 ```{r}
 plot_heatmap <- function(.data, y, low_color, high_color, subtitle = "") {
@@ -1023,9 +1027,8 @@ plot_heatmap <- function(.data, y, low_color, high_color, subtitle = "") {
         ordered = TRUE
       )
     ) %>% 
-    dplyr::select(-matches("week|Start|End|Mean|Med")) %>% 
-    tidyr::pivot_longer(c(-Epiyear, -month)) %>% 
-    dplyr::filter(name == y) %>% 
+    dplyr::select(Epiyear, month, {{ y }}) %>% 
+    tidyr::pivot_longer({{ y }}) %>% 
     dplyr::group_by(Epiyear, month) %>% 
     dplyr::summarise(Cases = sum(value),
                      .groups = "drop") %>% 
@@ -1081,29 +1084,18 @@ plot_ggbetweenstats <- function(data, x, y, xlab, ylab) {
 
 ### Time
 
-```{r}
-plot_heatmap(
-  data_time,
-  y = "Dengue",
-  low_color = "ivory3",
-  high_color = "deeppink4",
-  subtitle = "Highest number of Cases in 2020"
-)
+#### Monthly Calendar Heatmaps
 
-plot_heatmap(
-  data_time,
-  y = "HFMD",
-  low_color = "lightskyblue",
-  high_color = "darkblue"
-)
-
+```{r, fig.height=7}
 plot_heatmap(
   data_time,
   y = "URTI",
   low_color = "seagreen2",
   high_color = "honeydew4"
 )
+```
 
+```{r, fig.height=7}
 plot_heatmap(
   data_time,
   y = "Diarrhoea",
@@ -1112,44 +1104,70 @@ plot_heatmap(
 )
 ```
 
-```{r}
-# data_time %T>% 
-#   dplyr::glimpse() %>% 
-#   dplyr::select(-matches("Epiweek|End")) %>% 
-#   dplyr::mutate(Epiyear = as.factor(Epiyear)) %>% 
-#   tidyr::pivot_longer(Dengue:Med_temp_rng) %>% 
-#   ggplot(aes(x = Start, y = value, color = Epiyear)) + 
-#   geom_line() + 
-#   geom_point(alpha = 0.3) + 
-#   facet_grid(name ~ ., scales = "free_y") + 
-#   labs(title = "Weekly history of variables from 2012 to 2020",
-#        x = "",
-#        y = "",
-#        caption = "Sources: moh.gov.sg, weather.gov.sg") + 
-#   theme(legend.position = "none")
+In general, the number of cases of URTI and diarrhea are consistent throughout the years
+
+```{r, fig.height=7}
+plot_heatmap(
+  data_time,
+  y = "HFMD",
+  low_color = "lightskyblue",
+  high_color = "darkblue"
+)
 ```
 
-In general, the number of cases of URTI and diarrhea are consistent throughout the years; HFMD saw a sharp decrease from 2019 and DF fluctuated over the years, we observed a dip in number of Dengue cases in 2017 and a sudden spike in 2020. The decrease in dengue cases in 2017 could be attributed to several reasons such as, increase effort by NEA and the community in response to Zika outbreak in 2016 and perhaps the local population has built up immunity after outbreaks of dengue fever in the past. The spike in 2020 could be explained by the prolong period of time staying at home and the lack of resistance to a newly circulating strain of dengue virus.
+HFMD saw a sharp decrease from 2019.
 
-![](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/imgs/choropleth_mean_temp_ord_15.gif)
+```{r, fig.height=8}
+plot_heatmap(
+  data_time,
+  y = "Dengue",
+  low_color = "ivory3",
+  high_color = "deeppink4",
+  subtitle = "Highest number of Cases in 2020"
+)
+```
+
+DF fluctuated over the years, we observed a dip in number of Dengue cases in 2017 and a sudden spike in 2020.
+
+It is worth noting that there seems like a seasonal trend for DF which peaks in Jul – Aug. The decrease in dengue cases in 2017 could be attributed to several reasons such as, increase effort by NEA and the community in response to Zika outbreak in 2016 and perhaps the local population has built up immunity after outbreaks of dengue fever in the past. The spike in 2020 could be explained by the prolong period of time staying at home and the lack of resistance to a newly circulating strain of dengue virus.
 
 ### Space
+
+#### Spatial Heatmaps
 
 ```{r, fig.height=3}
 plot_choropleths(data_space, c("ncases", "ncases_p100k", "ncases_pkm2"))
 ```
 
+From the heat map, we observed that North-east region of Singapore is experiencing a higher number of dengue cases than the other parts of Singapore, with Geylang having the highest number of cases of 372.
+
 ```{r, fig.height=3}
 plot_choropleths(data_space, c("nhabs", "nhabs_pkm2"))
 ```
 
-```{r, fig.height=3}
+This pattern corresponds with the number of breeding habitats in Singapore, with higher number of breeding habitats found in the North-east region.
+
+```{r, fig.height=3, eval=FALSE, include=FALSE}
 plot_choropleths(data_space, c("nclinics", "nclinics_pkm2"))
 ```
 
 ```{r, fig.height=3}
 plot_choropleths(data_space, c("mean_rainfall", "med_temp", "med_temp_rng"))
 ```
+
+Generally, the temperature and amount of rainfall is quite homogenous in Singapore with Geylang and Hougang having slightly higher temperature than other regions; and South region seems to have more rainfall than other regions too.
+
+
+
+---
+
+![](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/imgs/choropleth_mean_temp_ord_15.gif)
+
+---
+
+
+
+#### `ggstatsplot::ggbetweenstats()`
 
 ```{r, fig.height=7}
 plot_ggbetweenstats(
@@ -1161,6 +1179,8 @@ plot_ggbetweenstats(
 )
 ```
 
+There is a significant difference in dengue cases in Singapore in the last 14 days between the North East ($\hat{\mu}$ = 127) and West ($\hat{\mu}$ = 25.6) regions of Singapore (p = 0.045).
+
 ```{r, fig.height=7}
 plot_ggbetweenstats(
   data = data_space,
@@ -1170,6 +1190,8 @@ plot_ggbetweenstats(
   ylab = "Number of cases (per 100,000)"
 )
 ```
+
+There is a significant difference in dengue case incidence rates (per 100,000 population) in Singapore in the last 14 days between the Central ($\hat{\mu}$ = 209.53) and West ($\hat{\mu}$ = 16.64) regions of Singapore (p = 0.002).
 
 ```{r, fig.height=7}
 plot_ggbetweenstats(
@@ -1181,6 +1203,8 @@ plot_ggbetweenstats(
 )
 ```
 
+There are significant differences in the median temperatures in the past month between the Central ($\hat{\mu}$ = 28.45) and North ($\hat{\mu}$ = 27.56) regions (p = 0.017), as well as between the North and North East ($\hat{\mu}$ = 28.49) regions (p = 0.009).
+
 ```{r, fig.height=7}
 plot_ggbetweenstats(
   data = data_space,
@@ -1190,6 +1214,8 @@ plot_ggbetweenstats(
   ylab = "Median temperature range"
 )
 ```
+
+Similar differences were present for the median temperature ranges, with differences between the Central ($\hat{\mu}$ = 5.28) and North ($\hat{\mu}$ = 5.93) regions (p <= 0.001), as well as between the North and North East ($\hat{\mu}$ = 5.15) regions (p = 0.001).
 
 ```{r}
 data_space %>% 
@@ -1215,7 +1241,7 @@ data_space %>%
   dplyr::arrange(estimate)
 ```
 
-Leaflet map of case density (per km^2^) choropleth with individual case clusters overlay.
+#### Leaflet map of case density (per km^2^) choropleth with individual case clusters overlay.
 
 ```{r}
 data_space %>% 
@@ -1251,6 +1277,10 @@ data_space %>%
 ---
 
 ## Model
+
+```{r}
+models <- list()
+```
 
 ### Dengue
 
@@ -1288,19 +1318,16 @@ data_time %>%
 Run a linear regression model
 
 ```{r}
-model1_Dengue <- lm(Dengue ~ Mean_rainfall + Med_temp + Med_temp_rng,
-                    data = data_time)
+models[["model1_dengue"]] <- 
+  lm(Dengue ~ Mean_rainfall + Med_temp + Med_temp_rng, data = data_time)
 
-broom::tidy(model1_Dengue) %>% 
-  dplyr::mutate(dplyr::across(is.numeric, ~round(., 3)))
+broom::tidy(models$model1_dengue)
 ```
 
 Let's check the skewness of y variable
 
 ```{r}
-data_time %>% 
-  tidyr::drop_na() %>% 
-  { e1071::skewness(.$Dengue) }  # [1] 2.033787
+e1071::skewness(data_time$Dengue)  # [1] 2.033787
 ```
 
 Let's see how the density plots look like after transformation
@@ -1318,41 +1345,44 @@ Let's see how the density plots look like after transformation
 Not really good. Try them on Model 1
 
 ```{r}
-model1_log_Dengue <- lm(log10(Dengue)~Mean_rainfall+Med_temp+Med_temp_rng,
-                    data=data_time)
-broom::tidy(model1_log_Dengue)
-gvlma::gvlma(model1_log_Dengue)
+models[["model1_log_dengue"]] <- 
+  lm(log10(Dengue) ~ Mean_rainfall + Med_temp + Med_temp_rng, data = data_time)
+
+broom::tidy(models$model1_log_dengue)
+gvlma::gvlma(models$model1_log_dengue)
 ```
 
 ```{r}
-model1_sqrt_Dengue <- lm(sqrt(Dengue)~Mean_rainfall+Med_temp+Med_temp_rng,
-                       data=data_time)
-broom::tidy(model1_sqrt_Dengue)
-gvlma::gvlma(model1_sqrt_Dengue)
+models[["model1_sqrt_dengue"]] <- 
+  lm(sqrt(Dengue) ~ Mean_rainfall + Med_temp + Med_temp_rng, data = data_time)
+
+broom::tidy(models$model1_sqrt_dengue)
+gvlma::gvlma(models$model1_sqrt_dengue)
 ```
 
 ```{r}
-model1_inv_Dengue <- lm((1/Dengue)~Mean_rainfall+Med_temp+Med_temp_rng,
-                        data=data_time)
-broom::tidy(model1_inv_Dengue)
-gvlma::gvlma(model1_inv_Dengue)
+models[["model1_inv_dengue"]] <- 
+  lm((1 / Dengue) ~ Mean_rainfall + Med_temp + Med_temp_rng, data = data_time)
+
+broom::tidy(models$model1_inv_dengue)
+gvlma::gvlma(models$model1_inv_dengue)
 ```
 
 Let's have a look at the models' adjusted R2 values
 
 ```{r}
 list(
-  "untransformed" = model1_Dengue,
-  "log" = model1_log_Dengue,
-  "sqrt" = model1_sqrt_Dengue,
-  "inv" = model1_inv_Dengue
+  "untransformed" = models$model1_dengue,
+  "log" = models$model1_log_dengue,
+  "sqrt" = models$model1_sqrt_dengue,
+  "inv" = models$model1_inv_dengue
 ) %>% 
   lapply(broom::glance) %>% 
   { dplyr::bind_cols(names(.), dplyr::bind_rows(.)) } %>% 
-  dplyr::rename(name = ...1)
+  dplyr::rename(transformation = ...1)
 ```
 
-It seems that `model1_Dengue` (untransformed) has a higher adjusted R2 value than the other models, and it explains about 6% of the variance.
+It seems that `models$model1_dengue` (untransformed) has a higher adjusted R2 value than the other models, and it explains about 6% of the variance.
 
 Plot the regression models
 
@@ -1374,134 +1404,164 @@ data_time %>%
 Since rainfall has marginal significance at an alpha of 10% and known to have effect on vector born diseases, we decided to explore rainfall variable by categorizing it (<11mm of rain fall and >=11mm of rainfall)
 
 ```{r}
-data_time$Mean_rainfall %>% 
-  hist()
-```
-
-```{r}
 data_time <- data_time %>% 
   dplyr::mutate(Rain_11 = ifelse(Mean_rainfall >= 11, 1, 0))
 
-# glimpse(data_time)
+dplyr::glimpse(data_time)
 ```
 
-Re-Run Model1 With categorised Rain variable
+Re-Run Model1 With categorized Rain variable
 
 ```{r}
-model2_Dengue <- lm(Dengue~Rain_11+Med_temp+Med_temp_rng,
-                                      data=data_time)
+models[["model2_dengue"]] <- 
+  lm(Dengue ~ Rain_11 + Med_temp + Med_temp_rng, data = data_time)
 
-gvlma::gvlma(model2_Dengue)
-broom::tidy(model2_Dengue)
+gvlma::gvlma(models$model2_dengue)
+broom::tidy(models$model2_dengue)
 ```
 
 Add Interaction term
 
 ```{r}
-model2_Dengue_Int <- lm(Dengue ~ (Med_temp + Med_temp_rng) * Rain_11,
-                       data=data_time)
+models[["model2_dengue_int"]] <- 
+  lm(Dengue ~ (Med_temp + Med_temp_rng) * Rain_11, data = data_time)
 
-gvlma::gvlma(model2_Dengue_Int)
-broom::tidy(model2_Dengue_Int)
-anova(model2_Dengue,model2_Dengue_Int)
-broom::glance(model2_Dengue)
-broom::glance(model2_Dengue_Int)
+gvlma::gvlma(models$model2_dengue_int)
+broom::tidy(models$model2_dengue_int)
+anova(models$model2_dengue,models$model2_dengue_int)
+broom::glance(models$model2_dengue)
+broom::glance(models$model2_dengue_int)
 ```
 
-There is an interaction effect (Rain_11 on 2 other predictors) and Anova test shows adding the interaction terms improves the model fit (p value=0.0017).
-This interaction model has a higher R2 value too.
+There is an interaction effect (Rain_11 on 2 other predictors) and Anova test shows adding the interaction terms improves the model fit (p value=0.0017). This interaction model has a higher R2 value too.
 
-r.squared(Model2_Dengue) --> 0.0757
-r.squared(Model2_Dengue_Int) --> 0.102
-adj.r.squared(Model2_Dengue) --> 0.0694
-adj.r.squared(Model2_Dengue_Int) --> 0.0919
+r.squared(`models$Model2_dengue`) --> 0.0757  
+r.squared(`models$Model2_dengue_int`) --> 0.102  
+adj.r.squared(`models$Model2_dengue`) --> 0.0694  
+adj.r.squared(`models$Model2_dengue_int`) --> 0.0919
 
-Unfortunately, all model assumptions failed. So This model won't be a good one for prediction
+Unfortunately, all model assumptions failed. So This model won't be a good one for prediction.
 
 Lets explore this interaction model
 
 ```{r}
-#Report the model summary and significance using export_summs() function
-library(jtools)
-jtools::export_summs(model2_Dengue,model2_Dengue_Int,
-             error_format = "(p = {p.value})",
-             model.names = c("Main Effects Only",
-                             "Interaction Effects"),
-             digits = 3)
+jtools::export_summs(
+  models$model2_dengue,
+  models$model2_dengue_int,
+  error_format = "(p = {p.value})",
+  model.names = c("Main Effects Only", "Interaction Effects"),
+  digits = 3
+)
 ```
 
 Probing Interaction Effects
+
 Run Spotlight analysis, using Johnson-Neyman Techniques
 
-```{r, fig.height=7, fig.width=9}
-#  a. Median Temperature
-interactions::sim_slopes(model2_Dengue_Int, 
-           pred = Rain_11,
-           modx = Med_temp_rng, 
-           johnson_neyman = T) #7.01
+Median temperature
 
-interactions::interact_plot(model2_Dengue_Int,
-              pred="Med_temp",
-              modx = "Rain_11",
-              modx.labels = c("less than 11mm of rain fall", 
-                              "rain fall >=11mm"),
-              interval = T,
-              int.width = .95,
-              colors = c("deeppink",
-                         "darkgreen"),
-              vary.lty = T,
-              line.thickness = 1,
-              legend.main = "") +
-  ggplot2:: geom_vline(xintercept = 27.15, col = "red", linetype = 3, size = 1)+
-  labs(title = "Effect of Rain fall and Temperature on Dengue cases in Singapore",
-       subtitle = "With an average weekly rainfall of 11mm and above,the number of Dengue cases\nincreases with rise in temperature", 
-       x = "Weekly Median Temperature",
-       y = "Number of Dengue Cases",
-       caption = "Source: MOH, NEA Websites") +
-  annotate("text", 
-           x = 28, 
-           y = 0,
-           label = "The shaded areas denote 95% confidence intervals.\nThe vertical line marks the boundary\nbetween regions of significance and non-significance\nbased on alpha at 5%") + 
+```{r, fig.height=7, fig.width=9}
+interactions::sim_slopes(
+  models$model2_dengue_int,
+  pred = Rain_11,
+  modx = Med_temp, 
+  johnson_neyman = T
+)  # [23.43, 27.15]
+
+interactions::interact_plot(
+  models$model2_dengue_int,
+  pred="Med_temp",
+  modx = "Rain_11",
+  modx.labels = c("less than 11mm of rain fall", "rain fall >=11mm"),
+  interval = T,
+  int.width = .95,
+  colors = c("deeppink", "darkgreen"),
+  vary.lty = T,
+  line.thickness = 1,
+  legend.main = ""
+) + 
+  geom_vline(xintercept = 27.15, col = "red", linetype = 3, size = 1) + 
+  labs(
+    title = "Effect of Rain fall and Temperature on Dengue cases in Singapore",
+    subtitle = paste0(
+      "With an average weekly rainfall of 11mm and above, the number of ",
+      "Dengue cases increases with rise in temperature"
+    ),
+    x = "Weekly Median Temperature",
+    y = "Number of Dengue Cases",
+    caption = "Source: MOH, NEA Websites"
+  ) + 
+  annotate(
+    "text", 
+    x = 28, 
+    y = 0,
+    label = paste(
+      "The shaded areas denote 95% confidence intervals.",
+      "The vertical line marks the boundary between",
+      "regions of significance and non-significance",
+      "based on alpha at 5%",
+      sep = "\n"
+    )
+  ) + 
   theme(legend.position = "top")
 ```
 
-```{r, fig.height=7, fig.width=9}
-#  b. Median Temperature Range
-interactions::sim_slopes(model2_Dengue_Int, 
-           pred = Rain_11,
-           modx = Med_temp, 
-           johnson_neyman = T) #27.15
+Median Temperature Range
 
-interactions::interact_plot(model2_Dengue_Int,
-              pred="Med_temp_rng",
-              modx = "Rain_11",
-              modx.labels = c("less than 11mm of rain fall", 
-                              "rain fall >=11mm"), 
-              interval = T,
-              int.width = .95,
-              colors = c("deeppink",
-                         "darkgreen"),
-              vary.lty = T,
-              line.thickness = 1,
-              legend.main = "Rain Fall")+
-  ggplot2:: geom_vline(xintercept = 7.01, col = "red", linetype = 3, size = 1)+
-  labs(title = "Effect of Rain fall and Temperature Variation on Dengue Cases in Singapore",
-       subtitle = "With an average weekly rainfall of 11mm and above,the number of Dengue cases\ndecreases when tempeature variation is HIGH", 
-       x = "Weekly Median Temperature Range",
-       y = "Number of Dengue Cases",
-       caption = "Source: MOH, NEA Websites") +
-  annotate("text", 
-           x = 6, 
-           y = 100,
-           label = "The shaded areas denote 95% confidence intervals.\nThe vertical line marks the boundary\nbetween regions of significance and non-significance\nbased on alpha at 5%") + 
+```{r, fig.height=7, fig.width=9}
+interactions::sim_slopes(
+  models$model2_dengue_int,
+  pred = Rain_11,
+  modx = Med_temp_rng,
+  johnson_neyman = T
+)  # [7.01, 9.04]
+
+interactions::interact_plot(
+  models$model2_dengue_int,
+  pred="Med_temp_rng",
+  modx = "Rain_11",
+  modx.labels = c("less than 11mm of rain fall", "rain fall >=11mm"), 
+  interval = T,
+  int.width = .95,
+  colors = c("deeppink", "darkgreen"),
+  vary.lty = T,
+  line.thickness = 1,
+  legend.main = "Rain Fall"
+) + 
+  geom_vline(xintercept = 7.01, col = "red", linetype = 3, size = 1) + 
+  labs(
+    title = paste0(
+      "Effect of Rain fall and Temperature Variation ",
+      "on Dengue Cases in Singapore"
+    ),
+    subtitle = paste0(
+      "With an average weekly rainfall of 11mm and above, the number of ",
+      "Dengue cases decreases when tempeature variation is HIGH"
+    ), 
+    x = "Weekly Median Temperature Range",
+    y = "Number of Dengue Cases",
+    caption = "Source: MOH, NEA Websites"
+  ) + 
+  annotate(
+    "text",
+    x = 6,
+    y = 100,
+    label = paste(
+      "The shaded areas denote 95% confidence intervals.",
+      "The vertical line marks the boundary between",
+      "regions of significance and non-significance",
+      "based on alpha at 5%",
+      sep = "\n"
+    )
+  ) + 
   theme(legend.position = "top")
 ```
 
 ### Upper Respiratory Tract Infections (URTI)
 
-Since the number of URTI cases in Singapore drastically reduced due to COVID-19, we decided to exclude the values since April 2020 (from circuit breaker period), for this analysis
+Since the number of URTI cases in Singapore drastically reduced due to COVID-19, we decided to exclude the values since April 2020 (from circuit breaker period), for this analysis.
 
-Let's plot the x variables (Mean_rainfall,Med_temp,Med_temp_rng) and Y (URTI)
+Let's plot the x variables (Mean_rainfall, Med_temp, Med_temp_rng) and Y (URTI)
 
 ```{r, fig.height=9}
 data_time_URTI <- data_time %>% 
@@ -1532,18 +1592,19 @@ data_time_URTI %>%
 Run a simple linear regression model
 
 ```{r}
-model1_URTI <- lm(URTI~Mean_rainfall+Med_temp+Med_temp_rng,
-                    data=data_time_URTI)
+models[["model1_URTI"]] <- 
+  lm(URTI ~ Mean_rainfall + Med_temp + Med_temp_rng, data = data_time_URTI)
 
-broom::tidy(model1_URTI)
-gvlma::gvlma(model1_URTI)
+broom::tidy(models$model1_URTI)
+gvlma::gvlma(models$model1_URTI)
 ```
 
 Assumption checks failed
+
 Let's check the skewness of y variable
 
 ```{r}
-e1071::skewness(data_time_URTI$URTI) #[1] 0.8635183
+e1071::skewness(data_time_URTI$URTI)  # [1] 0.8634216
 ```
 
 ```{r}
@@ -1560,24 +1621,27 @@ e1071::skewness(data_time_URTI$URTI) #[1] 0.8635183
 Try them on Model 1
 
 ```{r}
-model1_log_URTI <- lm(log10(URTI)~Mean_rainfall+Med_temp+Med_temp_rng,
-                        data=data_time_URTI)
-broom::tidy(model1_log_URTI)
-gvlma::gvlma(model1_log_URTI)
+models[["model1_log_URTI"]] <- data_time_URTI %>% 
+  lm(log10(URTI) ~ Mean_rainfall + Med_temp + Med_temp_rng, data = .)
+
+broom::tidy(models$model1_log_URTI)
+gvlma::gvlma(models$model1_log_URTI)
 ```
 
 ```{r}
-model1_sqrt_URTI <- lm(sqrt(URTI)~Mean_rainfall+Med_temp+Med_temp_rng,
-                         data=data_time_URTI)
-broom::tidy(model1_sqrt_URTI)
-gvlma::gvlma(model1_sqrt_URTI)
+models[["model1_sqrt_URTI"]] <- data_time_URTI %>% 
+  lm(sqrt(URTI) ~ Mean_rainfall + Med_temp + Med_temp_rng, data = .)
+
+broom::tidy(models$model1_sqrt_URTI)
+gvlma::gvlma(models$model1_sqrt_URTI)
 ```
 
 ```{r}
-model1_inv_URTI <- lm((1/URTI)~Mean_rainfall+Med_temp+Med_temp_rng,
-                        data=data_time_URTI)
-broom::tidy(model1_inv_URTI)
-gvlma::gvlma(model1_inv_URTI)
+models[["model1_inv_URTI"]] <- data_time_URTI %>% 
+  lm((1 / URTI) ~ Mean_rainfall + Med_temp + Med_temp_rng, data = .)
+
+broom::tidy(models$model1_inv_URTI)
+gvlma::gvlma(models$model1_inv_URTI)
 ```
 
 Assumptions acceptable
@@ -1586,194 +1650,248 @@ Plot the regression model 1
 
 ```{r}
 data_time_URTI %>% 
-  dplyr::select(URTI, Med_temp, Med_temp_rng,Mean_rainfall) %>% 
+  dplyr::mutate(URTI_inv = (1 / URTI)) %>% 
+  dplyr::select(URTI_inv, Med_temp, Med_temp_rng, Mean_rainfall) %>% 
   # scale() %>% 
   tibble::as_tibble() %>% 
-  tidyr::pivot_longer(-URTI) %>% 
-  ggplot(aes(x = value, y = URTI, color = name)) +
+  tidyr::pivot_longer(-URTI_inv) %>% 
+  ggplot(aes(x = value, y = URTI_inv, color = name)) +
   geom_point(alpha = 0.4) + 
   geom_smooth(method = "lm", formula = y ~ x, color = "blue") + 
   facet_grid(. ~ name, scales = "free") + 
   theme(legend.position = "none")
 ```
 
-From the plot, there are more cases when rain fall is lesser. So we decided to explore rainfall variable by categorizing it. (<11cm of rain fall and >=11cm of rainfall))
+From the plot, there are more cases when rain fall is lesser. So we decided to explore rainfall variable by categorizing it (<11cm of rain fall and >=11cm of rainfall).
 
 ```{r}
 data_time_URTI <- data_time_URTI %>% 
   dplyr::mutate(Rain_11 = ifelse(Mean_rainfall >= 11, 1, 0))
 
-# glimpse(data_time_URTI)
+dplyr::glimpse(data_time_URTI)
 ```
 
 Re-Run Model1 With categorised Rain variable
 
 ```{r}
-model2_inv_URTI<- lm((1/URTI)~Rain_11+Med_temp+Med_temp_rng,
-                   data=data_time_URTI)
+models[["model2_inv_URTI"]] <- 
+  lm((1 / URTI) ~ Rain_11 + Med_temp + Med_temp_rng, data = data_time_URTI)
 
-gvlma::gvlma(model2_inv_URTI)
-broom::tidy(model2_inv_URTI)
+gvlma::gvlma(models$model2_inv_URTI)
+broom::tidy(models$model2_inv_URTI)
 ```
 
 Add Interaction term
 
 ```{r}
-model2_inv_URTI_Int <- lm((1/URTI)~(Med_temp+Med_temp_rng)*Rain_11,
-                           data=data_time_URTI)
+models[["model2_inv_URTI_int"]] <- 
+  lm((1 / URTI) ~ (Med_temp + Med_temp_rng) * Rain_11, data = data_time_URTI)
 
-gvlma::gvlma(model2_inv_URTI_Int)
-broom::tidy(model2_inv_URTI_Int)
-anova(model2_inv_URTI,model2_inv_URTI_Int)
-broom::glance(model2_inv_URTI)
-broom::glance(model2_inv_URTI_Int)
+gvlma::gvlma(models$model2_inv_URTI_int)
+broom::tidy(models$model2_inv_URTI_int)
+anova(models$model2_inv_URTI,models$model2_inv_URTI_int)
+broom::glance(models$model2_inv_URTI)
+broom::glance(models$model2_inv_URTI_int)
 ```
 
 Median temperature is significant at an alpha level of 5%. There is an interaction effect too (Rain_11 on Med_temp) and Anova test shows adding the interaction terms improves the model fit (p value = 0.004838). This interaction model has a higher R2 value too.
 
-r.squared(model2_inv_URTI) --> 0.053
-r.squared(model2_inv_URTI_Int)--> 0.077
-adj.r.squared(model2_inv_URTI) --> 0.0467
-adj.r.squared(model2_inv_URTI_Int)--> 0.0660
-
-Report the model summary and significance using export_summs() function
+r.squared(`models$model2_inv_URTI`) --> 0.053  
+r.squared(`models$model2_inv_URTI_int`) --> 0.077  
+adj.r.squared(`models$model2_inv_URTI`) --> 0.0467  
+adj.r.squared(`models$model2_inv_URTI_int`) --> 0.0660
 
 ```{r}
-jtools::export_summs(model2_inv_URTI,model2_inv_URTI_Int,
-             error_format = "(p = {p.value})",
-             model.names = c("Main Effects Only",
-                             "Interaction Effects"),
-             digits = 3)
+jtools::export_summs(
+  models$model2_inv_URTI,models$model2_inv_URTI_int,
+  error_format = "(p = {p.value})",
+  model.names = c("Main Effects Only", "Interaction Effects"),
+  digits = 3
+)
 ```
 
 Probing Interaction Effects
 
 ```{r, fig.height=7, fig.width=9}
-#Run Spotlight analysis, using Johnson-Neyman Techniques
+# Run Spotlight analysis, using Johnson-Neyman Techniques
 # Median Temperature
 
-# interactions::sim_slopes(model2_inv_URTI_Int,
-#            pred = Rain_11,
-#            modx = Med_temp,
-#            johnson_neyman = T) ##[27.28, 28.61]
-# 
-# #Run interaction_plot() by adding benchmark for regions of significance
-# # Use plot B to see the actual URTI numbers instead of y inverse
-# #  a. Median Temperature
-# interactions::interact_plot(model2_inv_URTI_Int,
-#             pred="Med_temp",
-#             modx = "Rain_11",
-#             modx.labels = c("less than 11cm of rain fall",
-#                             "rain fall >=11cm"),
-#             interval = T,
-#             int.width = .95,
-#             colors = c("deeppink",
-#                        "darkgreen"),
-#             vary.lty = T,
-#             line.thickness = 1,
-#             legend.main = "") +
-# ggplot2:: geom_vline(xintercept = 27.28, col = "red", linetype = 3, size = 1)+
-# labs(title = "Effect of Rain fall and Temperature on rise in URTI Cases in Singapore",
-#      subtitle = "For lower weekly rainfall, the number of URTI cases\ndereases with rise in temperature",
-#      x = "Weekly Median Temperature",
-#      y = "1/Number of URTI Cases",
-#      caption = "Source: MOH, NEA websites") +
-# annotate("text",
-#          x = 28,
-#          y = 0.0003,
-#          label = "The shaded areas denote 95% confidence intervals.\nThe vertical line marks the boundary\nbetween regions of significance and non-significance\nbased on alpha at 5%") +
-# theme(legend.position = "top")
+# interactions::sim_slopes(
+#   models$model2_inv_URTI_int,
+#   pred = Rain_11,
+#   modx = Med_temp,
+#   johnson_neyman = T
+# )  # [27.28, 28.61]
+
+# Run interaction_plot() by adding benchmark for regions of significance
+# Use plot B to see the actual URTI numbers instead of y inverse
+
+# interactions::interact_plot(
+#   models$model2_inv_URTI_int,
+#   data = data_time_URTI,
+#   pred = "Med_temp",
+#   modx = "Rain_11",
+#   modx.labels = c("less than 11cm of rain fall", "rain fall >=11cm"),
+#   interval = T,
+#   int.width = .95,
+#   colors = c("deeppink","darkgreen"),
+#   vary.lty = T,
+#   line.thickness = 1,
+#   legend.main = ""
+# ) + 
+#   geom_vline(xintercept = 27.28, col = "red", linetype = 3, size = 1) + 
+#   geom_vline(xintercept = 28.61, col = "red", linetype = 3, size = 1) + 
+#   labs(
+#     title = paste0(
+#       "Effect of Rain fall and Temperature on rise in URTI Cases in Singapore"
+#     ),
+#     subtitle = paste0(
+#       "For lower weekly rainfall, the number of URTI cases ",
+#       "decreases with rise in temperature"
+#     ),
+#     x = "Weekly Median Temperature",
+#     y = "1/Number of URTI Cases",
+#     caption = "Source: MOH, NEA websites"
+#   ) + 
+#   annotate(
+#     "text",
+#     x = 28,
+#     y = 0.0003,
+#     label = paste(
+#       "The shaded areas denote 95% confidence intervals.",
+#       "The vertical lines mark the boundary between",
+#       "regions of significance and non-significance",
+#       "based on alpha at 5%",
+#       sep = "\n"
+#     )
+#   ) + 
+#   theme(legend.position = "top")
 ```
 
 ```{r, fig.height=7, fig.width=9}
 ##############################################
 #This model model2_URTI is just for plotting purpose.
-model2_URTI_Int <- lm(URTI~(Med_temp+Med_temp_rng)*Rain_11,
-                           data=data_time_URTI)
+models[["model2_URTI_int"]] <- 
+  lm(URTI ~ (Med_temp + Med_temp_rng) * Rain_11, data = data_time_URTI)
 
-#Run Spotlight analysis, using Johnson-Neyman Techniques
-#  Median Temperature
-# sim_slopes(model2_URTI_Int, 
-#            pred = Rain_11,
-#            modx = Med_temp, 
-#            johnson_neyman = F) 
+interactions::sim_slopes(
+  models$model2_URTI_int,
+  pred = Rain_11,
+  modx = Med_temp,
+  johnson_neyman = T
+)  # [27.24, 28.48]
 
-interactions::sim_slopes(model2_URTI_Int,
-           pred = Rain_11,
-           modx = Med_temp,
-           johnson_neyman = T) #[27.24, 28.48]
-
-interactions::interact_plot(model2_URTI_Int,
-              pred="Med_temp",
-              modx = "Rain_11",
-              modx.labels = c("less than 11cm of rain fall",
-                              "rain fall >=11cm"),
-              interval = T,
-              int.width = .95,
-              colors = c("deeppink",
-                         "darkgreen"),
-              vary.lty = T,
-              line.thickness = 1,
-              legend.main = "") +
-  ggplot2::geom_vline(xintercept = 27.24, col = "red", linetype = 3, size = 1)+
-  ggplot2::geom_vline(xintercept = 28.48, col = "red", linetype = 3, size = 1)+
-  labs(title = "Effect of Rain fall and Temperature on rise in URTI Cases in Singapore",
-       subtitle = "For lower weekly rainfall, the number of URTI cases\ndereases with rise in temperature",
-       x = "Weekly Median Temperature",
-       y = "Number of URTI Cases",
-       caption = "Source: MOH, NEA websites") +
-  annotate("text", 
-           x = 28, 
-           y = 2000,
-           label = "The shaded areas denote 95% confidence intervals.\nThe vertical line marks the boundary\nbetween regions of significance and non-significance\nbased on alpha at 5%") + 
+interactions::interact_plot(
+  models$model2_URTI_int,
+  pred="Med_temp",
+  modx = "Rain_11",
+  modx.labels = c("less than 11cm of rain fall", "rain fall >=11cm"),
+  interval = T,
+  int.width = .95,
+  colors = c("deeppink", "darkgreen"),
+  vary.lty = T,
+  line.thickness = 1,
+  legend.main = ""
+) +
+  geom_vline(xintercept = 27.24, col = "red", linetype = 3, size = 1) + 
+  geom_vline(xintercept = 28.48, col = "red", linetype = 3, size = 1) + 
+  labs(
+    title = paste0(
+      "Effect of Rain fall and Temperature on rise in URTI Cases in Singapore"
+    ),
+    subtitle = paste0(
+      "For lower weekly rainfall, the number of URTI cases ",
+      "decreases with rise in temperature"
+    ),
+    x = "Weekly Median Temperature",
+    y = "Number of URTI Cases",
+    caption = "Source: MOH, NEA websites"
+  ) +
+  annotate(
+    "text", 
+    x = 28, 
+    y = 2000,
+    label = paste(
+      "The shaded areas denote 95% confidence intervals.",
+      "The vertical lines mark the boundary between",
+      "regions of significance and non-significance",
+      "based on alpha at 5%",
+      sep = "\n"
+    )
+  ) + 
   theme(legend.position = "top")
 ```
 
-
+---
 
 ## Interpretation of the Results
 
-Associations between number of DF and URTI in the community with Rainfall and Temperature
-In the modeling analyses, all models for the 4 clinical conditions except URTI failed the assumption checks. Despite failing the checks, we continued to test several modeling for DF as we are interested in the disease. The interpretation below will be focusing on URTI and DF.
+### Associations between number of DF and URTI in the community with Rainfall and Temperature
 
-We hypothesized that there will be an increase in URTI cases when the air temperature is low as people are more susceptible to common cold during cold weather. We observed that the number of URTI cases increase when the air temperature is low with low rainfall but a decrease in cases during low temperature with high rainfall. One of the reasons for this phenomenon could be people may wear more layers when the rain is heavier to protect them from the rain and cold as heavy rainfall is likely to be associated with cold weather. 
+In the modeling analyses, all models for the 4 clinical conditions except URTI failed the assumption checks. Despite failing the checks, we continued to test several modeling for DF as we are interested in the disease. The results below will be focusing on URTI and DF. We observed the following results:
 
-However, it is interesting to note that there is an increase in number of cases for DF and URTI during high air temperature with high rainfall (>11mm). The increase in DF in warmer temperature is likely attributed to the optimal temperature for mosquito to develop, research has shown that mosquito replicates faster at higher temperature during incubation period (Liu et al., 2017). The increase in URTI under high temperature is interesting and worthy of further exploration especially in tropical countries, understanding the aetiology would be helpful in reducing the cases. A possible explanation suggested for this was indoor transmission in air-conditioned environments accounted for most of the transmission (Tang, Wong and Hon, 2010).
+1. In low rainfall (< 11mm), number of URTI cases seemed to increase when weekly median temperature is lower. Whilst in high rainfall (> 11mm), number of URTI cases decreased when weekly median temperature is lower.
+2. In high rainfall (> 11mm), there is an increase in the number of cases for both DF and URTI when weekly median air temperature is higher.
+3. Cases of DF seemed to decrease in high rainfall and low weekly median temperature.
 
-Dengue fever was observed to decrease in high rainfall and low temperature. We understand that precipitation is associated to increase incidence of dengue fever.  However, our results seemed to support a recent study that claimed that heavy rainfall could disrupt breeding habitat and mosquitoes’ reproductive cycle by washing away by the rain (Benedum, Seidahmed, Eltahir, Markuzon, 2018). 
+### Dengue cases in Singapore in the last 14 days
 
+1. There is a significant difference in dengue cases in Singapore in the last 14 days between the North East ($\hat{\mu}$ = 127) and West ($\hat{\mu}$ = 25.6) regions of Singapore (p = 0.045).
+2. There is a significant difference in dengue case incidence rates (per 100,000 population) in Singapore in the last 14 days between the Central ($\hat{\mu}$ = 209.53) and West ($\hat{\mu}$ = 16.64) regions of Singapore (p = 0.002).
+3. There are significant differences in the median temperatures in the past month between the Central ($\hat{\mu}$ = 28.45) and North ($\hat{\mu}$ = 27.56) regions (p = 0.017), as well as between the North and North East ($\hat{\mu}$ = 28.49) regions (p = 0.009).
+4. Similar differences were present for the median temperature ranges, with differences between the Central ($\hat{\mu}$ = 5.28) and North ($\hat{\mu}$ = 5.93) regions (p <= 0.001), as well as between the North and North East ($\hat{\mu}$ = 5.15) regions (p = 0.001).
 
+---
 
 ## Implications
 
-> Prof. Roh's Note: "This is where you provide the significance of the findings. Unlike the other sections, where your goal is to describe the results that you found (**what the data told you**). This is where you chime in and proactively discuss the meaning of the results."
+### Associations between number of DF and URTI in the community with Rainfall and Temperature
 
-Importance of keeping warm, dry and maintain good hygiene even during low rainfall to prevent developing URTI.
+It is expected that there will be an increase in URTI cases when the air temperature is low as people are more susceptible to common cold during cold weather. We observed that the number of URTI cases increase when the air temperature is low with low rainfall but a decrease in cases during low temperature with high rainfall. One of the reasons for this phenomenon could be people may wear more layers when the rain is heavier to protect them from the rain and cold.
 
+However, it is interesting to note that there is an increase in number of cases for DF and URTI during high air temperature with high rainfall (>11mm). The increase in DF in warmer temperature is likely attributed to the optimal temperature for mosquito to develop, research has shown that mosquito replicates faster at higher temperature during incubation period (Liu et al., 2017). The increase in URTI under high temperature is interesting and worthy of further exploration especially in tropical countries, understanding the aetiology would be helpful in reducing the cases. A possible explanation suggested for this was indoor transmission in air-conditioned environments accounted for most of the transmission (Tang, Wong and Hon, 2010).
 
+Dengue fever was observed to decrease in high rainfall and low temperature. We understand that precipitation is associated to increase incidence of dengue fever.  However, our results seemed to support a recent study that claimed that heavy rainfall could disrupt breeding habitat and mosquitoes’ reproductive cycle by washing away by the rain (Benedum, Seidahmed, Eltahir, Markuzon, 2018).
+
+These findings contribute to the evidence that weather plays a role in DF and URTI and there is no seasonal trend in URTI in Singapore. Therefore, it is important to maintain good personal hygiene at all times.
+
+### Dengue cases in Singapore in the last 14 days
+
+With homogeneous weather conditions in Singapore, it is an interesting observation that cases of DF cluster in North East of Singapore. This could be due to several reasons:
+
+-	Population density: Population in the central and North-Eastern parts are higher, with higher density, means more people with plants and littering which give rise to more places for mosquito to breed. However, the significant higher number of cases in the North east persisted even after normalizing by dividing the number of cases with the population in the region.
+-	Geography: North-East regions have more reservoir areas that may have contributed to mosquito breeding.
+
+This finding suggests that NEA should step up their effort in reducing the number of breeding habitat in North East of Singapore.
+
+---
 
 ## Limitations and Future Directions
 
-> Prof. Roh's Note: "Acknowledging limitations is not where you just provide a laundry list of what is missing and what should have done. Please take the responsibility of your analyses and inform your readers to understand what the results tell and don’t (or can’t) tell. More importantly, this is the section where you technically begin your next data science project, by highlighting what would be informative down the line to shed further light on what you have found here."
-
 We have identified some potential pitfalls for our project.
 
-- Failure of assumption checks for the models could be due to several reasons:
-  - Insufficient data points. To improve the quality of data, daily number of cases should be used. 
-  - Clinical conditions defined were too generalised. For example, Dengue fever can be caused by different strains of dengue virus.
-- Limitations in obtaining data to conduct more informative analyses. For example, patient’s demographic data. 
+1. Failure of assumption checks for the models could be due to several reasons, such as, insufficient data points and clinical conditions defined were too generalized. Future research should utilize daily number of cases to improve the model, as well as, collect more information on the virus and patients to provide a better model. 
+2. Limitations in obtaining latest data. The population dataset is not up to date; thus the results have to be analyzed with caution. We also faced difficulty in obtaining data on measures that control mosquitoes, such as, frequency of fumigation, number of offenders whom were caught breeding mosquitoes. These data would be helpful in analyzing the effectiveness of these interventions. 
 
+Future research could explore creating model to predict the spread and susceptibility of dengue fever and even the effectiveness of intervention to help in preventing an outbreak.
 
+---
 
 ## References
 
-Liu, Z., Zhang, Z., Lai, Z., Zhou, T., Jia, Z., Gu, J., ... & Chen, X. G. (2017). Temperature increase enhances Aedes albopictus competence to transmit dengue virus. Frontiers in microbiology, 8, 2337.
-Benedum, C. M., Seidahmed, O. M., Eltahir, E. A., & Markuzon, N. (2018). Statistical modeling of the effect of rainfall flushing on dengue transmission in Singapore. PLoS neglected tropical diseases, 12(12), e0006935.
-Tang, J. W., Lai, F. Y. L., Wong, F., & Hon, K. L. E. (2010). Incidence of common respiratory viral infections related to climate factors in hospitalized children in Hong Kong. Epidemiology & Infection, 138(2), 226-235.
+[Liu, Z., Zhang, Z., Lai, Z., Zhou, T., Jia, Z., Gu, J., ... & Chen, X. G. (2017). Temperature increase enhances Aedes albopictus competence to transmit dengue virus. _Frontiers in microbiology_, 8, 2337.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5717519/)
+
+[Benedum, C. M., Seidahmed, O. M., Eltahir, E. A., & Markuzon, N. (2018). Statistical modeling of the effect of rainfall flushing on dengue transmission in Singapore. _PLoS neglected tropical diseases_, 12(12), e0006935.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6283346/)
+
+[Tang, J. W., Lai, F. Y. L., Wong, F., & Hon, K. L. E. (2010). Incidence of common respiratory viral infections related to climate factors in hospitalized children in Hong Kong. _Epidemiology & Infection_, 138(2), 226-235.](https://pubmed.ncbi.nlm.nih.gov/19631018/)
+
+---
 
 ## Appendix
 
 > Appendix
+
+---
 
 ## Contribution Statement
 

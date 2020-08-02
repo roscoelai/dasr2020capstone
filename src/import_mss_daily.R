@@ -8,19 +8,17 @@ import_mss_daily <- function(years, stations = NULL) {
   #' Historical Daily Weather Records
   #' 
   #' @description
-  #' Daily weather records from the Meteorological Service Singapore (MSS). 
+  #' \href{http://www.weather.gov.sg/climate-historical-daily/}{Daily weather 
+  #' records} from the Meteorological Service Singapore (MSS). 
   #' Available data ranges from January 1980 to June 2020. Only 19 of the 63 
   #' climate stations are recognized by this function, because these contain 
-  #' more than just rainfall data. Relevant links are given under details.
+  #' more than just rainfall data. \href{http://www.weather.gov.sg/wp-content/
+  #' uploads/2016/12/Station_Records.pdf}{List of stations, weather parameters 
+  #' and periods of records}.
   #' 
   #' MSS is nice enough to have their data in .csv files, with a systematic 
   #' naming scheme. Data compilation becomes as simple as generating the 
   #' appropriate list of URLs.
-  #' 
-  #' @details
-  #' \href{http://www.weather.gov.sg/climate-historical-daily/}{MSS Daily Records}
-  #' 
-  #' \href{http://www.weather.gov.sg/wp-content/uploads/2016/12/Station_Records.pdf}{List of stations, weather parameters and periods of records}
   #' 
   #' @param years A vector of the years of interest.
   #' @param stations A vector of the climate station names.
