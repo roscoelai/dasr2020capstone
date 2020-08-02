@@ -4,8 +4,6 @@
 
 [Current Version of Leaflet Map](https://roscoelai.github.io/dasr2020capstone/src/capstone_leaflet_html.html)
 
-[Data](https://github.com/roscoelai/dasr2020capstone#data)
-
 ---
 
 ## Data
@@ -92,73 +90,6 @@ Date       | Central     | North East  | North West  | South East  | South West
 - [Master Plan 2014 Region Boundary (Web)](https://data.gov.sg/dataset/master-plan-2014-region-boundary-web), Data.gov.sg
   - Regions (URA MP14)
   - [.zip file](https://geo.data.gov.sg/mp14-region-web-pl/2014/12/05/kml/mp14-region-web-pl.zip)
-
----
-
-## Meeting (31 July 2020)
-
-### Temporal
-- [ ] 4 models?
-
-### Spatial
-- [ ] Aggregate recent weather data
-  - [ ] Latest 1 month
-- [x] Planning area data:
-  - [x] Area
-  - [x] Population (past data - 2017)
-  - [x] Dwelling type (past data - 2017)
-  - [x] Number of cases
-  - [x] Number of clinics
-  - [x] Meteorological data
-    - [x] Inverse distance weighted (IDW) interpolation from 19 stations
-    - [ ] Choice of ordinal (how much weight the inverse-distance has)
-- Visualization(s)
-  - [ ] Choropleth(s)
-- Standard choropleth weaknesses:
-  - Modifiable areal unit problem (MAUP)
-  - Ecological fallacy
-- [ ] Invent **fair** indicator variables
-  - [ ] Weight by area
-  - [x] Weight by population
-- Model
-  - [ ] Number of cases vs. landed property, population density, ...
-
----
-
-## Meeting (08 July 2020)
-
-#### S
-- Q1: Case numbers for different diseases across 2012-2020
-  - Plot weekly by months for each year - line/bar graph and heat map
-  - Compare significant differences between years
-- Q2: Weather variables across 2012 - 2020
-  - Variables: daily temperature, wind speed, daily total rainfall
-  - Aggregate to weekly data - median, mean, min, max, range
-  - Plot weekly by months for each year - bar graph and heat map
-
-#### A
-- Q3: Correlate case numbers and weather variables in general
-  - For each disease to each weather variables
-  - Which disease is most related to weather
-- Q4: Regression model
-  - Y (number of cases) = temperature range + e
-  - Y (number of cases) = temperature range + total rainfall + e
-  - Y (number of cases) = temperature range + total rainfall + humidity + e
-- Q5: Identify highest rainfall months and plot the number of cases over the years
-
-#### R
-- Q7: Compare cases across Singapore regions
-  - [x] Geographical plots using Leaflet
-  - [x] Leaflet with clusterOptions
-- R scripts for data import and tidy (and maybe collect... and maybe transform)
-  - [x] Tidy MOH weekly bulletin data
-  - [x] Import MSS daily weather data
-  - [x] Scrape HCI data (+ get coordinates)
-- Spatial Analysis
-  - [x] Area
-  - [x] Population
-  - [x] Type of housing
-  - [x] Number of clinics
 
 ---
 
