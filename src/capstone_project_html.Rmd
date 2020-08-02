@@ -34,23 +34,25 @@ Specifically, we aim to answer the following questions: Does higher air temperat
 ```{r load-packages}
 # Rule for activating packages in development mode:
 # - Specify everything fully
-# - Exceptions:
+# - Exceptions (these must be activated):
 #   - ggfortify - to overload `ggplot2::autoplot()`
 #   - ggmap - has to be activated for `ggmap::register_google()` to work
-#   - ggplot2 - too troublesome otherwise
+#   - ggplot2 - too troublesome otherwise ("ggplot2::" in function arguments)
 #   - magrittr - `%>%`
 #
 # For deployment mode, activate every package that is referenced more than once
 # - Add package name here, then use find-and-replace to remove "<package>::"
-# - Allowed to activate tidyverse
-#   - Remember what are the 8 packages?
+# - Remember what are the 8 packages in tidyverse?
+#
+# On second thought, let's just stick to development mode. We'll be paying a 
+#   tiny penalty every time "<package>::" is used, and the source code would be 
+#   slightly more verbose, but this might be more educational.
 
 pacman::p_load(
   ggfortify,
-  # ggmap,
+  ggmap,
   ggplot2,
   magrittr
-  # tidyverse
 )
 ```
 
@@ -67,8 +69,12 @@ All data are available online and first gathered into separate distinct raw data
   + [Weekly infectious disease bulletin](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
   + [Healthcare Institutions (HCI) Directory](http://hcidirectory.sg/hcidirectory/)
 * [Data.gov.sg](https://data.gov.sg/)
-  + [Dengue cases](https://data.gov.sg/search?q=denguecases)
-  + [_Aedes_ mosquito breeding habitats](https://data.gov.sg/search?q=aedes+habitats)
+  + [Dengue case locations (2020-07-28)](https://data.gov.sg/search?q=denguecases)
+    - Based on notified dengue cases and mosquito breeding habitats detected in the
+    last 14 days
+  + [_Aedes_ mosquito breeding habitat locations (2020-07-28)](https://data.gov.sg/search?q=aedes+habitats)
+    - Based on notified dengue cases and mosquito breeding habitats detected in the
+    last 14 days
   + [Singapore residents by planning area and type of dwelling, Jun 2017](https://data.gov.sg/dataset/singapore-residents-by-planning-area-and-type-of-dwelling-jun-2017)
   + [Master Plan 2014 Region Boundary (Web)](https://data.gov.sg/dataset/master-plan-2014-region-boundary-web)
 
@@ -674,7 +680,7 @@ grand_import_no_webscraping <- function(from_online_repo = TRUE) {
   )
 }
 
-raw_data <- grand_import_no_webscraping(from_online_repo = F)
+raw_data <- grand_import_no_webscraping(from_online_repo = T)
 ```
 
 ### What raw data do we have?
@@ -1080,6 +1086,68 @@ plot_ggbetweenstats <- function(data, x, y, xlab, ylab) {
     p.adjust.method = "bonferroni"
   )
 }
+
+animate_choropleth <- function(raw_data, .var = "Med_temp", .title = ".") {
+  weather_nested = raw_data$mss_19stations %>%
+    dplyr::mutate(Year = lubridate::year(Date),
+                  Month = lubridate::month(Date)) %>%
+    dplyr::group_by(Year, Month, Station) %>%
+    dplyr::summarise(Mean_rainfall = mean(Rainfall, na.rm = T),
+                     Med_temp = median(Mean_temp, na.rm = T),
+                     Med_temp_rng = median(Temp_range, na.rm = T),
+                     .groups = "drop") %>%
+    tidyr::drop_na() %>% 
+    dplyr::left_join(
+      dplyr::select(raw_data$mss_63station_pos, Station:`Long. (E)`),
+      by = "Station"
+    ) %>% 
+    sf::st_as_sf(coords = c("Long. (E)", "Lat.(N)")) %>% 
+    sf::`st_crs<-`("WGS84") %>% 
+    dplyr::mutate(Date = lubridate::ymd(paste(Year, Month, "01", sep = "-"))) %>% 
+    dplyr::select(Date, everything()) %>% 
+    dplyr::group_by(Year, Month) %>% 
+    tidyr::nest()
+  
+  pa_polys = raw_data$planning_areas %>% 
+    dplyr::select(-Name) %>% 
+    dplyr::mutate(plan_area = sub(".*d>(.*?)<.*", "\\1", Description),
+                  plan_area = tools::toTitleCase(tolower(plan_area)),
+                  .keep = "unused")
+  
+  result = weather_nested$data %>% 
+    lapply(function(x) {
+      df = idw_interpolation(
+        points = x,
+        points_label = c("Station", "Date"),
+        polys = pa_polys,
+        polys_label = "plan_area",
+        ordinal = 15
+      )
+      
+      df$Date = x$Date[1]
+      
+      df
+    }) %>% 
+    dplyr::bind_rows() %>% 
+    dplyr::left_join(pa_polys, by = "plan_area") %>% 
+    sf::st_as_sf()
+  
+  result %>% 
+    ggplot(aes(fill = .data[[.var]])) + 
+    geom_sf() + 
+    scale_fill_viridis_c(guide = guide_colourbar(
+      title.position = "top",
+      title.hjust = .5,
+      barwidth = 20,
+      barheight = .4
+    )) +
+    labs(title = .title,
+         subtitle = "Date: {frame_time}") + 
+    theme_void() +
+    theme(legend.position = "bottom") +
+    gganimate::transition_time(Date) + 
+    gganimate::ease_aes("linear")
+}
 ```
 
 ### Time
@@ -1157,15 +1225,16 @@ plot_choropleths(data_space, c("mean_rainfall", "med_temp", "med_temp_rng"))
 
 Generally, the temperature and amount of rainfall is quite homogenous in Singapore with Geylang and Hougang having slightly higher temperature than other regions; and South region seems to have more rainfall than other regions too.
 
+#### Animated Choropleth
 
-
----
-
-![](https://raw.githubusercontent.com/roscoelai/dasr2020capstone/master/imgs/choropleth_mean_temp_ord_15.gif)
-
----
-
-
+```{r}
+# Very expensive process, so we'll do just one
+animate_choropleth(
+  raw_data,
+  .var = "Med_temp",
+  .title = "Median temperatures in planning areas (2012-2020)"
+)
+```
 
 #### `ggstatsplot::ggbetweenstats()`
 
@@ -1179,7 +1248,7 @@ plot_ggbetweenstats(
 )
 ```
 
-There is a significant difference in dengue cases in Singapore in the last 14 days between the North East ($\hat{\mu}$ = 127) and West ($\hat{\mu}$ = 25.6) regions of Singapore (p = 0.045).
+There is a significant difference in dengue cases in Singapore in the last 14 days (from 2020-07-28) between the North East ($\hat{\mu}$ = 127) and West ($\hat{\mu}$ = 25.6) regions of Singapore (p = 0.045).
 
 ```{r, fig.height=7}
 plot_ggbetweenstats(
@@ -1191,7 +1260,7 @@ plot_ggbetweenstats(
 )
 ```
 
-There is a significant difference in dengue case incidence rates (per 100,000 population) in Singapore in the last 14 days between the Central ($\hat{\mu}$ = 209.53) and West ($\hat{\mu}$ = 16.64) regions of Singapore (p = 0.002).
+There is a significant difference in dengue case incidence rates (per 100,000 population) in Singapore in the last 14 days (from 2020-07-28) between the Central ($\hat{\mu}$ = 209.53) and West ($\hat{\mu}$ = 16.64) regions of Singapore (p = 0.002).
 
 ```{r, fig.height=7}
 plot_ggbetweenstats(
@@ -1279,6 +1348,7 @@ data_space %>%
 ## Model
 
 ```{r}
+# Store models in this list
 models <- list()
 ```
 
@@ -1399,8 +1469,6 @@ data_time %>%
   theme(legend.position = "none")
 ```
 
-![24 hr temperature mean per month is 27.5 mean Rainfall is 13.8](http://www.weather.gov.sg/climate-climate-of-singapore/#:~:text=Rainfall%20is%20plentiful%20in%20Singapore,is%200.2mm%20or%20more.%5D)
-
 Since rainfall has marginal significance at an alpha of 10% and known to have effect on vector born diseases, we decided to explore rainfall variable by categorizing it (<11mm of rain fall and >=11mm of rainfall)
 
 ```{r}
@@ -1441,6 +1509,10 @@ adj.r.squared(`models$Model2_dengue`) --> 0.0694
 adj.r.squared(`models$Model2_dengue_int`) --> 0.0919
 
 Unfortunately, all model assumptions failed. So This model won't be a good one for prediction.
+
+```{r}
+autoplot(models$model2_dengue_int)
+```
 
 Lets explore this interaction model
 
@@ -1646,6 +1718,10 @@ gvlma::gvlma(models$model1_inv_URTI)
 
 Assumptions acceptable
 
+```{r}
+autoplot(models$model1_inv_URTI)
+```
+
 Plot the regression model 1
 
 ```{r}
@@ -1671,7 +1747,7 @@ data_time_URTI <- data_time_URTI %>%
 dplyr::glimpse(data_time_URTI)
 ```
 
-Re-Run Model1 With categorised Rain variable
+Re-Run Model1 With categorized Rain variable
 
 ```{r}
 models[["model2_inv_URTI"]] <- 
@@ -1834,7 +1910,7 @@ In the modeling analyses, all models for the 4 clinical conditions except URTI f
 2. In high rainfall (> 11mm), there is an increase in the number of cases for both DF and URTI when weekly median air temperature is higher.
 3. Cases of DF seemed to decrease in high rainfall and low weekly median temperature.
 
-### Dengue cases in Singapore in the last 14 days
+### Dengue cases in Singapore in the last 14 days (from 2020-07-28)
 
 1. There is a significant difference in dengue cases in Singapore in the last 14 days between the North East ($\hat{\mu}$ = 127) and West ($\hat{\mu}$ = 25.6) regions of Singapore (p = 0.045).
 2. There is a significant difference in dengue case incidence rates (per 100,000 population) in Singapore in the last 14 days between the Central ($\hat{\mu}$ = 209.53) and West ($\hat{\mu}$ = 16.64) regions of Singapore (p = 0.002).
@@ -1887,13 +1963,6 @@ Future research could explore creating model to predict the spread and susceptib
 
 ---
 
-## Appendix
-
-> Appendix
-
----
-
 ## Contribution Statement
 
-> Prof. Roh's Note: "Please describe your individual contribution to the team's project (**in detail**)."
-
+SY devised the project and the main conceptual ideas. SY, RL, and AS searched for the main sources of data. RL created the data pipeline from source to RAM. SY and RL performed the exploratory visualizations and their interpretations. SY and AS planned out the directions for analyses. AS worked out the statistical analyses and created the statistical models. SY provided the summative interpretations as well as links to previous research. RL handled the technical details, and maintained the source code. SY, AS, and RL wrote and approved of the final version of the RMarkdown file. Knitr generated the final report.
