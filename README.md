@@ -8,41 +8,6 @@
 
 ---
 
-## Meeting (31 July 2020)
-
-### Temporal
-- [ ] Account for time lag
-  - [ ] Shift case numbers (Y) up by 1 row?
-  - [ ] Shift predictors (X) down by 1 row?
-- [ ] 4 models
-
-### Spatial
-- [ ] How to aggregate recent weather data?
-  - [ ] Latest 1 month?
-  - [ ] Latest 3 weeks?
-  - [ ] Latest 2 weeks?
-- [x] Planning area data:
-  - [x] Area
-  - [x] Population (past data - 2017)
-  - [x] Dwelling type (past data - 2017)
-  - [x] Number of cases
-  - [x] Number of clinics
-  - [x] Meteorological data
-    - [x] Inverse distance weighted (IDW) interpolation from 19 stations
-    - [ ] Choice of ordinal (how much weight the inverse-distance has)
-- Visualization(s)
-  - [ ] Choropleth(s)
-- Standard choropleth weaknesses:
-  - Modifiable areal unit problem (MAUP)
-  - Ecological fallacy
-- [ ] Invent **fair** indicator variables
-  - [ ] Weight by area
-  - [x] Weight by population
-- Model
-  - [ ] Number of cases vs. landed property, population density, ...
-
----
-
 ## Data
 - [Weekly Infectious Disease Bulletin, Ministry of Health (MOH)](https://www.moh.gov.sg/resources-statistics/infectious-disease-statistics/2020/weekly-infectious-diseases-bulletin)
   - [Latest data as of 31 July 2020 (2012-W01 to 2020-W30)](https://www.moh.gov.sg/docs/librariesprovider5/diseases-updates/weekly-infectious-disease-bulletin-year-2020d1092fcb484447bc96ef1722b16b0c08.xlsx)
@@ -130,7 +95,38 @@ Date       | Central     | North East  | North West  | South East  | South West
 
 ---
 
+## Meeting (31 July 2020)
+
+### Temporal
+- [ ] 4 models?
+
+### Spatial
+- [ ] Aggregate recent weather data
+  - [ ] Latest 1 month
+- [x] Planning area data:
+  - [x] Area
+  - [x] Population (past data - 2017)
+  - [x] Dwelling type (past data - 2017)
+  - [x] Number of cases
+  - [x] Number of clinics
+  - [x] Meteorological data
+    - [x] Inverse distance weighted (IDW) interpolation from 19 stations
+    - [ ] Choice of ordinal (how much weight the inverse-distance has)
+- Visualization(s)
+  - [ ] Choropleth(s)
+- Standard choropleth weaknesses:
+  - Modifiable areal unit problem (MAUP)
+  - Ecological fallacy
+- [ ] Invent **fair** indicator variables
+  - [ ] Weight by area
+  - [x] Weight by population
+- Model
+  - [ ] Number of cases vs. landed property, population density, ...
+
+---
+
 ## Meeting (08 July 2020)
+
 #### S
 - Q1: Case numbers for different diseases across 2012-2020
   - Plot weekly by months for each year - line/bar graph and heat map
@@ -166,9 +162,11 @@ Date       | Central     | North East  | North West  | South East  | South West
 
 ---
 
-# Capstone Project Proposal
-
 ![](./imgs/ncases_4diseases_sep_2012_2020.png)
+
+---
+
+# Capstone Project Proposal
 
 ![](./imgs/ncases_2012_2020.png)
 
